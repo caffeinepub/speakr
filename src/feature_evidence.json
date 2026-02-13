@@ -1,0 +1,41 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-expand-the-built-in-language-list-in-frontend-src-constants-languages-ts-to-include-a-comprehensive-authoritative-set-of-base-world-languages-excluding-dialects-variants-while-keeping-the-existing-no-language-music-option",
+      "featureTitle": "Expand the built-in language list in frontend/src/constants/languages.ts to include a comprehensive, authoritative set of base world languages (excluding dialects/variants), while keeping the existing \"No language (music)\" option.",
+      "files": [
+        "frontend/src/constants/languages.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-42"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-languages-in-a-single-perfectly-alphabetical-list-by-english-label-everywhere-languages-are-shown-including-the-combined-list-of-built-in-user-added-custom-languages",
+      "featureTitle": "Display languages in a single perfectly alphabetical list (by English label) everywhere languages are shown, including the combined list of built-in + user-added custom languages.",
+      "files": [
+        "frontend/src/hooks/useCustomLanguages.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-43"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

@@ -1,0 +1,557 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 25,
+  "summary": "Expand SPEAKR web app (UI-first) beyond login/register to include richer creator profiles, multi-step onboarding walkthrough (with a pulsating speaker animation), enhanced content discovery sections on Explore, clearer social signals (likes/follows/activity), a more informative audio detail page, a new top-left dropdown menu placed in the branding banner linking to common site pages (About, Categories, Contact, etc.)—and add a language selection/filter system (defaulting to the user’s browser language) that filters search/feed results and captures audio language(s) during upload—while preserving the current overall layout/UI with minimal changes.",
+  "architectural_notes": [
+    "Proceed step-by-step (MVP-first) rather than single full build.",
+    "Target a web app first, with potential to wrap for Google Play Store later.",
+    "Avoid significant layout/interface changes while implementing logo sizing and mini-player close behavior (preserve current layout).",
+    "Add a new top branding banner ABOVE the existing header (do not alter the current header/search/icons layout), containing the upright logo and the slogan \"Giving everyone a voice!\".",
+    "In the sticky header, remove the far-left placeholder element while keeping the search bar and the two icons exactly as-is (no other spacing/layout changes).",
+    "Top-of-page branding banner: use the newly uploaded logo image (replace the previous one) and scale it to fit well within the banner’s rectangular area without distortion, consistent with the page layout.",
+    "Login/register: UI-only (no email registration/verification backend).",
+    "Registration form should include interests selection: multi-select checkboxes; include existing categories plus additional interest options.",
+    "Do not make any other layout/UI changes beyond adding the login/register flow.",
+    "Add new features with minimal disruption: place discovery sections on the existing Explore page; keep the overall layout/UI largely unchanged."
+  ],
+  "known_issues": [
+    "Build process hit an internal configuration problem; may need workaround during generation.",
+    "Mini-player close (X) control is not visible; ensure it is clearly visible at the far right inside the mini-player.",
+    "Top branding banner logo rendering is incorrect (wrong orientation/not showing the intended uploaded image); replace with the reuploaded image and ensure it fits the banner rectangle cleanly.",
+    "Floating Back-to-Feed button icon includes a small 'x' that makes it look like a mute button; replace with a clean speaker icon.",
+    "Warm-to-cool/brand gradient is still not visible in the top branding banner placeholder despite multiple uploads."
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-create-the-speakr-frontend-shell-layout-with-a-responsive-header-that-includes-the-uploaded-speakr-logo-and-the-site-name-speakr-at-the-top",
+      "title": "Create the SPEAKR frontend shell layout with a responsive header that includes the uploaded SPEAKR logo and the site name \"SPEAKR\" at the top.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-primary-navigation-ui-for-the-app-interface-only-home-feed-explore-categories-upload-record-entry-point-and-a-basic-profile-login-area-placeholder-no-auth-logic-required-yet",
+      "title": "Implement primary navigation UI for the app (interface-only): Home/Feed, Explore/Categories, Upload/Record entry point, and a basic profile/login area placeholder (no auth logic required yet).",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-home-main-feed-interface-a-list-grid-of-audio-cards-showing-required-elements-thumbnail-above-play-button-title-creator-category-like-dislike-buttons-listen-count-and-a-comments-toggle-use-mock-data-for-now",
+      "title": "Build the Home (main feed) interface: a list/grid of audio cards showing required elements (thumbnail above play button, title, creator, category, like/dislike buttons, listen count, and a comments toggle). Use mock data for now.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-global-search-bar-ui-in-the-header-that-filters-the-visible-mock-feed-results-client-side-by-title-creator-category-interface-only-no-backend-search-yet",
+      "title": "Add a global search bar UI in the header that filters the visible mock feed results client-side by title/creator/category (interface-only, no backend search yet).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-categories-ui-show-a-predefined-starter-set-entertainment-technology-food-sports-politics-music-work-and-allow-selecting-a-category-to-filter-the-mock-feed-interface-only",
+      "title": "Add categories UI: show a predefined starter set (Entertainment, Technology, Food, Sports, Politics, Music, Work) and allow selecting a category to filter the mock feed (interface-only).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-upload-record-interface-ui-only-a-form-for-title-description-optional-category-picker-with-ability-to-enter-a-new-custom-category-thumbnail-input-upload-ui-and-audio-source-selection-upload-file-vs-record-enforce-a-3-hour-maximum-duration-as-ui-validation-messaging-no-backend-enforcement-required-yet",
+      "title": "Create an Upload/Record interface (UI only): a form for title, description (optional), category picker with ability to enter a new custom category, thumbnail input (upload UI) and audio source selection (upload file vs record). Enforce a 3-hour maximum duration as UI validation messaging (no backend enforcement required yet).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-persistent-mini-player-ui-region-that-stays-visible-while-navigating-the-interface-and-indicates-that-playback-continues-when-the-page-view-changes-interface-first-it-can-play-a-sample-mock-audio-source-for-now",
+      "title": "Implement a persistent mini-player UI region that stays visible while navigating the interface and indicates that playback continues when the page view changes (interface-first; it can play a sample/mock audio source for now).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-cohesive-creative-visual-theme-for-speakr-and-enforce-it-consistently-across-screens-typography-spacing-component-styling-and-layout-do-not-use-a-blue-purple-default-theme-unless-it-matches-the-uploaded-logo-prefer-a-warm-to-cool-gradient-inspired-palette-drawn-from-the-logo-reds-oranges-into-cyan-with-neutral-backgrounds",
+      "title": "Apply a cohesive, creative visual theme for SPEAKR and enforce it consistently across screens (typography, spacing, component styling, and layout). Do not use a blue+purple default theme unless it matches the uploaded logo; prefer a warm-to-cool gradient-inspired palette drawn from the logo (reds/oranges into cyan) with neutral backgrounds.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-uploaded-logo-image-to-the-frontend-static-assets-and-reference-it-from-the-header-without-routing-through-the-backend",
+      "title": "Add the uploaded logo image to the frontend static assets and reference it from the header without routing through the backend.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-adjust-the-header-branding-so-the-existing-speakr-logo-asset-assets-generated-speakr-logo-dim-1536x864-png-renders-larger-and-clearly-readable-in-the-top-left-area-without-making-significant-changes-to-the-current-header-layout-keep-the-header-s-overall-structure-and-height-consistent",
+      "title": "Adjust the header branding so the existing SPEAKR logo asset (/assets/generated/speakr-logo.dim_1536x864.png) renders larger and clearly readable in the top-left area, without making significant changes to the current header layout (keep the header’s overall structure and height consistent).",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-close-control-x-to-the-persistent-mini-player-that-when-clicked-stops-playback-clears-the-currently-loaded-audio-item-resets-player-progress-as-appropriate-and-hides-the-mini-player-until-a-new-audio-item-is-played",
+      "title": "Add a close control (\"X\") to the persistent mini-player that, when clicked, stops playback, clears the currently loaded audio item, resets player progress as appropriate, and hides the mini-player until a new audio item is played.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-new-top-of-page-branding-banner-above-the-existing-sticky-header-that-prominently-displays-the-existing-speakr-logo-assets-generated-speakr-logo-dim-1536x864-png-in-an-upright-normal-orientation-inside-a-rectangular-container-with-the-slogan-text-giving-everyone-a-voice-placed-directly-underneath-the-logo-keep-the-existing-header-layout-contents-search-bar-icons-and-height-unchanged",
+      "title": "Add a new top-of-page branding banner above the existing sticky header that prominently displays the existing SPEAKR logo (/assets/generated/speakr-logo.dim_1536x864.png) in an upright, normal orientation inside a rectangular container, with the slogan text \"Giving everyone a voice!\" placed directly underneath the logo. Keep the existing header layout, contents (search bar + icons), and height unchanged.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-mini-player-close-x-control-is-clearly-visible-and-usable-at-the-far-right-inside-the-mini-player-on-all-screen-sizes",
+      "title": "Ensure the mini-player close (X) control is clearly visible and usable at the far right inside the mini-player on all screen sizes.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-sticky-header-the-bar-that-remains-visible-while-scrolling-to-remove-the-far-left-placeholder-logo-area-so-the-header-contains-only-the-search-bar-and-the-two-right-side-controls-upload-icon-button-and-user-sign-in-control-keep-the-header-height-styling-sticky-blur-borders-and-the-search-bar-right-side-controls-unchanged-aside-from-any-spacing-adjustments-required-by-removing-the-left-element",
+      "title": "Update the sticky header (the bar that remains visible while scrolling) to remove the far-left placeholder/logo area so the header contains only: the search bar and the two right-side controls (Upload icon button and user/sign-in control). Keep the header height, styling (sticky, blur, borders), and the search bar + right-side controls unchanged aside from any spacing adjustments required by removing the left element.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-image-used-in-the-top-of-page-branding-banner-above-the-sticky-header-with-the-newly-uploaded-speakr-image-and-ensure-it-is-rendered-upright-and-scaled-to-fit-beautifully-within-the-banner-s-rectangular-container-without-cropping-or-distortion-keep-the-slogan-text-giving-everyone-a-voice-directly-underneath-the-logo-and-keep-the-existing-banner-layout-structure-otherwise-unchanged",
+      "title": "Replace the image used in the top-of-page branding banner (above the sticky header) with the newly uploaded SPEAKR image, and ensure it is rendered upright and scaled to fit beautifully within the banner’s rectangular container without cropping or distortion. Keep the slogan text \"Giving everyone a voice!\" directly underneath the logo and keep the existing banner layout structure otherwise unchanged.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-newly-uploaded-speakr-logo-image-as-a-static-frontend-asset-under-frontend-public-assets-generated-and-reference-it-from-the-branding-banner-without-routing-through-the-backend",
+      "title": "Add the newly uploaded SPEAKR logo image as a static frontend asset under frontend/public/assets/generated and reference it from the branding banner without routing through the backend.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-sticky-header-user-sign-in-control-navigate-to-a-new-login-register-page-when-clicked-without-changing-any-other-header-layout-styling",
+      "title": "Make the sticky header user/sign-in control navigate to a new Login/Register page when clicked, without changing any other header layout/styling.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-new-auth-page-that-contains-both-a-login-form-and-a-register-form-ui-only-no-backend-calls-with-a-clear-toggle-e-g-tabs-or-segmented-buttons-to-switch-between-the-two-views",
+      "title": "Add a new Auth page that contains both a Login form and a Register form (UI-only; no backend calls), with a clear toggle (e.g., tabs or segmented buttons) to switch between the two views.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-register-form-ui-with-standard-registration-fields-ui-only-and-an-interests-section-that-supports-selecting-multiple-interests-via-checkboxes",
+      "title": "Implement the Register form UI with standard registration fields (UI-only) and an Interests section that supports selecting multiple interests via checkboxes.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-populate-the-interests-checkbox-list-using-the-existing-site-categories-as-a-base-and-include-additional-interest-options-beyond-the-existing-categories",
+      "title": "Populate the Interests checkbox list using the existing site categories as a base and include additional interest options beyond the existing categories.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-login-form-ui-ui-only-with-email-and-password-inputs-and-a-submit-button-using-english-user-facing-text",
+      "title": "Implement the Login form UI (UI-only) with email and password inputs and a submit button, using English user-facing text.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-new-ui-only-multi-step-onboarding-walkthrough-2-3-steps-with-english-user-facing-copy-that-introduces-speakr-and-its-core-actions-discover-audio-upload-record-and-play-in-the-mini-player-while-preserving-the-existing-overall-layout-ui-styling",
+      "title": "Create a new UI-only multi-step onboarding walkthrough (2–3 steps) with English user-facing copy that introduces SPEAKR and its core actions (discover audio, upload/record, and play in the mini-player) while preserving the existing overall layout/UI styling.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-routing-so-the-onboarding-walkthrough-is-reachable-via-a-dedicated-route-for-example-onboarding-using-the-existing-tanstack-router-setup-without-breaking-existing-routes-explore-upload-auth",
+      "title": "Add routing so the onboarding walkthrough is reachable via a dedicated route (for example, /onboarding) using the existing TanStack Router setup, without breaking existing routes (/ , /explore, /upload, /auth).",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-show-the-onboarding-walkthrough-to-first-time-visitors-before-they-enter-the-feed-ui-only-and-persist-completion-locally-so-returning-users-are-not-repeatedly-forced-through-onboarding",
+      "title": "Show the onboarding walkthrough to first-time visitors before they enter the Feed (UI-only), and persist completion locally so returning users are not repeatedly forced through onboarding.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-onboarding-navigation-controls-are-accessible-and-clear-keyboard-navigable-visible-focus-states-descriptive-button-labels-in-english-and-do-not-interfere-with-the-persistent-mini-player-region-when-no-audio-is-playing",
+      "title": "Ensure onboarding navigation controls are accessible and clear (keyboard navigable, visible focus states, descriptive button labels in English) and do not interfere with the persistent mini-player region when no audio is playing.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-accessible-dropdown-menu-control-in-the-top-left-of-the-existing-brandingbanner-frontend-src-components-layout-brandingbanner-tsx-without-removing-or-significantly-changing-the-existing-centered-logo-slogan-layout",
+      "title": "Add an accessible dropdown menu control in the top-left of the existing BrandingBanner (frontend/src/components/layout/BrandingBanner.tsx) without removing or significantly changing the existing centered logo + slogan layout.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-populate-the-branding-banner-dropdown-menu-with-common-site-navigation-items-including-about-categories-contact-plus-other-standard-items-that-are-relevant-for-a-content-app-e-g-help-faq-terms-privacy-use-english-labels-for-all-menu-items",
+      "title": "Populate the branding-banner dropdown menu with common site navigation items including: About, Categories, Contact, plus other standard items that are relevant for a content app (e.g., Help/FAQ, Terms, Privacy). Use English labels for all menu items.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-any-missing-pages-routes-for-the-dropdown-menu-items-that-do-not-already-exist-and-wire-them-into-the-existing-tanstack-router-configuration-in-frontend-src-app-tsx-if-a-relevant-existing-page-already-exists-e-g-the-current-explore-categories-page-reuse-it-instead-of-creating-a-duplicate",
+      "title": "Create any missing pages/routes for the dropdown menu items that do not already exist, and wire them into the existing TanStack Router configuration in frontend/src/App.tsx. If a relevant existing page already exists (e.g., the current Explore categories page), reuse it instead of creating a duplicate.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-pulsating-speaker-style-animation-as-part-of-the-onboarding-flow-ui-in-frontend-src-components-onboarding-onboardingwizard-tsx-e-g-animated-pulse-around-the-step-icon-area-and-or-during-step-transitions",
+      "title": "Add a pulsating speaker-style animation as part of the onboarding flow UI in frontend/src/components/onboarding/OnboardingWizard.tsx (e.g., animated pulse around the step icon area and/or during step transitions).",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-floating-action-button-that-appears-in-the-top-right-corner-of-every-page-route-and-instantly-navigates-to-the-feed-page-when-clicked",
+      "title": "Add a floating action button that appears in the top-right corner of every page/route and instantly navigates to the Feed page (\"/\") when clicked.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-render-the-floating-back-to-feed-control-as-an-icon-only-button-using-a-speaker-style-icon-matching-the-app-s-existing-visual-theme-and-button-styling-conventions",
+      "title": "Render the floating \"Back to Feed\" control as an icon-only button using a speaker-style icon, matching the app’s existing visual theme and button styling conventions.",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-hide-the-floating-back-to-feed-button-whenever-the-mini-player-is-open-i-e-when-the-mini-player-bar-is-rendered-has-a-current-audio-item-loaded-and-show-it-again-when-the-mini-player-is-closed",
+      "title": "Hide the floating \"Back to Feed\" button whenever the mini-player is open (i.e., when the mini-player bar is rendered/has a current audio item loaded), and show it again when the mini-player is closed.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-floating-back-to-feed-action-button-frontend-src-components-layout-floatingbacktofeedbutton-tsx-to-keep-its-circular-shape-use-a-solid-red-background-and-display-a-clean-white-speaker-icon-not-a-mute-icon-with-an-x-keep-the-styling-simple-no-warm-to-cool-gradient",
+      "title": "Update the floating \"Back to Feed\" action button (frontend/src/components/layout/FloatingBackToFeedButton.tsx) to keep its circular shape, use a solid red background, and display a clean white speaker icon (not a mute icon with an \"x\"). Keep the styling simple (no warm-to-cool gradient).",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-extend-the-global-feed-filter-state-to-support-language-filtering-including-a-storing-the-user-s-current-selected-language-s-and-b-storing-a-default-language-derived-from-the-user-s-browser-language-setting-without-removing-or-changing-existing-search-query-and-category-filtering-behavior",
+      "title": "Extend the global feed filter state to support language filtering, including (a) storing the user’s current selected language(s) and (b) storing a default language derived from the user’s browser language setting, without removing or changing existing search query and category filtering behavior.",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-search-experience-so-that-when-a-user-starts-using-the-search-bar-the-app-auto-selects-the-user-s-default-language-from-the-browser-language-if-the-user-has-not-explicitly-selected-any-language-yet",
+      "title": "Update the search experience so that when a user starts using the search bar, the app auto-selects the user’s default language (from the browser language) if the user has not explicitly selected any language yet.",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-new-floating-language-selector-control-positioned-directly-under-the-existing-floating-back-to-feed-button-using-a-compact-dropdown-that-is-scrollable-and-supports-selecting-ticking-one-or-multiple-languages",
+      "title": "Add a new floating language selector control positioned directly under the existing floating “Back to Feed” button, using a compact dropdown that is scrollable and supports selecting/ticking one or multiple languages.",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-language-metadata-to-mock-audio-items-and-apply-language-filtering-to-the-feed-so-that-when-one-or-more-languages-are-selected-only-audio-items-matching-at-least-one-selected-language-are-shown-additionally-update-the-upload-form-to-ask-for-audio-language-s-using-a-compact-scrollable-multi-select-dropdown-with-a-no-language-music-option",
+      "title": "Add language metadata to mock audio items and apply language filtering to the Feed so that when one or more languages are selected, only audio items matching at least one selected language are shown; additionally, update the Upload form to ask for audio language(s) using a compact, scrollable multi-select dropdown with a ‘No language (music)’ option.",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-the-base-language-list-used-by-the-app-to-a-curated-set-of-20-30-common-globally-used-base-languages-no-regional-variants-while-keeping-the-existing-no-language-music-option",
+      "title": "Expand the base language list used by the app to a curated set of ~20–30 common, globally used base languages (no regional variants), while keeping the existing \"No language (music)\" option.",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-custom-language-entry-workflow-that-lets-a-user-type-and-add-a-language-that-is-not-present-in-the-dropdown-and-make-this-workflow-available-in-both-places-1-the-floating-feed-language-filter-and-2-the-upload-form-language-selector",
+      "title": "Add a \"custom language\" entry workflow that lets a user type and add a language that is not present in the dropdown, and make this workflow available in BOTH places: (1) the floating feed language filter and (2) the upload form language selector.",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-duplicate-detection-for-user-added-languages-so-that-if-the-user-tries-to-add-a-language-that-already-exists-either-built-in-or-already-custom-added-the-ui-informs-the-user-and-does-not-add-a-duplicate",
+      "title": "Implement duplicate detection for user-added languages so that if the user tries to add a language that already exists (either built-in or already custom-added), the UI informs the user and does not add a duplicate.",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-persist-the-user-added-custom-languages-locally-in-the-browser-and-ensure-both-the-floating-language-selector-and-the-upload-language-selector-read-from-the-same-combined-list-built-in-custom-on-reload",
+      "title": "Persist the user-added custom languages locally in the browser and ensure both the floating language selector and the upload language selector read from the same combined list (built-in + custom) on reload.",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-the-built-in-language-list-in-frontend-src-constants-languages-ts-to-include-a-comprehensive-authoritative-set-of-base-world-languages-excluding-dialects-variants-while-keeping-the-existing-no-language-music-option",
+      "title": "Expand the built-in language list in frontend/src/constants/languages.ts to include a comprehensive, authoritative set of base world languages (excluding dialects/variants), while keeping the existing \"No language (music)\" option.",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-languages-in-a-single-perfectly-alphabetical-list-by-english-label-everywhere-languages-are-shown-including-the-combined-list-of-built-in-user-added-custom-languages",
+      "title": "Display languages in a single perfectly alphabetical list (by English label) everywhere languages are shown, including the combined list of built-in + user-added custom languages.",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create SPEAKR UI/interface with top logo branding",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Support direct audio uploads with maximum length of 3 hours",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Support in-app audio recording for posts",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Categories system: predefined starter categories plus user-defined categories on upload",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Search bar to find audio content",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Main feed that includes general + personalized recommendations (based on history, follows, likes)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Require thumbnail upload or generation for each audio file, displayed above play button",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Background/minimized playback so audio continues when browser/app is minimized",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Like and dislike buttons for each audio file",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Comments section that appears below the audio file when clicked",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Global listen counter displaying total plays per audio file",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Adjust header branding so uploaded SPEAKR logo displays large, clear, and readable in the top-left placeholder without changing overall layout",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Add an 'X' close button to the persistent mini-player that hides it and clears the currently loaded audio",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Add a top-of-page branding banner above the existing header with a large upright SPEAKR logo in a rectangular box and the slogan \"Giving everyone a voice!\" underneath (keep everything else unchanged)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Remove the far-left placeholder area in the sticky header so only the search bar and two icons remain (no other layout changes)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Replace the top branding banner logo with the newly uploaded SPEAKR image and scale/fit it beautifully within the banner’s rectangular area to match the page layout",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Add login/register page (UI-only) opened from sticky header login icon, including email/password inputs and multi-select interests via checkboxes (categories + additional options)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Add rich creator profile pages (UI) including profile picture, bio, follower/following counts & lists, creator interests, and a list of the creator’s audio posts",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Add a simple multi-step onboarding walkthrough (2–3 screens) for new users before entering the feed (UI-only)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Enhance Explore page with discovery sections such as Trending, New This Week, and Recommended For You (UI-only, minimal layout change)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Add clearer social signals (UI) such as follow/unfollow, follower counts, and recent listener activity indicators",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Add a more informative audio detail/page view (UI) with creator details and episode descriptions/metadata",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Add a top-left dropdown menu in the top branding banner with common navigation links (About, Categories, Contact, etc.)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Create new pages/routes for dropdown menu items that do not already exist (e.g., About, Categories, Contact)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Add a pulsating speaker animation to the onboarding flow transitions/screens",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Add a floating speaker-icon button in the top-right on every page that instantly navigates back to the Feed; it should be always visible except when the mini-player is open",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Refine the floating Back-to-Feed button styling: keep circular shape, use a solid red background, and use a clean white speaker icon (remove the small 'x' that makes it look like mute); keep styling simple (no warm-to-cool gradient for now).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Add language selection/filter: default to user’s browser language for search/feed, provide a selector button under Back-to-Feed, and filter visible audio by selected language(s)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Add upload metadata for audio language(s): compact scrollable multi-select dropdown with option for no language (e.g., music) and support multiple languages per audio",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Expand language selectors beyond ~20–30 to a comprehensive global language list (excluding dialects/variants) using authoritative sources, and display languages in a single perfectly alphabetical list (including built-in + user-added).",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "SPEAKR",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

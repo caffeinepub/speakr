@@ -1,0 +1,71 @@
+{
+  "kind": "build_request",
+  "title": "Expand language list using authoritative sources and enforce perfectly alphabetical ordering",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-42",
+      "text": "Expand the built-in language list in frontend/src/constants/languages.ts to include a comprehensive, authoritative set of base world languages (excluding dialects/variants), while keeping the existing \"No language (music)\" option.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "Sure, use sources to know which languages will be most common and useful to add"
+        ]
+      },
+      "acceptanceCriteria": [
+        "SUPPORTED_LANGUAGES contains a comprehensive list of base languages derived from an authoritative standard (e.g., ISO 639-1 base languages), using stable language codes and English labels.",
+        "Regional variants/dialects (e.g., en-US, pt-BR) are not included as separate entries; only base languages are included.",
+        "The existing option { code: 'none', label: 'No language (music)' } remains available in the list.",
+        "getBrowserDefaultLanguage() continues to return a supported base language code when possible, otherwise falls back to 'en'."
+      ]
+    },
+    {
+      "id": "REQ-43",
+      "text": "Display languages in a single perfectly alphabetical list (by English label) everywhere languages are shown, including the combined list of built-in + user-added custom languages.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2",
+          "msg-3"
+        ],
+        "quotes": [
+          "I still feel a lot of languages are missing and they are also not alphabetically displayed.",
+          "Just keep it perfectly alphabetical"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Both the floating language filter (frontend/src/components/layout/FloatingLanguageSelector.tsx) and the upload language selector (frontend/src/components/language/LanguageMultiSelectDropdown.tsx) render the language checklist in strictly alphabetical order by label (case-insensitive).",
+        "The ordering is applied to the combined list (built-in + custom languages) as a single list; custom languages are not grouped separately.",
+        "After adding a custom language, the list remains perfectly alphabetized without requiring a page refresh.",
+        "On reload, the list remains perfectly alphabetized after custom languages are loaded from localStorage."
+      ]
+    }
+  ],
+  "constraints": [
+    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
+    "Do not add backend logic; this change is frontend-only.",
+    "Keep all user-facing text in English."
+  ],
+  "nonGoals": [
+    "Adding backend-powered language search or fetching language lists from external APIs at runtime.",
+    "Adding regional language variants (e.g., en-US, es-MX) as separate selectable languages.",
+    "Changing how language filtering works beyond expanding the available languages and ensuring alphabetical ordering."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}
