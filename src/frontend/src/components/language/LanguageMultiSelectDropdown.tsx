@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
-import { Languages, Check, Plus } from 'lucide-react';
+import { Languages, Check, Plus, Search } from 'lucide-react';
 import { useCustomLanguages } from '@/hooks/useCustomLanguages';
 
 interface LanguageMultiSelectDropdownProps {
@@ -23,8 +23,20 @@ export default function LanguageMultiSelectDropdown({
 }: LanguageMultiSelectDropdownProps) {
   const [open, setOpen] = useState(false);
   const [customLanguageInput, setCustomLanguageInput] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const { allLanguages, addCustomLanguage, getLanguageLabel } = useCustomLanguages();
+
+  // Filter languages based on search query
+  const filteredLanguages = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return allLanguages;
+    }
+    const query = searchQuery.toLowerCase();
+    return allLanguages.filter(language =>
+      language.label.toLowerCase().includes(query)
+    );
+  }, [allLanguages, searchQuery]);
 
   const handleToggle = (languageCode: string) => {
     const isSelected = selectedLanguages.includes(languageCode);
@@ -76,6 +88,21 @@ export default function LanguageMultiSelectDropdown({
       </PopoverTrigger>
       <PopoverContent className="w-[280px] p-0" align="start">
         <div className="p-3 border-b space-y-2">
+          <Label htmlFor="search-language" className="text-xs font-semibold">
+            Search Languages
+          </Label>
+          <div className="relative">
+            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              id="search-language"
+              placeholder="Type to filter..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-8 text-sm pl-8"
+            />
+          </div>
+        </div>
+        <div className="p-3 border-b space-y-2">
           <Label htmlFor="custom-language-upload" className="text-xs font-semibold">
             Add Custom Language
           </Label>
@@ -108,24 +135,30 @@ export default function LanguageMultiSelectDropdown({
         </div>
         <ScrollArea className="h-[300px]">
           <div className="p-4 space-y-3">
-            {allLanguages.map((language) => {
-              const isSelected = selectedLanguages.includes(language.code);
-              return (
-                <div key={language.code} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={`lang-${language.code}`}
-                    checked={isSelected}
-                    onCheckedChange={() => handleToggle(language.code)}
-                  />
-                  <Label
-                    htmlFor={`lang-${language.code}`}
-                    className="flex-1 cursor-pointer text-sm font-normal"
-                  >
-                    {language.label}
-                  </Label>
-                </div>
-              );
-            })}
+            {filteredLanguages.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-4">
+                No languages found
+              </p>
+            ) : (
+              filteredLanguages.map((language) => {
+                const isSelected = selectedLanguages.includes(language.code);
+                return (
+                  <div key={language.code} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`lang-${language.code}`}
+                      checked={isSelected}
+                      onCheckedChange={() => handleToggle(language.code)}
+                    />
+                    <Label
+                      htmlFor={`lang-${language.code}`}
+                      className="flex-1 cursor-pointer text-sm font-normal"
+                    >
+                      {language.label}
+                    </Label>
+                  </div>
+                );
+              })
+            )}
           </div>
         </ScrollArea>
       </PopoverContent>

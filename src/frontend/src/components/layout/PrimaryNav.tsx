@@ -13,7 +13,7 @@ export default function PrimaryNav() {
   ];
 
   return (
-    <nav className="flex items-center gap-1 border-b border-border/40 px-4 md:px-6">
+    <nav className="flex items-center gap-2 border-b border-border/40 px-4 md:px-6 py-2">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = currentPath === item.path;
@@ -21,10 +21,10 @@ export default function PrimaryNav() {
           <Link key={item.path} to={item.path}>
             <Button
               variant={isActive ? 'default' : 'ghost'}
-              size="sm"
-              className="gap-2"
+              size="default"
+              className="gap-2 text-base px-5"
             >
-              <Icon className="h-4 w-4" />
+              <Icon className="h-5 w-5" />
               {item.label}
             </Button>
           </Link>

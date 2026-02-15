@@ -1,7 +1,7 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-13T23:48:06.036Z",
+  "generatedAt": "2026-02-15T03:54:39.217Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
@@ -11,27 +11,25 @@
     "implemented": 2,
     "items": [
       {
-        "id": "REQ-42",
-        "summary": "Expand the built-in language list in frontend/src/constants/languages.ts to include a comprehensive, authoritative set of base world languages (excluding dialects/variants), while keeping the existing \"No language (music)\" option.",
+        "id": "REQ-1",
+        "summary": "Update the main header so it is not sticky and does not remain fixed while the page scrolls (i.e., remove the sticky positioning behavior so the header is placed at the top of the document flow).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/constants/languages.ts"
+          "frontend/src/components/layout/Header.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/constants/languages.ts"
+          "frontend/src/components/layout/Header.tsx"
         ]
       },
       {
-        "id": "REQ-43",
-        "summary": "Display languages in a single perfectly alphabetical list (by English label) everywhere languages are shown, including the combined list of built-in + user-added custom languages.",
+        "id": "REQ-2",
+        "summary": "Center the header logo horizontally within the top header area (desktop and mobile) and increase its visual clarity/visibility (e.g., larger size and stronger contrast against the header background), while preserving the existing logo fallback behavior when the image fails to load.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useCustomLanguages.ts",
-          "frontend/src/components/layout/FloatingLanguageSelector.tsx",
-          "frontend/src/components/language/LanguageMultiSelectDropdown.tsx"
+          "frontend/src/components/layout/Header.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useCustomLanguages.ts"
+          "frontend/src/components/layout/Header.tsx"
         ]
       }
     ]
@@ -41,8 +39,7 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/constants/languages.ts",
-    "frontend/src/hooks/useCustomLanguages.ts",
+    "frontend/src/components/layout/Header.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

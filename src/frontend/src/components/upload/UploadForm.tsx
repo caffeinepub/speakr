@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,15 +10,19 @@ import AudioSourceSelector from './AudioSourceSelector';
 import LanguageMultiSelectDropdown from '@/components/language/LanguageMultiSelectDropdown';
 import { useAudioDurationValidation } from './useAudioDurationValidation';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle, Upload } from 'lucide-react';
+import { AlertCircle, Upload, CheckCircle } from 'lucide-react';
+import { saveDraftItem } from '@/lib/draftFeedItems';
+import { toast } from 'sonner';
 
 export default function UploadForm() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { durationError, validateAudioFile } = useAudioDurationValidation();
 
   const handleAudioFileChange = (file: File | null) => {
@@ -27,34 +32,72 @@ export default function UploadForm() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation
     if (!thumbnail) {
-      alert('Please upload a thumbnail');
+      toast.error('Please upload a thumbnail');
       return;
     }
     if (!audioFile) {
-      alert('Please select an audio file');
+      toast.error('Please select an audio file or record audio');
       return;
     }
     if (selectedLanguages.length === 0) {
-      alert('Please select at least one language or "No language (music)"');
+      toast.error('Please select at least one language or "No language (music)"');
       return;
     }
     if (durationError) {
-      alert('Audio file exceeds 3-hour limit');
+      toast.error('Audio file exceeds 3-hour limit');
       return;
     }
-    // Mock submission
-    console.log('Form submitted:', { 
-      title, 
-      description, 
-      category, 
-      thumbnail, 
-      audioFile,
-      languages: selectedLanguages 
-    });
-    alert('Upload form submitted (interface only)');
+    if (!title.trim()) {
+      toast.error('Please enter a title');
+      return;
+    }
+    if (!category) {
+      toast.error('Please select a category');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Save as draft item
+      await saveDraftItem({
+        title: title.trim(),
+        category,
+        languages: selectedLanguages,
+        description: description.trim(),
+        audioFile,
+        thumbnailFile: thumbnail,
+      });
+
+      // Show success message
+      toast.success('Draft saved! Your recording is now visible in the feed.', {
+        description: 'This is a local test draft and has not been published to the network.',
+        duration: 5000,
+      });
+
+      // Reset form
+      setTitle('');
+      setDescription('');
+      setCategory('');
+      setThumbnail(null);
+      setAudioFile(null);
+      setSelectedLanguages([]);
+
+      // Navigate to feed
+      navigate({ to: '/' });
+    } catch (error) {
+      console.error('Failed to save draft:', error);
+      toast.error('Failed to save draft', {
+        description: error instanceof Error ? error.message : 'An unexpected error occurred',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -134,9 +177,18 @@ export default function UploadForm() {
             )}
           </div>
 
-          <Button type="submit" className="w-full" size="lg">
-            <Upload className="h-4 w-4 mr-2" />
-            Upload Audio
+          <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                Uploading...
+              </>
+            ) : (
+              <>
+                <Upload className="h-4 w-4 mr-2" />
+                Upload
+              </>
+            )}
           </Button>
         </form>
       </CardContent>

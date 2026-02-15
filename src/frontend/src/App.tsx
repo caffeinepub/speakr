@@ -1,10 +1,9 @@
-import { RouterProvider, createRouter, createRootRoute, createRoute, Outlet, redirect } from '@tanstack/react-router';
+import { RouterProvider, createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/react-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PlayerProvider } from './player/PlayerProvider';
-import BrandingBanner from './components/layout/BrandingBanner';
+import { Toaster } from '@/components/ui/sonner';
 import Header from './components/layout/Header';
 import MiniPlayerBar from './components/player/MiniPlayerBar';
-import FloatingBackToFeedButton from './components/layout/FloatingBackToFeedButton';
-import FloatingLanguageSelector from './components/layout/FloatingLanguageSelector';
 import FeedPage from './pages/FeedPage';
 import ExplorePage from './pages/ExplorePage';
 import UploadPage from './pages/UploadPage';
@@ -15,13 +14,26 @@ import ContactPage from './pages/ContactPage';
 import HelpPage from './pages/HelpPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
+import FloatingBackToFeedButton from './components/layout/FloatingBackToFeedButton';
+import FloatingLanguageSelector from './components/layout/FloatingLanguageSelector';
+import { useOnboarding } from './hooks/useOnboarding';
+import { useEffect } from 'react';
+
+const queryClient = new QueryClient();
 
 function AppLayout() {
+  const { isComplete } = useOnboarding();
+
+  useEffect(() => {
+    if (!isComplete && window.location.pathname !== '/onboarding') {
+      window.location.href = '/onboarding';
+    }
+  }, [isComplete]);
+
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <BrandingBanner />
+    <div className="min-h-screen bg-background">
       <Header />
-      <main className="flex-1">
+      <main>
         <Outlet />
       </main>
       <MiniPlayerBar />
@@ -35,18 +47,10 @@ const rootRoute = createRootRoute({
   component: AppLayout,
 });
 
-const feedRoute = createRoute({
+const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   component: FeedPage,
-  beforeLoad: () => {
-    if (typeof window !== 'undefined') {
-      const isOnboardingComplete = localStorage.getItem('speakr_onboarding_complete') === 'true';
-      if (!isOnboardingComplete) {
-        throw redirect({ to: '/onboarding' });
-      }
-    }
-  },
 });
 
 const exploreRoute = createRoute({
@@ -104,7 +108,7 @@ const privacyRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([
-  feedRoute,
+  indexRoute,
   exploreRoute,
   uploadRoute,
   authRoute,
@@ -118,16 +122,13 @@ const routeTree = rootRoute.addChildren([
 
 const router = createRouter({ routeTree });
 
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
-}
-
 export default function App() {
   return (
-    <PlayerProvider>
-      <RouterProvider router={router} />
-    </PlayerProvider>
+    <QueryClientProvider client={queryClient}>
+      <PlayerProvider>
+        <RouterProvider router={router} />
+        <Toaster />
+      </PlayerProvider>
+    </QueryClientProvider>
   );
 }

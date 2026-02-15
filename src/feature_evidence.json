@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-expand-the-built-in-language-list-in-frontend-src-constants-languages-ts-to-include-a-comprehensive-authoritative-set-of-base-world-languages-excluding-dialects-variants-while-keeping-the-existing-no-language-music-option",
-      "featureTitle": "Expand the built-in language list in frontend/src/constants/languages.ts to include a comprehensive, authoritative set of base world languages (excluding dialects/variants), while keeping the existing \"No language (music)\" option.",
+      "featureId": "feature-update-the-main-header-so-it-is-not-sticky-and-does-not-remain-fixed-while-the-page-scrolls-i-e-remove-the-sticky-positioning-behavior-so-the-header-is-placed-at-the-top-of-the-document-flow",
+      "featureTitle": "Update the main header so it is not sticky and does not remain fixed while the page scrolls (i.e., remove the sticky positioning behavior so the header is placed at the top of the document flow).",
       "files": [
-        "frontend/src/constants/languages.ts"
+        "frontend/src/components/layout/Header.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -15,15 +15,15 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-42"
+        "REQ-1"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-display-languages-in-a-single-perfectly-alphabetical-list-by-english-label-everywhere-languages-are-shown-including-the-combined-list-of-built-in-user-added-custom-languages",
-      "featureTitle": "Display languages in a single perfectly alphabetical list (by English label) everywhere languages are shown, including the combined list of built-in + user-added custom languages.",
+      "featureId": "feature-center-the-header-logo-horizontally-within-the-top-header-area-desktop-and-mobile-and-increase-its-visual-clarity-visibility-e-g-larger-size-and-stronger-contrast-against-the-header-background-while-preserving-the-existing-logo-fallback-behavior-when-the-image-fails-to-load",
+      "featureTitle": "Center the header logo horizontally within the top header area (desktop and mobile) and increase its visual clarity/visibility (e.g., larger size and stronger contrast against the header background), while preserving the existing logo fallback behavior when the image fails to load.",
       "files": [
-        "frontend/src/hooks/useCustomLanguages.ts"
+        "frontend/src/components/layout/Header.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -33,7 +33,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-43"
+        "REQ-2"
       ],
       "confidence": "high"
     }

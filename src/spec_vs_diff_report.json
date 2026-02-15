@@ -1,33 +1,36 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-13T23:48:06.033Z",
-  "summary": "REQ-42 appears partially implemented by expanding SUPPORTED_LANGUAGES in frontend/src/constants/languages.ts and retaining the 'none' option, but the diff is truncated so completeness and getBrowserDefaultLanguage() behavior cannot be verified. REQ-43 (perfect alphabetical ordering everywhere languages are shown) is not evidenced in the two specified UI components; only a hook-level combined sorting change is shown.",
-  "missing_requirements": [
+  "generatedAt": "2026-02-15T03:54:39.215Z",
+  "summary": "REQ-1 and REQ-2 appear implemented in Header.tsx: header is no longer sticky/fixed and the logo is centered with improved visibility while preserving image-fallback behavior. However, the diff also adds/changes header navigation menu items that look like new header functionality/routes, which conflicts with the stated non-goals.",
+  "missing_requirements": [],
+  "hallucinated_features": [
     {
-      "id": "REQ-42",
-      "requirement": "getBrowserDefaultLanguage() continues to return a supported base language code when possible, otherwise falls back to 'en'.",
-      "reason": "The diff for frontend/src/constants/languages.ts is truncated and does not show getBrowserDefaultLanguage() or any updates confirming the required fallback/normalization behavior.",
+      "description": "Added/expanded header dropdown navigation entries pointing to additional paths (e.g., /about, /contact, /help, /terms, /privacy), which constitutes new header navigation beyond removing stickiness and improving logo alignment/visibility.",
+      "reason": "BuildRequest explicitly disallows new navigation routes or new header features beyond removing stickiness and improving logo alignment/visibility; these menu items are not requested in REQ-1/REQ-2.",
       "evidence": [
-        "frontend/src/constants/languages.ts (truncated)"
+        "frontend/src/components/layout/Header.tsx"
       ]
     },
     {
-      "id": "REQ-43",
-      "requirement": "Both FloatingLanguageSelector and LanguageMultiSelectDropdown render the combined built-in + custom language list in strictly alphabetical order by English label (case-insensitive), staying sorted after adding a custom language and after reload.",
-      "reason": "No changes are shown for frontend/src/components/layout/FloatingLanguageSelector.tsx or frontend/src/components/language/LanguageMultiSelectDropdown.tsx, so there is no evidence that these components use the new sorted combined list or apply case-insensitive label sorting in their rendered checklist.",
+      "description": "Updated project metadata/state tracking (new_feature_requests entries) unrelated to implementing the UI requirements.",
+      "reason": "BuildRequest only requests frontend header behavior and logo alignment/visibility changes; modifying/adding tracking entries in project_state.json is not requested functionality.",
       "evidence": [
-        "frontend/src/hooks/useCustomLanguages.ts",
-        "frontend-file-summaries.txt (does not show modifications for FloatingLanguageSelector.tsx or LanguageMultiSelectDropdown.tsx)"
+        "project_state.json"
+      ]
+    },
+    {
+      "description": "Edited/added generated documentation-style summary file (frontend-file-summaries.txt).",
+      "reason": "Not requested by the BuildRequest requirements; appears to be auxiliary documentation rather than implementing REQ-1/REQ-2.",
+      "evidence": [
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "hallucinated_features": [],
-  "confidence": 0.62,
+  "confidence": 0.72,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/constants/languages.ts",
-    "frontend/src/hooks/useCustomLanguages.ts",
+    "frontend/src/components/layout/Header.tsx",
     "project_state.json"
   ]
 }

@@ -1,4 +1,3 @@
-import PrimaryNav from '@/components/layout/PrimaryNav';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CATEGORIES } from '@/constants/categories';
@@ -18,7 +17,6 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen pb-24">
-      <PrimaryNav />
       <div className="container px-4 md:px-6 py-8">
         <h1 className="text-3xl font-bold mb-6">Explore Categories</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

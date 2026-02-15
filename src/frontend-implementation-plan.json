@@ -1,49 +1,36 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Expand supported languages and enforce perfect alphabetical ordering across language selectors",
+  "title": "Header: remove sticky behavior and center/clarify logo",
   "requirements": [
     {
-      "id": "REQ-42",
-      "summary": "Expand built-in language constants to a comprehensive authoritative base-language set while preserving the existing 'none' option and browser-default fallback behavior.",
+      "id": "REQ-1",
+      "summary": "Remove sticky/fixed positioning so the header (including its mobile sub-rows) scrolls with the page content.",
       "acceptanceCriteria": [
-        "SUPPORTED_LANGUAGES contains a comprehensive list of base languages derived from an authoritative standard (e.g., ISO 639-1 base languages), using stable language codes and English labels.",
-        "Regional variants/dialects (e.g., en-US, pt-BR) are not included as separate entries; only base languages are included.",
-        "The existing option { code: 'none', label: 'No language (music)' } remains available in the list.",
-        "getBrowserDefaultLanguage() continues to return a supported base language code when possible, otherwise falls back to 'en'."
+        "When scrolling any page, the header scrolls away with the page content (it is not sticky/fixed).",
+        "No header sub-sections (desktop row, mobile search row, mobile nav row) remain stuck to the viewport during scroll."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/constants/languages.ts",
+          "path": "frontend/src/components/layout/Header.tsx",
           "operation": "modify",
-          "description": "Replace the current small language list with a comprehensive, authoritative base-language list (ISO 639-1 codes with English labels), keeping { code: 'none', label: 'No language (music)' } intact; ensure only base codes are present (no regional variants) and adjust getBrowserDefaultLanguage() to consistently map navigator.language to a supported base code (splitting on '-') with fallback to 'en'."
+          "description": "Remove the sticky positioning behavior from the root <header> element (e.g., eliminate Tailwind classes that cause sticky/fixed placement such as \"sticky\"/\"top-0\") and ensure no other header sub-rows rely on viewport-stuck positioning, so the entire header participates in normal document flow while retaining existing border/background styling."
         }
       ]
     },
     {
-      "id": "REQ-43",
-      "summary": "Ensure languages display as one combined, strictly alphabetical (case-insensitive) list everywhere they are rendered, including built-in + custom languages, and maintain ordering after add/reload.",
+      "id": "REQ-2",
+      "summary": "Center the header logo on desktop and mobile and improve its visibility while keeping the existing image-fallback-to-text behavior.",
       "acceptanceCriteria": [
-        "Both the floating language filter (frontend/src/components/layout/FloatingLanguageSelector.tsx) and the upload language selector (frontend/src/components/language/LanguageMultiSelectDropdown.tsx) render the language checklist in strictly alphabetical order by label (case-insensitive).",
-        "The ordering is applied to the combined list (built-in + custom languages) as a single list; custom languages are not grouped separately.",
-        "After adding a custom language, the list remains perfectly alphabetized without requiring a page refresh.",
-        "On reload, the list remains perfectly alphabetized after custom languages are loaded from localStorage."
+        "On desktop widths, the logo appears centered within the header area rather than grouped to the left next to the menu button.",
+        "On mobile widths, the logo remains centered in the header area without overlapping other controls.",
+        "The logo is visibly clearer than before (increased size and/or contrast), and the text fallback (\"SPEAKR\") still renders if the image fails to load."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useCustomLanguages.ts",
+          "path": "frontend/src/components/layout/Header.tsx",
           "operation": "modify",
-          "description": "Centralize alphabetical sorting for the combined language list: derive a single combined array (built-in + custom) and return it sorted by English label using a strict case-insensitive comparator so that (a) adding a custom language re-sorts immediately and (b) loading from localStorage produces a sorted list on first render after hydration."
-        },
-        {
-          "path": "frontend/src/components/layout/FloatingLanguageSelector.tsx",
-          "operation": "modify",
-          "description": "Ensure the rendered checklist uses the globally sorted combined language list from useCustomLanguages (and does not introduce any grouping); if any local transforms exist/are introduced, keep the final render order strictly case-insensitive alphabetical by label."
-        },
-        {
-          "path": "frontend/src/components/language/LanguageMultiSelectDropdown.tsx",
-          "operation": "modify",
-          "description": "Ensure the rendered checklist uses the globally sorted combined language list from useCustomLanguages (and does not introduce any grouping); keep the final render order strictly case-insensitive alphabetical by label and stable immediately after adding custom languages and after reload."
+          "description": "Restructure the top header row layout so the logo link is centered horizontally (desktop + mobile) independent of left menu and right actions (e.g., use a relative container with an absolutely centered logo region or a 3-column grid). Increase logo clarity by adjusting the image styling (larger height than the current h-10 and stronger contrast such as adding a Tailwind drop-shadow/contrast utility) and update the fallback text styling for comparable prominence. Preserve the existing onError-driven fallback behavior and continue using the same logo asset path: frontend/public/assets/generated/speakr-logo-reupload.dim_1536x864.png."
         }
       ]
     }
