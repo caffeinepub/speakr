@@ -1,11 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Remove sticky/fixed header behavior and make the header logo centered and more visually clear on desktop and mobile.
+**Goal:** Add a delete option in the main feed so signed-in users can permanently remove their own published uploads (including the “test” post) and delete local draft uploads, with proper per-user authorization.
 
 **Planned changes:**
-- Remove sticky/fixed positioning from the main header and any header sub-rows so the header remains in normal document flow and scrolls away with content.
-- Update header layout so the logo is horizontally centered within the top header area on both desktop and mobile without overlapping other controls.
-- Improve logo visibility/clarity (e.g., larger rendering size and/or stronger contrast against the header background) while preserving the existing text fallback (“SPEAKR”) when the logo image fails to load.
+- Show a delete action in the main feed only for backend uploads authored by the currently authenticated user (including the backend upload titled “test”).
+- Implement backend deletion for published uploads that permanently removes the post and its associated stored audio blob.
+- Implement draft deletion that removes the draft feed item and deletes its data from local device storage (e.g., localStorage).
+- Enforce per-user authorization: backend rejects non-author delete attempts; frontend hides delete for non-authors and shows an English error message if a non-author attempts deletion.
 
-**User-visible outcome:** When scrolling, the header scrolls away with the page, and the logo appears centered and easier to see on both desktop and mobile (with the “SPEAKR” fallback still working if the image doesn’t load).
+**User-visible outcome:** Signed-in users see a delete option on their own uploads in the main feed and can permanently delete them (including the “test” upload); drafts can be removed locally and won’t return after refresh; users cannot delete others’ posts.

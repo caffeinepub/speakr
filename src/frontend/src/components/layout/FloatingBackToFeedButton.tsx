@@ -21,7 +21,7 @@ export default function FloatingBackToFeedButton() {
       variant="default"
       size="icon"
       onClick={handleClick}
-      className="fixed top-4 right-4 z-40 h-12 w-12 rounded-full bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl transition-all"
+      className="fixed top-4 right-4 z-50 h-14 w-14 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-elevated-lg hover:shadow-glow-primary hover:scale-105 transition-all"
       aria-label="Back to Feed"
     >
       <Volume2 className="h-6 w-6" />

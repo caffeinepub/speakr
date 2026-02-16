@@ -1,7 +1,7 @@
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import SearchBar from '../search/SearchBar';
-import { Upload, User, Home, Compass, Menu } from 'lucide-react';
+import { Upload, Home, Compass, Menu, LogOut, LayoutDashboard, LogIn } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,15 +10,39 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
+import { useInternetIdentity } from '@/hooks/useInternetIdentity';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Header() {
   const navigate = useNavigate();
   const router = useRouterState();
   const currentPath = router.location.pathname;
   const [logoError, setLogoError] = useState(false);
+  const { login, clear, loginStatus, identity } = useInternetIdentity();
+  const queryClient = useQueryClient();
+
+  const isAuthenticated = !!identity;
+  const isLoggingIn = loginStatus === 'logging-in';
 
   const handleMenuNavigate = (path: string) => {
     navigate({ to: path });
+  };
+
+  const handleLogin = async () => {
+    try {
+      await login();
+    } catch (error: any) {
+      console.error('Login error:', error);
+      if (error.message === 'User is already authenticated') {
+        await clear();
+        setTimeout(() => login(), 300);
+      }
+    }
+  };
+
+  const handleLogout = async () => {
+    await clear();
+    queryClient.clear();
   };
 
   const navItems = [
@@ -28,7 +52,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="z-10 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 shadow-sm">
       <div className="container px-4 md:px-6">
         {/* Main header row with centered logo */}
         <div className="relative flex h-20 items-center">
@@ -40,7 +64,7 @@ export default function Header() {
                   variant="ghost"
                   size="icon"
                   aria-label="Open navigation menu"
-                  className="h-11 w-11"
+                  className="h-11 w-11 hover:bg-muted/80"
                 >
                   <Menu className="h-6 w-6" />
                 </Button>
@@ -65,6 +89,24 @@ export default function Header() {
                 <DropdownMenuItem onClick={() => handleMenuNavigate('/privacy')}>
                   Privacy Policy
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {isAuthenticated ? (
+                  <>
+                    <DropdownMenuItem onClick={() => handleMenuNavigate('/dashboard')}>
+                      <LayoutDashboard className="h-4 w-4 mr-2" />
+                      Dashboard
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <DropdownMenuItem onClick={handleLogin} disabled={isLoggingIn}>
+                    <LogIn className="h-4 w-4 mr-2" />
+                    {isLoggingIn ? 'Logging in...' : 'Login'}
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -80,30 +122,21 @@ export default function Header() {
                   onError={() => setLogoError(true)}
                 />
               ) : (
-                <span className="text-3xl font-bold text-primary drop-shadow-md">SPEAKR</span>
+                <span className="text-3xl font-bold text-primary drop-shadow-md tracking-tight">SPEAKR</span>
               )}
             </Link>
           </div>
 
-          {/* Right: Actions */}
+          {/* Right: Upload button only */}
           <div className="ml-auto flex items-center gap-3">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => navigate({ to: '/upload' })}
-              className="shrink-0 h-11 w-11"
+              className="shrink-0 h-11 w-11 hover:bg-muted/80"
             >
               <Upload className="h-6 w-6" />
               <span className="sr-only">Upload</span>
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="default" 
-              className="shrink-0 text-base px-5"
-              onClick={() => navigate({ to: '/auth' })}
-            >
-              <User className="h-5 w-5 mr-2" />
-              <span className="hidden sm:inline">Sign in</span>
             </Button>
           </div>
         </div>
@@ -119,7 +152,9 @@ export default function Header() {
                   <Button
                     variant={isActive ? 'default' : 'ghost'}
                     size="default"
-                    className="gap-2 text-base px-5"
+                    className={`gap-2 text-base px-5 transition-all ${
+                      isActive ? 'shadow-sm' : 'hover:bg-muted/80'
+                    }`}
                   >
                     <Icon className="h-5 w-5" />
                     {item.label}
@@ -149,7 +184,9 @@ export default function Header() {
               <Button
                 variant={isActive ? 'default' : 'ghost'}
                 size="default"
-                className="w-full gap-2 text-base"
+                className={`w-full gap-2 text-base ${
+                  isActive ? 'shadow-sm' : 'hover:bg-muted/80'
+                }`}
               >
                 <Icon className="h-5 w-5" />
                 {item.label}

@@ -55,6 +55,7 @@ export async function saveDraftItem(data: DraftItemData): Promise<MockAudioItem>
   // Save to localStorage
   try {
     localStorage.setItem(DRAFT_ITEMS_KEY, JSON.stringify(updatedDrafts));
+    notifyDraftChange();
   } catch (error) {
     console.error('Failed to save draft item:', error);
     throw new Error('Failed to save draft. Storage may be full.');
@@ -75,7 +76,36 @@ export function getDraftItems(): MockAudioItem[] {
   }
 }
 
+// Remove a draft item by ID
+export function removeDraftItem(id: string): void {
+  try {
+    const existingDrafts = getDraftItems();
+    const updatedDrafts = existingDrafts.filter(item => item.id !== id);
+    localStorage.setItem(DRAFT_ITEMS_KEY, JSON.stringify(updatedDrafts));
+    notifyDraftChange();
+  } catch (error) {
+    console.error('Failed to remove draft item:', error);
+    throw new Error('Failed to remove draft item');
+  }
+}
+
 // Clear all draft items (optional utility)
 export function clearDraftItems(): void {
   localStorage.removeItem(DRAFT_ITEMS_KEY);
+  notifyDraftChange();
+}
+
+// Draft change notification mechanism
+type DraftChangeListener = () => void;
+const draftChangeListeners = new Set<DraftChangeListener>();
+
+export function subscribeToDraftChanges(listener: DraftChangeListener): () => void {
+  draftChangeListeners.add(listener);
+  return () => {
+    draftChangeListeners.delete(listener);
+  };
+}
+
+function notifyDraftChange(): void {
+  draftChangeListeners.forEach(listener => listener());
 }

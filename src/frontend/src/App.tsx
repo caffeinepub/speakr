@@ -2,6 +2,7 @@ import { RouterProvider, createRouter, createRoute, createRootRoute, Outlet } fr
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PlayerProvider } from './player/PlayerProvider';
 import { Toaster } from '@/components/ui/sonner';
+import { InternetIdentityProvider } from './hooks/useInternetIdentity';
 import Header from './components/layout/Header';
 import MiniPlayerBar from './components/player/MiniPlayerBar';
 import FeedPage from './pages/FeedPage';
@@ -14,6 +15,7 @@ import ContactPage from './pages/ContactPage';
 import HelpPage from './pages/HelpPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
+import DashboardPage from './pages/DashboardPage';
 import FloatingBackToFeedButton from './components/layout/FloatingBackToFeedButton';
 import FloatingLanguageSelector from './components/layout/FloatingLanguageSelector';
 import { useOnboarding } from './hooks/useOnboarding';
@@ -31,7 +33,7 @@ function AppLayout() {
   }, [isComplete]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <Header />
       <main>
         <Outlet />
@@ -107,6 +109,12 @@ const privacyRoute = createRoute({
   component: PrivacyPage,
 });
 
+const dashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/dashboard',
+  component: DashboardPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   exploreRoute,
@@ -118,6 +126,7 @@ const routeTree = rootRoute.addChildren([
   helpRoute,
   termsRoute,
   privacyRoute,
+  dashboardRoute,
 ]);
 
 const router = createRouter({ routeTree });
@@ -125,10 +134,12 @@ const router = createRouter({ routeTree });
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <PlayerProvider>
-        <RouterProvider router={router} />
-        <Toaster />
-      </PlayerProvider>
+      <InternetIdentityProvider>
+        <PlayerProvider>
+          <RouterProvider router={router} />
+          <Toaster />
+        </PlayerProvider>
+      </InternetIdentityProvider>
     </QueryClientProvider>
   );
 }

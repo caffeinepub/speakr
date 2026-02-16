@@ -2,17 +2,20 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-main-header-so-it-is-not-sticky-and-does-not-remain-fixed-while-the-page-scrolls-i-e-remove-the-sticky-positioning-behavior-so-the-header-is-placed-at-the-top-of-the-document-flow",
-      "featureTitle": "Update the main header so it is not sticky and does not remain fixed while the page scrolls (i.e., remove the sticky positioning behavior so the header is placed at the top of the document flow).",
+      "featureId": "feature-ensure-the-main-feed-shows-a-delete-action-for-uploads-that-belong-to-the-currently-authenticated-user-including-the-existing-backend-upload-item-titled-test",
+      "featureTitle": "Ensure the main feed shows a delete action for uploads that belong to the currently authenticated user, including the existing backend-upload item titled \"test\".",
       "files": [
-        "frontend/src/components/layout/Header.tsx"
+        "frontend/src/components/feed/AudioCard.tsx",
+        "frontend/src/pages/FeedPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
       ],
       "testIds": [
         "REQ-1"
@@ -20,20 +23,44 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-center-the-header-logo-horizontally-within-the-top-header-area-desktop-and-mobile-and-increase-its-visual-clarity-visibility-e-g-larger-size-and-stronger-contrast-against-the-header-background-while-preserving-the-existing-logo-fallback-behavior-when-the-image-fails-to-load",
-      "featureTitle": "Center the header logo horizontally within the top header area (desktop and mobile) and increase its visual clarity/visibility (e.g., larger size and stronger contrast against the header background), while preserving the existing logo fallback behavior when the image fails to load.",
+      "featureId": "feature-implement-deletion-for-feed-items-so-that-deleting-a-published-backend-upload-permanently-removes-the-post-and-its-associated-stored-audio-blob-and-deleting-a-draft-upload-permanently-removes-it-from-local-device-storage",
+      "featureTitle": "Implement deletion for feed items so that deleting a published backend upload permanently removes the post and its associated stored audio blob, and deleting a draft upload permanently removes it from local device storage.",
       "files": [
-        "frontend/src/components/layout/Header.tsx"
+        "frontend/src/components/feed/AudioCard.tsx",
+        "frontend/src/lib/draftFeedItems.ts",
+        "frontend/src/pages/FeedPage.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-enforce-that-only-the-uploader-author-can-delete-their-own-published-backend-uploads-ui-gating-backend-authorization",
+      "featureTitle": "Enforce that only the uploader/author can delete their own published backend uploads (UI gating + backend authorization).",
+      "files": [
+        "frontend/src/components/feed/AudioCard.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
       ],
       "confidence": "high"
     }

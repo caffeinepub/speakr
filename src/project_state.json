@@ -2,23 +2,36 @@
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
   "summary": "New project",
-  "architectural_notes": [],
-  "known_issues": [],
+  "architectural_notes": [
+    "Delete action must enforce ownership (only uploader can delete).",
+    "Deletion must be permanent: remove upload from storage and remove associated feed item."
+  ],
+  "known_issues": [
+    "No option currently exists to delete an upload from the main feed."
+  ],
   "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-update-the-main-header-so-it-is-not-sticky-and-does-not-remain-fixed-while-the-page-scrolls-i-e-remove-the-sticky-positioning-behavior-so-the-header-is-placed-at-the-top-of-the-document-flow",
-      "title": "Update the main header so it is not sticky and does not remain fixed while the page scrolls (i.e., remove the sticky positioning behavior so the header is placed at the top of the document flow).",
+      "id": "feature-ensure-the-main-feed-shows-a-delete-action-for-uploads-that-belong-to-the-currently-authenticated-user-including-the-existing-backend-upload-item-titled-test",
+      "title": "Ensure the main feed shows a delete action for uploads that belong to the currently authenticated user, including the existing backend-upload item titled \"test\".",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-center-the-header-logo-horizontally-within-the-top-header-area-desktop-and-mobile-and-increase-its-visual-clarity-visibility-e-g-larger-size-and-stronger-contrast-against-the-header-background-while-preserving-the-existing-logo-fallback-behavior-when-the-image-fails-to-load",
-      "title": "Center the header logo horizontally within the top header area (desktop and mobile) and increase its visual clarity/visibility (e.g., larger size and stronger contrast against the header background), while preserving the existing logo fallback behavior when the image fails to load.",
+      "id": "feature-implement-deletion-for-feed-items-so-that-deleting-a-published-backend-upload-permanently-removes-the-post-and-its-associated-stored-audio-blob-and-deleting-a-draft-upload-permanently-removes-it-from-local-device-storage",
+      "title": "Implement deletion for feed items so that deleting a published backend upload permanently removes the post and its associated stored audio blob, and deleting a draft upload permanently removes it from local device storage.",
       "reqIds": [
         "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enforce-that-only-the-uploader-author-can-delete-their-own-published-backend-uploads-ui-gating-backend-authorization",
+      "title": "Enforce that only the uploader/author can delete their own published backend uploads (UI gating + backend authorization).",
+      "reqIds": [
+        "REQ-3"
       ],
       "version": 1
     }
@@ -26,18 +39,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Remove sticky behavior from the three headers; place them entirely at the top of the page",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Center the logo and increase its visibility/clarity in the header area",
+      "summary": "Add delete-upload option in main feed: users can delete only their own uploads; deletion permanently removes from storage (not just hides)",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Remove sticky header behavior and center/clarify header logo",
+  "projectName": "Add delete option for uploads in main feed with permanent removal and per-user authorization",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

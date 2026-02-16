@@ -1,52 +1,76 @@
 {
   "kind": "build_request",
-  "title": "Remove sticky header behavior and center/clarify header logo",
-  "priority": "normal",
+  "title": "Add delete option for uploads in main feed with permanent removal and per-user authorization",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the main header so it is not sticky and does not remain fixed while the page scrolls (i.e., remove the sticky positioning behavior so the header is placed at the top of the document flow).",
+      "text": "Ensure the main feed shows a delete action for uploads that belong to the currently authenticated user, including the existing backend-upload item titled \"test\".",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-5",
+          "msg-7",
+          "msg-9"
         ],
         "quotes": [
-          "The three sticky headers shouldn't be sticky. They should be placed entirely at the top of the page."
+          "I see no option to delete an upload. This is imperative for all uploads. But let's just remove the last manually uploaded test upload. It's only 7 seconds.",
+          "In the main feed. It's labelled \"test\".",
+          "There should be a delete-upload feature."
         ]
       },
       "acceptanceCriteria": [
-        "When scrolling any page, the header scrolls away with the page content (it is not sticky/fixed).",
-        "No header sub-sections (desktop row, mobile search row, mobile nav row) remain stuck to the viewport during scroll."
+        "When signed in, backend items in the main feed that are authored by the signed-in principal display a visible delete option (e.g., in a post menu)",
+        "The backend-upload post titled \"test\" in the main feed displays the delete option for its author",
+        "When not signed in, no delete option is shown in the main feed for backend uploads"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Center the header logo horizontally within the top header area (desktop and mobile) and increase its visual clarity/visibility (e.g., larger size and stronger contrast against the header background), while preserving the existing logo fallback behavior when the image fails to load.",
-      "target": "frontend",
+      "text": "Implement deletion for feed items so that deleting a published backend upload permanently removes the post and its associated stored audio blob, and deleting a draft upload permanently removes it from local device storage.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-10"
         ],
         "quotes": [
-          "The logo should also be centered and much clearer visible"
+          "Permanently remove the upload from storage"
         ]
       },
       "acceptanceCriteria": [
-        "On desktop widths, the logo appears centered within the header area rather than grouped to the left next to the menu button.",
-        "On mobile widths, the logo remains centered in the header area without overlapping other controls.",
-        "The logo is visibly clearer than before (increased size and/or contrast), and the text fallback (\"SPEAKR\") still renders if the image fails to load."
+        "Deleting a backend upload removes it from the feed and from subsequent calls that load the user’s backend content (e.g., the item no longer appears after refresh)",
+        "Deleting a backend upload also deletes the underlying stored audio data so it is no longer retrievable via backend blob access for that post",
+        "Deleting a draft upload removes it from the feed and from localStorage so it does not reappear after refresh"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Enforce that only the uploader/author can delete their own published backend uploads (UI gating + backend authorization).",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-10"
+        ],
+        "quotes": [
+          "Only their own"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend rejects delete attempts from non-authors with an authorization error",
+        "Frontend does not show a delete option on published uploads unless the signed-in user is the author",
+        "If a non-author still attempts deletion (e.g., via manual calls), the UI shows an English error message indicating the user can only delete their own posts"
       ]
     }
   ],
   "constraints": [
-    "Frontend must remain React + TypeScript + Tailwind + Shadcn + React Query.",
-    "Do not edit files under frontend/src/components/ui (read-only).",
-    "Do not edit frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, or frontend/src/main.tsx (immutable paths)."
+    "Do not edit files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui (compose instead).",
+    "Do not introduce additional backend services; keep all backend logic in the single Motoko actor (backend/main.mo).",
+    "Do not change unrelated app behavior or UI beyond adding/fixing the delete-upload option in the main feed (\"Don't change anything else\")."
   ],
   "nonGoals": [
-    "No backend changes (no Motoko actor changes, no persistence changes).",
-    "No new navigation routes or new header features beyond removing stickiness and improving logo alignment/visibility."
+    "Add admin/moderator deletion of other users’ uploads",
+    "Add recovery/undo for deletions",
+    "Add new social features (likes/comments) related to deletion"
   ],
   "imageRequirements": {
     "required": [],

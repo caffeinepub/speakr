@@ -1,36 +1,50 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T03:54:39.215Z",
-  "summary": "REQ-1 and REQ-2 appear implemented in Header.tsx: header is no longer sticky/fixed and the logo is centered with improved visibility while preserving image-fallback behavior. However, the diff also adds/changes header navigation menu items that look like new header functionality/routes, which conflicts with the stated non-goals.",
-  "missing_requirements": [],
-  "hallucinated_features": [
+  "generatedAt": "2026-02-16T01:18:44.461Z",
+  "summary": "Delete UI gating and delete flows were added for backend-owned posts and draft items, and backend authorization checks were implemented. However, permanent deletion of the associated backend audio blob is not evidenced, and the frontend does not clearly surface the required English error message when a non-author attempts backend deletion.",
+  "missing_requirements": [
     {
-      "description": "Added/expanded header dropdown navigation entries pointing to additional paths (e.g., /about, /contact, /help, /terms, /privacy), which constitutes new header navigation beyond removing stickiness and improving logo alignment/visibility.",
-      "reason": "BuildRequest explicitly disallows new navigation routes or new header features beyond removing stickiness and improving logo alignment/visibility; these menu items are not requested in REQ-1/REQ-2.",
+      "id": "REQ-2",
+      "requirement": "Deleting a published backend upload permanently removes the post and its associated stored audio blob (so it is no longer retrievable via backend blob access).",
+      "reason": "backend/main.mo removes the post from the audioPosts map and userContent list, but the diff shows no call to delete/remove the underlying stored audio blob from blob storage / ExternalBlob; therefore permanence for the stored audio data is not demonstrated.",
       "evidence": [
-        "frontend/src/components/layout/Header.tsx"
+        "backend/main.mo"
       ]
     },
     {
-      "description": "Updated project metadata/state tracking (new_feature_requests entries) unrelated to implementing the UI requirements.",
-      "reason": "BuildRequest only requests frontend header behavior and logo alignment/visibility changes; modifying/adding tracking entries in project_state.json is not requested functionality.",
+      "id": "REQ-3",
+      "requirement": "If a non-author still attempts deletion (e.g., via manual calls), the UI shows an English error message indicating the user can only delete their own posts.",
+      "reason": "AudioCard.handleDelete() catches errors but only shows a toast error for draft deletion failures; there is no shown English toast/error path for backend deletion failures (including authorization failures).",
       "evidence": [
-        "project_state.json"
-      ]
-    },
-    {
-      "description": "Edited/added generated documentation-style summary file (frontend-file-summaries.txt).",
-      "reason": "Not requested by the BuildRequest requirements; appears to be auxiliary documentation rather than implementing REQ-1/REQ-2.",
-      "evidence": [
-        "frontend-file-summaries.txt"
+        "frontend/src/components/feed/AudioCard.tsx"
       ]
     }
   ],
-  "confidence": 0.72,
+  "hallucinated_features": [
+    {
+      "description": "Language-specific empty state detection/messaging on the feed page (separate message when language filters yield zero items).",
+      "reason": "Not requested by any REQ; BuildRequest explicitly says not to change unrelated UI/behavior beyond adding/fixing delete-upload option.",
+      "evidence": [
+        "frontend/src/pages/FeedPage.tsx"
+      ]
+    },
+    {
+      "description": "Draft item change subscription/notification system (subscribeToDraftChanges, notifyDraftChange) to reactively reload drafts from localStorage.",
+      "reason": "REQ-2 requires draft deletion from localStorage, but a subscription system for draft changes is additional behavior not explicitly requested.",
+      "evidence": [
+        "frontend/src/lib/draftFeedItems.ts",
+        "frontend/src/pages/FeedPage.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.68,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/components/layout/Header.tsx",
+    "frontend/src/components/feed/AudioCard.tsx",
+    "frontend/src/lib/draftFeedItems.ts",
+    "frontend/src/pages/FeedPage.tsx",
     "project_state.json"
   ]
 }

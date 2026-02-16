@@ -15,20 +15,28 @@ export function useAudioDurationValidation() {
       URL.revokeObjectURL(objectUrl);
       
       if (audio.duration > MAX_DURATION_SECONDS) {
-        const hours = Math.floor(audio.duration / 3600);
-        const minutes = Math.floor((audio.duration % 3600) / 60);
         setDurationError(
-          `Audio duration (${hours}h ${minutes}m) exceeds the 3-hour maximum limit.`
+          `Audio file exceeds the maximum duration of 3 hours. Your file is ${formatDuration(audio.duration)}.`
         );
       }
     });
 
     audio.addEventListener('error', () => {
       URL.revokeObjectURL(objectUrl);
-      setDurationError('Unable to read audio file metadata.');
+      setDurationError('Unable to read audio file. Please ensure it is a valid audio file.');
     });
 
     audio.src = objectUrl;
+  };
+
+  const formatDuration = (seconds: number): string => {
+    const hours = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    
+    if (hours > 0) {
+      return `${hours} hour${hours > 1 ? 's' : ''} ${mins} minute${mins !== 1 ? 's' : ''}`;
+    }
+    return `${mins} minute${mins !== 1 ? 's' : ''}`;
   };
 
   return { durationError, validateAudioFile };

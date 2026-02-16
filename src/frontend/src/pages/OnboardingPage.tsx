@@ -1,10 +1,10 @@
-import { useNavigate } from '@tanstack/react-router';
-import { useOnboarding } from '@/hooks/useOnboarding';
 import OnboardingWizard from '@/components/onboarding/OnboardingWizard';
+import { useOnboarding } from '@/hooks/useOnboarding';
+import { useNavigate } from '@tanstack/react-router';
 
 export default function OnboardingPage() {
-  const navigate = useNavigate();
   const { markComplete } = useOnboarding();
+  const navigate = useNavigate();
 
   const handleComplete = () => {
     markComplete();
@@ -17,7 +17,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 pb-32">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-muted/20 to-background fade-in-up">
       <OnboardingWizard onComplete={handleComplete} onSkip={handleSkip} />
     </div>
   );

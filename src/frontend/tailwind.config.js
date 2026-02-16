@@ -65,10 +65,13 @@ export default {
             boxShadow: {
                 xs: '0 1px 2px 0 rgba(0,0,0,0.05)',
                 'glow-primary': '0 0 20px oklch(var(--primary) / 0.3)',
-                'glow-accent': '0 0 20px oklch(var(--accent) / 0.3)'
+                'glow-accent': '0 0 20px oklch(var(--accent) / 0.3)',
+                'elevated': '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)',
+                'elevated-lg': '0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.08)',
             },
             fontFamily: {
                 sans: [
+                    'Inter var',
                     'Inter',
                     'system-ui',
                     '-apple-system',
@@ -78,10 +81,15 @@ export default {
                     'sans-serif'
                 ],
                 display: [
+                    'Inter var',
                     'Inter',
                     'system-ui',
                     'sans-serif'
                 ]
+            },
+            letterSpacing: {
+                tighter: '-0.02em',
+                tight: '-0.011em',
             },
             keyframes: {
                 'accordion-down': {
@@ -105,13 +113,38 @@ export default {
                         transform: 'scale(1.5)',
                         opacity: '0'
                     }
+                },
+                'fadeInUp': {
+                    from: {
+                        opacity: '0',
+                        transform: 'translateY(10px)'
+                    },
+                    to: {
+                        opacity: '1',
+                        transform: 'translateY(0)'
+                    }
+                },
+                'scaleIn': {
+                    from: {
+                        opacity: '0',
+                        transform: 'scale(0.95)'
+                    },
+                    to: {
+                        opacity: '1',
+                        transform: 'scale(1)'
+                    }
                 }
             },
             animation: {
                 'accordion-down': 'accordion-down 0.2s ease-out',
                 'accordion-up': 'accordion-up 0.2s ease-out',
                 'speaker-pulse': 'speaker-pulse 2s ease-out infinite',
-                'speaker-pulse-delayed': 'speaker-pulse 2s ease-out 1s infinite'
+                'speaker-pulse-delayed': 'speaker-pulse 2s ease-out 1s infinite',
+                'fade-in-up': 'fadeInUp 0.4s ease-out',
+                'scale-in': 'scaleIn 0.3s ease-out',
+            },
+            transitionTimingFunction: {
+                'premium': 'cubic-bezier(0.4, 0, 0.2, 1)',
             }
         }
     },

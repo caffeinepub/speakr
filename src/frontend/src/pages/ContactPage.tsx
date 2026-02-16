@@ -1,17 +1,16 @@
 export default function ContactPage() {
   return (
-    <div className="container px-4 py-12 md:py-16 max-w-4xl mx-auto">
-      <div className="space-y-6">
-        <h1 className="text-4xl md:text-5xl font-bold text-foreground">
-          Contact
+    <div className="container px-4 py-12 md:py-16 max-w-4xl mx-auto pb-24 fade-in-up">
+      <div className="space-y-8">
+        <h1 className="text-5xl md:text-6xl font-bold text-foreground tracking-tight">
+          Contact Us
         </h1>
-        <div className="prose prose-lg max-w-none text-muted-foreground">
-          <p className="text-xl">
-            Content coming soon. We'd love to hear from you.
+        <div className="prose prose-lg max-w-none">
+          <p className="text-xl text-muted-foreground leading-relaxed">
+            Content coming soon. We're setting up our contact channels.
           </p>
-          <p>
-            Our contact form and support channels will be available here soon.
-            In the meantime, thank you for your interest in SPEAKR.
+          <p className="text-lg text-muted-foreground/90 leading-relaxed">
+            In the meantime, stay tuned for updates on how to reach our team and support.
           </p>
         </div>
       </div>

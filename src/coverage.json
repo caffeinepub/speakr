@@ -1,45 +1,70 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-15T03:54:39.217Z",
+  "generatedAt": "2026-02-16T01:18:44.465Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 3,
+    "implemented": 3,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update the main header so it is not sticky and does not remain fixed while the page scrolls (i.e., remove the sticky positioning behavior so the header is placed at the top of the document flow).",
+        "summary": "Ensure the main feed shows a delete action for uploads that belong to the currently authenticated user, including the existing backend-upload item titled \"test\".",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/layout/Header.tsx"
+          "frontend/src/components/feed/AudioCard.tsx",
+          "frontend/src/pages/FeedPage.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/layout/Header.tsx"
+          "frontend/src/components/feed/AudioCard.tsx",
+          "frontend/src/pages/FeedPage.tsx"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Center the header logo horizontally within the top header area (desktop and mobile) and increase its visual clarity/visibility (e.g., larger size and stronger contrast against the header background), while preserving the existing logo fallback behavior when the image fails to load.",
+        "summary": "Implement deletion for feed items so that deleting a published backend upload permanently removes the post and its associated stored audio blob, and deleting a draft upload permanently removes it from local device storage.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/layout/Header.tsx"
+          "frontend/src/lib/draftFeedItems.ts",
+          "frontend/src/pages/FeedPage.tsx",
+          "frontend/src/components/feed/AudioCard.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/layout/Header.tsx"
+          "frontend/src/lib/draftFeedItems.ts",
+          "frontend/src/pages/FeedPage.tsx",
+          "frontend/src/components/feed/AudioCard.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Enforce that only the uploader/author can delete their own published backend uploads (UI gating + backend authorization).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/feed/AudioCard.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/feed/AudioCard.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/layout/Header.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/feed/AudioCard.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/lib/draftFeedItems.ts",
+    "frontend/src/pages/FeedPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

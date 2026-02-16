@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { CATEGORIES } from '@/constants/categories';
 import { useFeedFilters } from '@/state/feedFilters';
+import { getCategoryColorClass } from '@/constants/categoryColors';
 
 export default function CategoryChips() {
   const { selectedCategory, setSelectedCategory } = useFeedFilters();
@@ -16,7 +16,9 @@ export default function CategoryChips() {
             variant={isSelected ? 'default' : 'outline'}
             size="sm"
             onClick={() => setSelectedCategory(category)}
-            className="rounded-full"
+            className={`rounded-full shadow-sm hover:shadow-md transition-all ${
+              isSelected ? 'shadow-primary/20' : ''
+            }`}
           >
             {category}
           </Button>

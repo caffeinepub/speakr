@@ -10,7 +10,63 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface _SERVICE {}
+export interface AudioPost {
+  'id' : string,
+  'listens' : bigint,
+  'title' : string,
+  'audio' : ExternalBlob,
+  'description' : string,
+  'audioPath' : string,
+  'author' : Principal,
+}
+export type ExternalBlob = Uint8Array;
+export type UserRole = { 'admin' : null } |
+  { 'user' : null } |
+  { 'guest' : null };
+export interface UserStatistics {
+  'totalListens' : bigint,
+  'totalUploads' : bigint,
+}
+export interface _CaffeineStorageCreateCertificateResult {
+  'method' : string,
+  'blob_hash' : string,
+}
+export interface _CaffeineStorageRefillInformation {
+  'proposed_top_up_amount' : [] | [bigint],
+}
+export interface _CaffeineStorageRefillResult {
+  'success' : [] | [boolean],
+  'topped_up_amount' : [] | [bigint],
+}
+export interface _SERVICE {
+  '_caffeineStorageBlobIsLive' : ActorMethod<[Uint8Array], boolean>,
+  '_caffeineStorageBlobsToDelete' : ActorMethod<[], Array<Uint8Array>>,
+  '_caffeineStorageConfirmBlobDeletion' : ActorMethod<
+    [Array<Uint8Array>],
+    undefined
+  >,
+  '_caffeineStorageCreateCertificate' : ActorMethod<
+    [string],
+    _CaffeineStorageCreateCertificateResult
+  >,
+  '_caffeineStorageRefillCashier' : ActorMethod<
+    [[] | [_CaffeineStorageRefillInformation]],
+    _CaffeineStorageRefillResult
+  >,
+  '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
+  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'addAudioPost' : ActorMethod<[string, string, ExternalBlob], string>,
+  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'editAudioPost' : ActorMethod<[string, string, string], boolean>,
+  'getAudioBlob' : ActorMethod<[string], [] | [ExternalBlob]>,
+  'getAudioPost' : ActorMethod<[string], [] | [AudioPost]>,
+  'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getMyContent' : ActorMethod<[], Array<AudioPost>>,
+  'getUserStatistics' : ActorMethod<[], UserStatistics>,
+  'isCallerAdmin' : ActorMethod<[], boolean>,
+  'listenToAudioPost' : ActorMethod<[string], undefined>,
+  'removeAudioPost' : ActorMethod<[string], boolean>,
+}
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];
 export declare const idlFactory: IDL.InterfaceFactory;

@@ -10,20 +10,25 @@ import AudioSourceSelector from './AudioSourceSelector';
 import LanguageMultiSelectDropdown from '@/components/language/LanguageMultiSelectDropdown';
 import { useAudioDurationValidation } from './useAudioDurationValidation';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle, Upload, CheckCircle } from 'lucide-react';
-import { saveDraftItem } from '@/lib/draftFeedItems';
+import { AlertCircle, Upload } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAddAudioPost } from '@/hooks/useQueries';
+import { ExternalBlob } from '@/backend';
+import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 
 export default function UploadForm() {
   const navigate = useNavigate();
+  const { identity } = useInternetIdentity();
+  const isAuthenticated = !!identity;
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const { durationError, validateAudioFile } = useAudioDurationValidation();
+  const addAudioPost = useAddAudioPost();
 
   const handleAudioFileChange = (file: File | null) => {
     setAudioFile(file);
@@ -34,50 +39,46 @@ export default function UploadForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validation
-    if (!thumbnail) {
-      toast.error('Please upload a thumbnail');
+
+    if (!isAuthenticated) {
+      toast.error('Please login to upload audio');
       return;
     }
+    
     if (!audioFile) {
       toast.error('Please select an audio file or record audio');
       return;
     }
-    if (selectedLanguages.length === 0) {
-      toast.error('Please select at least one language or "No language (music)"');
-      return;
-    }
+    
     if (durationError) {
-      toast.error('Audio file exceeds 3-hour limit');
+      toast.error('Audio file exceeds the 3-hour maximum duration');
       return;
     }
+    
     if (!title.trim()) {
       toast.error('Please enter a title');
       return;
     }
-    if (!category) {
-      toast.error('Please select a category');
-      return;
-    }
-
-    setIsSubmitting(true);
 
     try {
-      // Save as draft item
-      await saveDraftItem({
-        title: title.trim(),
-        category,
-        languages: selectedLanguages,
-        description: description.trim(),
-        audioFile,
-        thumbnailFile: thumbnail,
+      // Convert audio file to bytes
+      const arrayBuffer = await audioFile.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuffer);
+      
+      // Create ExternalBlob with upload progress tracking
+      const audioBlob = ExternalBlob.fromBytes(bytes).withUploadProgress((percentage) => {
+        setUploadProgress(percentage);
       });
 
-      // Show success message
-      toast.success('Draft saved! Your recording is now visible in the feed.', {
-        description: 'This is a local test draft and has not been published to the network.',
-        duration: 5000,
+      // Upload to backend
+      await addAudioPost.mutateAsync({
+        title: title.trim(),
+        description: description.trim(),
+        audioBlob,
+      });
+
+      toast.success('Audio uploaded successfully!', {
+        description: 'Your audio is now live and visible in your dashboard.',
       });
 
       // Reset form
@@ -87,18 +88,20 @@ export default function UploadForm() {
       setThumbnail(null);
       setAudioFile(null);
       setSelectedLanguages([]);
+      setUploadProgress(0);
 
-      // Navigate to feed
-      navigate({ to: '/' });
+      // Navigate to dashboard
+      navigate({ to: '/dashboard' });
     } catch (error) {
-      console.error('Failed to save draft:', error);
-      toast.error('Failed to save draft', {
+      console.error('Failed to upload audio:', error);
+      toast.error('Failed to upload audio', {
         description: error instanceof Error ? error.message : 'An unexpected error occurred',
       });
-    } finally {
-      setIsSubmitting(false);
+      setUploadProgress(0);
     }
   };
+
+  const isSubmitting = addAudioPost.isPending;
 
   return (
     <Card className="max-w-2xl mx-auto">
@@ -106,6 +109,14 @@ export default function UploadForm() {
         <CardTitle>Upload Audio</CardTitle>
       </CardHeader>
       <CardContent>
+        {!isAuthenticated && (
+          <Alert className="mb-6">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              You must be logged in to upload audio. Please login to continue.
+            </AlertDescription>
+          </Alert>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="title">Title *</Label>
@@ -115,6 +126,7 @@ export default function UploadForm() {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter audio title"
               required
+              disabled={!isAuthenticated}
             />
           </div>
 
@@ -126,39 +138,8 @@ export default function UploadForm() {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe your audio (optional)"
               rows={4}
+              disabled={!isAuthenticated}
             />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Category *</Label>
-            <CategoryPicker value={category} onChange={setCategory} />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Language *</Label>
-            <LanguageMultiSelectDropdown
-              selectedLanguages={selectedLanguages}
-              onLanguagesChange={setSelectedLanguages}
-              triggerLabel="Select language(s)"
-              showIcon={true}
-            />
-            <p className="text-sm text-muted-foreground">
-              Select one or more languages, or "No language (music)" for instrumental content
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="thumbnail">Thumbnail *</Label>
-            <Input
-              id="thumbnail"
-              type="file"
-              accept="image/*"
-              onChange={(e) => setThumbnail(e.target.files?.[0] || null)}
-              required
-            />
-            <p className="text-sm text-muted-foreground">
-              Upload an image to represent your audio
-            </p>
           </div>
 
           <div className="space-y-2">
@@ -177,7 +158,27 @@ export default function UploadForm() {
             )}
           </div>
 
-          <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+          {isSubmitting && uploadProgress > 0 && (
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Uploading...</span>
+                <span>{uploadProgress}%</span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-2">
+                <div
+                  className="bg-primary h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+            </div>
+          )}
+
+          <Button 
+            type="submit" 
+            className="w-full" 
+            size="lg" 
+            disabled={isSubmitting || !isAuthenticated || !!durationError}
+          >
             {isSubmitting ? (
               <>
                 <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent" />

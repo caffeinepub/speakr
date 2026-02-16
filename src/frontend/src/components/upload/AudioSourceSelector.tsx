@@ -10,6 +10,8 @@ interface AudioSourceSelectorProps {
   onFileChange: (file: File | null) => void;
 }
 
+const MAX_RECORDING_DURATION = 3 * 60 * 60; // 3 hours in seconds
+
 // Detect supported audio MIME type
 function getSupportedMimeType(): { mimeType: string; extension: string } | null {
   const types = [
@@ -35,6 +37,7 @@ export default function AudioSourceSelector({ onFileChange }: AudioSourceSelecto
   const [recordingError, setRecordingError] = useState<string | null>(null);
   const [recordingTime, setRecordingTime] = useState(0);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [maxDurationReached, setMaxDurationReached] = useState(false);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -95,6 +98,7 @@ export default function AudioSourceSelector({ onFileChange }: AudioSourceSelecto
       setRecordedBlob(null);
       setRecordingTime(0);
       setPreviewUrl(null);
+      setMaxDurationReached(false);
       chunksRef.current = [];
     }
   }, [selectedTab]);
@@ -102,6 +106,7 @@ export default function AudioSourceSelector({ onFileChange }: AudioSourceSelecto
   const startRecording = async () => {
     try {
       setRecordingError(null);
+      setMaxDurationReached(false);
 
       // Check for secure context
       if (typeof window !== 'undefined' && !window.isSecureContext) {
@@ -190,9 +195,20 @@ export default function AudioSourceSelector({ onFileChange }: AudioSourceSelecto
       setIsRecording(true);
       setRecordingTime(0);
       
-      // Start timer
+      // Start timer with 3-hour max duration check
       timerRef.current = window.setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime(prev => {
+          const newTime = prev + 1;
+          
+          // Auto-stop at 3 hours
+          if (newTime >= MAX_RECORDING_DURATION) {
+            setMaxDurationReached(true);
+            stopRecording();
+            return MAX_RECORDING_DURATION;
+          }
+          
+          return newTime;
+        });
       }, 1000);
       
     } catch (error) {
@@ -229,8 +245,13 @@ export default function AudioSourceSelector({ onFileChange }: AudioSourceSelecto
   };
 
   const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
+    
+    if (hours > 0) {
+      return `${hours}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
@@ -271,6 +292,15 @@ export default function AudioSourceSelector({ onFileChange }: AudioSourceSelecto
           </Alert>
         )}
         
+        {maxDurationReached && (
+          <Alert>
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Maximum recording duration of 3 hours reached. Recording has been stopped automatically.
+            </AlertDescription>
+          </Alert>
+        )}
+        
         <div className="rounded-lg border border-border p-6 space-y-4">
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
@@ -281,6 +311,9 @@ export default function AudioSourceSelector({ onFileChange }: AudioSourceSelecto
               <div className="text-center">
                 <p className="text-2xl font-mono font-bold">{formatTime(recordingTime)}</p>
                 <p className="text-sm text-muted-foreground">Recording...</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Max: {formatTime(MAX_RECORDING_DURATION)}
+                </p>
               </div>
             )}
             
