@@ -2,34 +2,29 @@
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
   "summary": "New project",
-  "architectural_notes": [
-    "Delete action must enforce ownership (only uploader can delete).",
-    "Deletion must be permanent: remove upload from storage and remove associated feed item."
-  ],
-  "known_issues": [
-    "No option currently exists to delete an upload from the main feed."
-  ],
+  "architectural_notes": [],
+  "known_issues": [],
   "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-ensure-the-main-feed-shows-a-delete-action-for-uploads-that-belong-to-the-currently-authenticated-user-including-the-existing-backend-upload-item-titled-test",
-      "title": "Ensure the main feed shows a delete action for uploads that belong to the currently authenticated user, including the existing backend-upload item titled \"test\".",
+      "id": "feature-remove-the-feed-page-hero-banner-update-by-reverting-the-top-of-feed-ui-to-the-pre-banner-state-i-e-stop-rendering-the-full-width-static-banner-image-currently-shown-at-the-top-of-the-feed-page",
+      "title": "Remove the Feed page hero banner update by reverting the top-of-feed UI to the pre-banner state (i.e., stop rendering the full-width static banner image currently shown at the top of the Feed page).",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-implement-deletion-for-feed-items-so-that-deleting-a-published-backend-upload-permanently-removes-the-post-and-its-associated-stored-audio-blob-and-deleting-a-draft-upload-permanently-removes-it-from-local-device-storage",
-      "title": "Implement deletion for feed items so that deleting a published backend upload permanently removes the post and its associated stored audio blob, and deleting a draft upload permanently removes it from local device storage.",
+      "id": "feature-remove-the-slogan-update-by-deleting-the-recently-added-slogan-text-giving-everyone-a-voice-from-the-ui-where-it-was-introduced-as-part-of-the-recent-banner-slogan-change-set",
+      "title": "Remove the slogan update by deleting the recently added slogan text \"Giving everyone a voice!\" from the UI where it was introduced as part of the recent banner/slogan change set.",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
     },
     {
-      "id": "feature-enforce-that-only-the-uploader-author-can-delete-their-own-published-backend-uploads-ui-gating-backend-authorization",
-      "title": "Enforce that only the uploader/author can delete their own published backend uploads (UI gating + backend authorization).",
+      "id": "feature-remove-any-now-unused-static-banner-asset-references-introduced-by-the-recent-banner-change-including-the-generated-banner-filename-currently-referenced-by-the-feed-hero-banner-component-and-ensure-the-app-builds-without-unused-unused-import-errors",
+      "title": "Remove any now-unused static banner asset references introduced by the recent banner change (including the generated banner filename currently referenced by the Feed hero banner component), and ensure the app builds without unused/unused-import errors.",
       "reqIds": [
         "REQ-3"
       ],
@@ -39,12 +34,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add delete-upload option in main feed: users can delete only their own uploads; deletion permanently removes from storage (not just hides)",
+      "summary": "Revert the most recent banner update and slogan update (remove last changes)",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Add delete option for uploads in main feed with permanent removal and per-user authorization",
+  "projectName": "Revert the most recent banner and slogan changes",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

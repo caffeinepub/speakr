@@ -1,76 +1,69 @@
 {
   "kind": "build_request",
-  "title": "Add delete option for uploads in main feed with permanent removal and per-user authorization",
-  "priority": "high",
+  "title": "Revert the most recent banner and slogan changes",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Ensure the main feed shows a delete action for uploads that belong to the currently authenticated user, including the existing backend-upload item titled \"test\".",
+      "text": "Remove the Feed page hero banner update by reverting the top-of-feed UI to the pre-banner state (i.e., stop rendering the full-width static banner image currently shown at the top of the Feed page).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-5",
-          "msg-7",
-          "msg-9"
+          "msg-4"
         ],
         "quotes": [
-          "I see no option to delete an upload. This is imperative for all uploads. But let's just remove the last manually uploaded test upload. It's only 7 seconds.",
-          "In the main feed. It's labelled \"test\".",
-          "There should be a delete-upload feature."
+          "Both"
         ]
       },
       "acceptanceCriteria": [
-        "When signed in, backend items in the main feed that are authored by the signed-in principal display a visible delete option (e.g., in a post menu)",
-        "The backend-upload post titled \"test\" in the main feed displays the delete option for its author",
-        "When not signed in, no delete option is shown in the main feed for backend uploads"
+        "Visiting the Feed page (route \"/\") no longer shows the full-width banner image at the top of the page.",
+        "`FeedPage.tsx` no longer imports or renders `FeedHeroBanner`."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Implement deletion for feed items so that deleting a published backend upload permanently removes the post and its associated stored audio blob, and deleting a draft upload permanently removes it from local device storage.",
-      "target": "both",
+      "text": "Remove the slogan update by deleting the recently added slogan text \"Giving everyone a voice!\" from the UI where it was introduced as part of the recent banner/slogan change set.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-10"
+          "msg-4"
         ],
         "quotes": [
-          "Permanently remove the upload from storage"
+          "Both"
         ]
       },
       "acceptanceCriteria": [
-        "Deleting a backend upload removes it from the feed and from subsequent calls that load the user’s backend content (e.g., the item no longer appears after refresh)",
-        "Deleting a backend upload also deletes the underlying stored audio data so it is no longer retrievable via backend blob access for that post",
-        "Deleting a draft upload removes it from the feed and from localStorage so it does not reappear after refresh"
+        "The exact text \"Giving everyone a voice!\" is no longer displayed beneath the Feed hero area (and is not displayed as part of the reverted banner/slogan change set).",
+        "There are no remaining hardcoded instances of the slogan string that were added as part of the recent banner/slogan updates."
       ]
     },
     {
       "id": "REQ-3",
-      "text": "Enforce that only the uploader/author can delete their own published backend uploads (UI gating + backend authorization).",
-      "target": "both",
+      "text": "Remove any now-unused static banner asset references introduced by the recent banner change (including the generated banner filename currently referenced by the Feed hero banner component), and ensure the app builds without unused/unused-import errors.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-10"
+          "msg-4"
         ],
         "quotes": [
-          "Only their own"
+          "Both"
         ]
       },
       "acceptanceCriteria": [
-        "Backend rejects delete attempts from non-authors with an authorization error",
-        "Frontend does not show a delete option on published uploads unless the signed-in user is the author",
-        "If a non-author still attempts deletion (e.g., via manual calls), the UI shows an English error message indicating the user can only delete their own posts"
+        "The codebase no longer references `/assets/generated/feed-hero-banner.dim_2400x600.png` from the Feed hero/banner UI.",
+        "The frontend builds and runs without TypeScript or lint errors related to removed components or imports."
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui (compose instead).",
-    "Do not introduce additional backend services; keep all backend logic in the single Motoko actor (backend/main.mo).",
-    "Do not change unrelated app behavior or UI beyond adding/fixing the delete-upload option in the main feed (\"Don't change anything else\")."
+    "Do not modify any files under `frontend/src/components/ui` (compose them only).",
+    "Do not edit any paths listed as immutable in SYSTEM_CONTEXT (e.g., `frontend/src/hooks/useInternetIdentity.ts(x)`, `frontend/src/hooks/useActor.ts`, `frontend/src/main.tsx`).",
+    "Backend must remain single-actor; do not introduce additional canisters."
   ],
   "nonGoals": [
-    "Add admin/moderator deletion of other users’ uploads",
-    "Add recovery/undo for deletions",
-    "Add new social features (likes/comments) related to deletion"
+    "Do not introduce a new banner, new slogan, or new branding content.",
+    "Do not change backend logic or data models (this is a UI reversion only).",
+    "Do not redesign unrelated Feed filtering, search, upload, or playback behavior."
   ],
   "imageRequirements": {
     "required": [],

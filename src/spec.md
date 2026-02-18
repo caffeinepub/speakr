@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Add a delete option in the main feed so signed-in users can permanently remove their own published uploads (including the “test” post) and delete local draft uploads, with proper per-user authorization.
+**Goal:** Revert the recent Feed banner and slogan UI changes so the Feed page returns to its pre-banner state.
 
 **Planned changes:**
-- Show a delete action in the main feed only for backend uploads authored by the currently authenticated user (including the backend upload titled “test”).
-- Implement backend deletion for published uploads that permanently removes the post and its associated stored audio blob.
-- Implement draft deletion that removes the draft feed item and deletes its data from local device storage (e.g., localStorage).
-- Enforce per-user authorization: backend rejects non-author delete attempts; frontend hides delete for non-authors and shows an English error message if a non-author attempts deletion.
+- Remove the full-width hero banner from the Feed page by stopping rendering of the `FeedHeroBanner` on route `/`.
+- Remove the recently added slogan text “Giving everyone a voice!” from the Feed UI and eliminate any hardcoded instances introduced by the banner/slogan change set.
+- Delete/cleanup any now-unused banner asset references (including `/assets/generated/feed-hero-banner.dim_2400x600.png`) and ensure the frontend builds cleanly without TypeScript/lint errors from removed imports/components.
 
-**User-visible outcome:** Signed-in users see a delete option on their own uploads in the main feed and can permanently delete them (including the “test” upload); drafts can be removed locally and won’t return after refresh; users cannot delete others’ posts.
+**User-visible outcome:** Visiting the Feed page no longer shows the hero banner image or the “Giving everyone a voice!” slogan, and the UI appears as it did before the recent banner/slogan updates.

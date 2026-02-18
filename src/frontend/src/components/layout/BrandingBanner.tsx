@@ -28,11 +28,6 @@ export default function BrandingBanner() {
               </div>
             )}
           </div>
-          
-          {/* Slogan */}
-          <p className="text-xl sm:text-2xl md:text-3xl font-semibold text-foreground/90 tracking-tight">
-            Giving everyone a voice!
-          </p>
         </div>
       </div>
     </div>

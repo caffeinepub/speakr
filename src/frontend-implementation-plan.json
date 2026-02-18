@@ -1,73 +1,55 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Delete uploads from main feed with author-only gating and draft cleanup",
+  "title": "Revert Feed banner + slogan UI changes",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Show a delete action in the main feed for backend uploads authored by the currently authenticated user (including the post titled \"test\"), and hide it when signed out.",
+      "summary": "Revert the Feed page to the pre-banner state by removing the hero banner from the top of the feed.",
       "acceptanceCriteria": [
-        "When signed in, backend items in the main feed that are authored by the signed-in principal display a visible delete option (e.g., in a post menu)",
-        "The backend-upload post titled \"test\" in the main feed displays the delete option for its author",
-        "When not signed in, no delete option is shown in the main feed for backend uploads"
+        "Visiting the Feed page (route \"/\") no longer shows the full-width banner image at the top of the page.",
+        "`FeedPage.tsx` no longer imports or renders `FeedHeroBanner`."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/feed/AudioCard.tsx",
-          "operation": "modify",
-          "description": "Ensure the delete action is only rendered for backend feed cards when the user is authenticated and the card's author principal matches the signed-in principal; keep the UI affordance as the existing shadcn-ui DropdownMenu + AlertDialog pattern (verify the component's usage instructions before implementing)."
-        },
-        {
           "path": "frontend/src/pages/FeedPage.tsx",
           "operation": "modify",
-          "description": "Keep backend feed items mapped from backend posts with their `author` preserved so AudioCard can accurately gate the delete option by signed-in principal (no UI changes beyond supporting delete gating)."
+          "description": "Remove the `FeedHeroBanner` import and stop rendering the hero banner at the top of the Feed page, keeping the rest of the feed layout intact."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Support deletion flows in the feed UI for both published backend uploads and local draft uploads, including removing drafts from localStorage and updating the feed view accordingly.",
+      "summary": "Remove the recently added slogan text from all UI locations introduced by the banner/slogan change set.",
       "acceptanceCriteria": [
-        "Deleting a backend upload removes it from the feed and from subsequent calls that load the user’s backend content (e.g., the item no longer appears after refresh)",
-        "Deleting a backend upload also deletes the underlying stored audio data so it is no longer retrievable via backend blob access for that post",
-        "Deleting a draft upload removes it from the feed and from localStorage so it does not reappear after refresh"
+        "The exact text \"Giving everyone a voice!\" is no longer displayed beneath the Feed hero area (and is not displayed as part of the reverted banner/slogan change set).",
+        "There are no remaining hardcoded instances of the slogan string that were added as part of the recent banner/slogan updates."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/lib/draftFeedItems.ts",
+          "path": "frontend/src/components/layout/BrandingBanner.tsx",
           "operation": "modify",
-          "description": "Add a draft deletion utility (e.g., remove-by-id) that permanently removes a draft item from localStorage, and provide a lightweight change-notification mechanism so the feed can refresh draft items after deletion."
+          "description": "Remove the hardcoded slogan text \"Giving everyone a voice!\" from the branding banner UI so it is no longer rendered."
         },
         {
-          "path": "frontend/src/pages/FeedPage.tsx",
-          "operation": "modify",
-          "description": "Refactor draft loading to be reactive (subscribe to the draft change-notification and refresh draft items in component state) so deleting a draft removes it from the feed immediately and it does not reappear after refresh."
-        },
-        {
-          "path": "frontend/src/components/feed/AudioCard.tsx",
-          "operation": "modify",
-          "description": "Wire the delete action to handle two cases: (1) backend items call the existing `useRemoveAudioPost` mutation; (2) draft items call the new local draft removal utility; reuse the existing shadcn-ui AlertDialog confirmation UI (verify the component's usage instructions before implementing)."
+          "path": "frontend/src/components/feed/FeedHeroBanner.tsx",
+          "operation": "delete",
+          "description": "Delete the `FeedHeroBanner` component to fully remove the banner+slogan UI introduced by the recent change set and prevent any remaining hardcoded slogan usage."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Enforce author-only deletion behavior in the main feed UI and surface a clear English error message if a non-author attempts deletion.",
+      "summary": "Remove now-unused static banner asset references introduced by the banner change and ensure the frontend builds cleanly.",
       "acceptanceCriteria": [
-        "Backend rejects delete attempts from non-authors with an authorization error",
-        "Frontend does not show a delete option on published uploads unless the signed-in user is the author",
-        "If a non-author still attempts deletion (e.g., via manual calls), the UI shows an English error message indicating the user can only delete their own posts"
+        "The codebase no longer references `/assets/generated/feed-hero-banner.dim_2400x600.png` from the Feed hero/banner UI.",
+        "The frontend builds and runs without TypeScript or lint errors related to removed components or imports."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Ensure the delete mutation (`useRemoveAudioPost`) reliably maps backend authorization failures into a user-visible English error message indicating the user can only delete their own posts (keep behavior tightly scoped to delete)."
-        },
-        {
-          "path": "frontend/src/components/feed/AudioCard.tsx",
-          "operation": "modify",
-          "description": "Avoid swallowing delete errors in a way that prevents the existing toast-based messaging; ensure unauthorized deletion attempts still surface the English error to the user while keeping delete UI gated by author check (shadcn-ui menu/dialog already in use; verify the component's usage instructions before implementing)."
+          "path": "frontend/public/assets/generated/feed-hero-banner.dim_2400x600.png",
+          "operation": "delete",
+          "description": "Remove the generated banner asset file `frontend/public/assets/generated/feed-hero-banner.dim_2400x600.png` that was introduced for the Feed hero banner so there are no remaining banner asset references."
         }
       ]
     }

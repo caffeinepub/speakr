@@ -2,10 +2,9 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-ensure-the-main-feed-shows-a-delete-action-for-uploads-that-belong-to-the-currently-authenticated-user-including-the-existing-backend-upload-item-titled-test",
-      "featureTitle": "Ensure the main feed shows a delete action for uploads that belong to the currently authenticated user, including the existing backend-upload item titled \"test\".",
+      "featureId": "feature-remove-the-feed-page-hero-banner-update-by-reverting-the-top-of-feed-ui-to-the-pre-banner-state-i-e-stop-rendering-the-full-width-static-banner-image-currently-shown-at-the-top-of-the-feed-page",
+      "featureTitle": "Remove the Feed page hero banner update by reverting the top-of-feed UI to the pre-banner state (i.e., stop rendering the full-width static banner image currently shown at the top of the Feed page).",
       "files": [
-        "frontend/src/components/feed/AudioCard.tsx",
         "frontend/src/pages/FeedPage.tsx"
       ],
       "components": [
@@ -23,12 +22,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-implement-deletion-for-feed-items-so-that-deleting-a-published-backend-upload-permanently-removes-the-post-and-its-associated-stored-audio-blob-and-deleting-a-draft-upload-permanently-removes-it-from-local-device-storage",
-      "featureTitle": "Implement deletion for feed items so that deleting a published backend upload permanently removes the post and its associated stored audio blob, and deleting a draft upload permanently removes it from local device storage.",
+      "featureId": "feature-remove-the-slogan-update-by-deleting-the-recently-added-slogan-text-giving-everyone-a-voice-from-the-ui-where-it-was-introduced-as-part-of-the-recent-banner-slogan-change-set",
+      "featureTitle": "Remove the slogan update by deleting the recently added slogan text \"Giving everyone a voice!\" from the UI where it was introduced as part of the recent banner/slogan change set.",
       "files": [
-        "frontend/src/components/feed/AudioCard.tsx",
-        "frontend/src/lib/draftFeedItems.ts",
-        "frontend/src/pages/FeedPage.tsx"
+        "frontend/src/components/feed/FeedHeroBanner.tsx",
+        "frontend/src/components/layout/BrandingBanner.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -45,11 +43,9 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-enforce-that-only-the-uploader-author-can-delete-their-own-published-backend-uploads-ui-gating-backend-authorization",
-      "featureTitle": "Enforce that only the uploader/author can delete their own published backend uploads (UI gating + backend authorization).",
-      "files": [
-        "frontend/src/components/feed/AudioCard.tsx"
-      ],
+      "featureId": "feature-remove-any-now-unused-static-banner-asset-references-introduced-by-the-recent-banner-change-including-the-generated-banner-filename-currently-referenced-by-the-feed-hero-banner-component-and-ensure-the-app-builds-without-unused-unused-import-errors",
+      "featureTitle": "Remove any now-unused static banner asset references introduced by the recent banner change (including the generated banner filename currently referenced by the Feed hero banner component), and ensure the app builds without unused/unused-import errors.",
+      "files": [],
       "components": [
         "core-infrastructure@1.0.2",
         "shadcn-ui@1.0.0",
