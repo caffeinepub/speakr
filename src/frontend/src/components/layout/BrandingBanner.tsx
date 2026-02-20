@@ -2,7 +2,7 @@ import BrandingBannerDropdown from './BrandingBannerDropdown';
 import { useState } from 'react';
 
 export default function BrandingBanner() {
-  const [logoError, setLogoError] = useState(false);
+  const [bannerError, setBannerError] = useState(false);
 
   return (
     <div className="w-full border-b border-border/40 bg-background py-8 md:py-12">
@@ -13,14 +13,14 @@ export default function BrandingBanner() {
             <BrandingBannerDropdown />
           </div>
           
-          {/* Centered logo */}
-          <div className="flex items-center justify-center">
-            {!logoError ? (
+          {/* Centered banner */}
+          <div className="flex items-center justify-center w-full">
+            {!bannerError ? (
               <img
-                src="/assets/generated/speakr-logo-reupload.dim_1536x864.png"
+                src="/assets/generated/header-banner.dim_1200x300.png"
                 alt="SPEAKR"
                 className="h-20 sm:h-28 md:h-36 w-auto object-contain"
-                onError={() => setLogoError(true)}
+                onError={() => setBannerError(true)}
               />
             ) : (
               <div className="h-20 sm:h-28 md:h-36 flex items-center justify-center px-8">

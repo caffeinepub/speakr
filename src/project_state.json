@@ -1,32 +1,21 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
-  "architectural_notes": [],
+  "summary": "Audio sharing web app with like/dislike counters, favorites feature, and custom banner image",
+  "architectural_notes": [
+    "Audio feed with like/dislike functionality",
+    "Frontend components need React-based audio player",
+    "Backend storage for audio posts and engagement metrics"
+  ],
   "known_issues": [],
-  "isFixRequest": true,
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Custom header banner image for SPEAKR audio platform with modern, professional design (header-banner.dim_1200x300.png)",
   "existing_features": [
     {
-      "id": "feature-remove-the-feed-page-hero-banner-update-by-reverting-the-top-of-feed-ui-to-the-pre-banner-state-i-e-stop-rendering-the-full-width-static-banner-image-currently-shown-at-the-top-of-the-feed-page",
-      "title": "Remove the Feed page hero banner update by reverting the top-of-feed UI to the pre-banner state (i.e., stop rendering the full-width static banner image currently shown at the top of the Feed page).",
+      "id": "feature-replace-the-placeholder-header-banner-image-in-the-brandingbanner-component-with-the-user-s-uploaded-custom-banner-image-rendering-it-as-a-static-asset-from-frontend-public-assets-generated",
+      "title": "Replace the placeholder header banner image in the BrandingBanner component with the user's uploaded custom banner image, rendering it as a static asset from frontend/public/assets/generated",
       "reqIds": [
         "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-remove-the-slogan-update-by-deleting-the-recently-added-slogan-text-giving-everyone-a-voice-from-the-ui-where-it-was-introduced-as-part-of-the-recent-banner-slogan-change-set",
-      "title": "Remove the slogan update by deleting the recently added slogan text \"Giving everyone a voice!\" from the UI where it was introduced as part of the recent banner/slogan change set.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-remove-any-now-unused-static-banner-asset-references-introduced-by-the-recent-banner-change-including-the-generated-banner-filename-currently-referenced-by-the-feed-hero-banner-component-and-ensure-the-app-builds-without-unused-unused-import-errors",
-      "title": "Remove any now-unused static banner asset references introduced by the recent banner change (including the generated banner filename currently referenced by the Feed hero banner component), and ensure the app builds without unused/unused-import errors.",
-      "reqIds": [
-        "REQ-3"
       ],
       "version": 1
     }
@@ -34,12 +23,25 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Revert the most recent banner update and slogan update (remove last changes)",
+      "summary": "Add like and dislike counters to audio files",
       "reqIds": [],
       "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add favorites option for audio files",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Replace placeholder header banner with custom image",
+      "reqIds": [],
+      "status": "in_progress"
     }
   ],
-  "projectName": "Revert the most recent banner and slogan changes",
+  "gameProjectType": "none",
+  "projectName": "SPEAKR Audio",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

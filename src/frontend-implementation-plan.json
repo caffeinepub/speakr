@@ -1,55 +1,22 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Revert Feed banner + slogan UI changes",
+  "title": "Replace placeholder header banner with uploaded image",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Revert the Feed page to the pre-banner state by removing the hero banner from the top of the feed.",
+      "summary": "Replace the placeholder header banner image in the BrandingBanner component with the custom banner image from frontend/public/assets/generated",
       "acceptanceCriteria": [
-        "Visiting the Feed page (route \"/\") no longer shows the full-width banner image at the top of the page.",
-        "`FeedPage.tsx` no longer imports or renders `FeedHeroBanner`."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/FeedPage.tsx",
-          "operation": "modify",
-          "description": "Remove the `FeedHeroBanner` import and stop rendering the hero banner at the top of the Feed page, keeping the rest of the feed layout intact."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Remove the recently added slogan text from all UI locations introduced by the banner/slogan change set.",
-      "acceptanceCriteria": [
-        "The exact text \"Giving everyone a voice!\" is no longer displayed beneath the Feed hero area (and is not displayed as part of the reverted banner/slogan change set).",
-        "There are no remaining hardcoded instances of the slogan string that were added as part of the recent banner/slogan updates."
+        "The BrandingBanner component displays the custom banner image instead of the placeholder",
+        "The banner image is loaded from a static asset path in frontend/public/assets/generated",
+        "The banner maintains proper aspect ratio and responsive sizing",
+        "No placeholder or default banner is visible after the change"
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/layout/BrandingBanner.tsx",
           "operation": "modify",
-          "description": "Remove the hardcoded slogan text \"Giving everyone a voice!\" from the branding banner UI so it is no longer rendered."
-        },
-        {
-          "path": "frontend/src/components/feed/FeedHeroBanner.tsx",
-          "operation": "delete",
-          "description": "Delete the `FeedHeroBanner` component to fully remove the banner+slogan UI introduced by the recent change set and prevent any remaining hardcoded slogan usage."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Remove now-unused static banner asset references introduced by the banner change and ensure the frontend builds cleanly.",
-      "acceptanceCriteria": [
-        "The codebase no longer references `/assets/generated/feed-hero-banner.dim_2400x600.png` from the Feed hero/banner UI.",
-        "The frontend builds and runs without TypeScript or lint errors related to removed components or imports."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/feed-hero-banner.dim_2400x600.png",
-          "operation": "delete",
-          "description": "Remove the generated banner asset file `frontend/public/assets/generated/feed-hero-banner.dim_2400x600.png` that was introduced for the Feed hero banner so there are no remaining banner asset references."
+          "description": "Replace the placeholder banner image with the generated custom header banner located at frontend/public/assets/generated/header-banner.dim_1200x300.png. Update the image source to reference the static asset path, ensuring proper responsive sizing and aspect ratio maintenance. Remove any placeholder or default banner references to display only the custom banner image."
         }
       ]
     }

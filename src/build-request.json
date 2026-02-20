@@ -1,72 +1,42 @@
 {
   "kind": "build_request",
-  "title": "Revert the most recent banner and slogan changes",
+  "title": "Replace placeholder header banner with uploaded image",
+  "projectName": "SPEAKR Audio",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Remove the Feed page hero banner update by reverting the top-of-feed UI to the pre-banner state (i.e., stop rendering the full-width static banner image currently shown at the top of the Feed page).",
+      "text": "Replace the placeholder header banner image in the BrandingBanner component with the user's uploaded custom banner image, rendering it as a static asset from frontend/public/assets/generated",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-20"
         ],
         "quotes": [
-          "Both"
+          "Can we replace the placeholder header at the top?"
         ]
       },
       "acceptanceCriteria": [
-        "Visiting the Feed page (route \"/\") no longer shows the full-width banner image at the top of the page.",
-        "`FeedPage.tsx` no longer imports or renders `FeedHeroBanner`."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Remove the slogan update by deleting the recently added slogan text \"Giving everyone a voice!\" from the UI where it was introduced as part of the recent banner/slogan change set.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "Both"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The exact text \"Giving everyone a voice!\" is no longer displayed beneath the Feed hero area (and is not displayed as part of the reverted banner/slogan change set).",
-        "There are no remaining hardcoded instances of the slogan string that were added as part of the recent banner/slogan updates."
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Remove any now-unused static banner asset references introduced by the recent banner change (including the generated banner filename currently referenced by the Feed hero banner component), and ensure the app builds without unused/unused-import errors.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "Both"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The codebase no longer references `/assets/generated/feed-hero-banner.dim_2400x600.png` from the Feed hero/banner UI.",
-        "The frontend builds and runs without TypeScript or lint errors related to removed components or imports."
+        "The BrandingBanner component displays the custom banner image instead of the placeholder",
+        "The banner image is loaded from a static asset path in frontend/public/assets/generated",
+        "The banner maintains proper aspect ratio and responsive sizing",
+        "No placeholder or default banner is visible after the change"
       ]
     }
   ],
   "constraints": [
-    "Do not modify any files under `frontend/src/components/ui` (compose them only).",
-    "Do not edit any paths listed as immutable in SYSTEM_CONTEXT (e.g., `frontend/src/hooks/useInternetIdentity.ts(x)`, `frontend/src/hooks/useActor.ts`, `frontend/src/main.tsx`).",
-    "Backend must remain single-actor; do not introduce additional canisters."
+    "Do not modify Internet Identity integration files",
+    "Do not edit read-only UI component sources in frontend/src/components/ui"
   ],
   "nonGoals": [
-    "Do not introduce a new banner, new slogan, or new branding content.",
-    "Do not change backend logic or data models (this is a UI reversion only).",
-    "Do not redesign unrelated Feed filtering, search, upload, or playback behavior."
+    "Changing the banner's layout or positioning",
+    "Adding animation or transition effects to the banner",
+    "Modifying other header components beyond the banner image"
   ],
   "imageRequirements": {
-    "required": [],
+    "required": [
+      "Custom header banner image for SPEAKR audio platform with modern, professional design (header-banner.dim_1200x300.png)"
+    ],
     "edits": []
   }
 }

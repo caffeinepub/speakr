@@ -2,30 +2,9 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-remove-the-feed-page-hero-banner-update-by-reverting-the-top-of-feed-ui-to-the-pre-banner-state-i-e-stop-rendering-the-full-width-static-banner-image-currently-shown-at-the-top-of-the-feed-page",
-      "featureTitle": "Remove the Feed page hero banner update by reverting the top-of-feed UI to the pre-banner state (i.e., stop rendering the full-width static banner image currently shown at the top of the Feed page).",
+      "featureId": "feature-replace-the-placeholder-header-banner-image-in-the-brandingbanner-component-with-the-user-s-uploaded-custom-banner-image-rendering-it-as-a-static-asset-from-frontend-public-assets-generated",
+      "featureTitle": "Replace the placeholder header banner image in the BrandingBanner component with the user's uploaded custom banner image, rendering it as a static asset from frontend/public/assets/generated",
       "files": [
-        "frontend/src/pages/FeedPage.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0",
-        "blob-storage@4.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-remove-the-slogan-update-by-deleting-the-recently-added-slogan-text-giving-everyone-a-voice-from-the-ui-where-it-was-introduced-as-part-of-the-recent-banner-slogan-change-set",
-      "featureTitle": "Remove the slogan update by deleting the recently added slogan text \"Giving everyone a voice!\" from the UI where it was introduced as part of the recent banner/slogan change set.",
-      "files": [
-        "frontend/src/components/feed/FeedHeroBanner.tsx",
         "frontend/src/components/layout/BrandingBanner.tsx"
       ],
       "components": [
@@ -38,25 +17,7 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-remove-any-now-unused-static-banner-asset-references-introduced-by-the-recent-banner-change-including-the-generated-banner-filename-currently-referenced-by-the-feed-hero-banner-component-and-ensure-the-app-builds-without-unused-unused-import-errors",
-      "featureTitle": "Remove any now-unused static banner asset references introduced by the recent banner change (including the generated banner filename currently referenced by the Feed hero banner component), and ensure the app builds without unused/unused-import errors.",
-      "files": [],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0",
-        "blob-storage@4.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
+        "REQ-1"
       ],
       "confidence": "high"
     }

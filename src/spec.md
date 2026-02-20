@@ -1,11 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Revert the recent Feed banner and slogan UI changes so the Feed page returns to its pre-banner state.
+**Goal:** Replace the placeholder header banner with the uploaded custom banner image.
 
 **Planned changes:**
-- Remove the full-width hero banner from the Feed page by stopping rendering of the `FeedHeroBanner` on route `/`.
-- Remove the recently added slogan text “Giving everyone a voice!” from the Feed UI and eliminate any hardcoded instances introduced by the banner/slogan change set.
-- Delete/cleanup any now-unused banner asset references (including `/assets/generated/feed-hero-banner.dim_2400x600.png`) and ensure the frontend builds cleanly without TypeScript/lint errors from removed imports/components.
+- Update BrandingBanner component to display the uploaded custom banner image from frontend/public/assets/generated
+- Ensure proper aspect ratio and responsive sizing for the banner
 
-**User-visible outcome:** Visiting the Feed page no longer shows the hero banner image or the “Giving everyone a voice!” slogan, and the UI appears as it did before the recent banner/slogan updates.
+**User-visible outcome:** The header displays the custom uploaded banner image instead of the placeholder.
