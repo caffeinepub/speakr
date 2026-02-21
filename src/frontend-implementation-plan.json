@@ -1,22 +1,37 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Crop logo image to remove bottom white space for compact header",
+  "title": "Replace logo with cropped speaker logo and fix slogan positioning",
   "requirements": [
     {
-      "id": "REQ-22",
-      "summary": "Crop the speaker logo image file to remove excess white space underneath the graphic, allowing the slogan to sit closer to the logo and creating a more compact header",
+      "id": "REQ-23",
+      "summary": "Replace the current logo in the Header component with the cropped speaker logo image served as a static asset",
       "acceptanceCriteria": [
-        "The logo image file has visible white space cropped from the bottom edge",
-        "The slogan appears visually closer to the logo graphic due to reduced image padding",
-        "The overall header section height is reduced as a result of the tighter logo-slogan spacing",
-        "The logo graphic itself remains intact and centered within the cropped image"
+        "The speaker logo with gradient text and speaker icon is displayed in the header",
+        "The logo image is served as a static asset from frontend/public/assets/generated",
+        "The logo replaces any existing logo or placeholder in the Header component"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/layout/BrandingBanner.tsx",
+          "path": "frontend/src/components/layout/Header.tsx",
           "operation": "modify",
-          "description": "Update the BrandingBanner component to reference the newly cropped logo image at frontend/public/assets/generated/speakr-logo-cropped.dim_800x400.png instead of the current logo file. This will display the cropped version with reduced bottom white space, bringing the slogan visually closer to the logo graphic and making the header more compact overall."
+          "description": "Replace the existing logo implementation with an <img> element that references the generated cropped speaker logo at frontend/public/assets/generated/speaker-logo.dim_800x200.png. Remove or update any existing logo text/SVG with this static asset reference. Ensure appropriate alt text and styling for the logo image."
+        }
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "summary": "Position the slogan text below the header separator line while maintaining proximity to the logo",
+      "acceptanceCriteria": [
+        "The slogan appears completely below the header separator line with no overlap",
+        "Visual spacing between the logo and slogan remains minimal",
+        "The header separator line is clearly visible and unobstructed"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/layout/Header.tsx",
+          "operation": "modify",
+          "description": "Adjust the slogan positioning to ensure it appears completely below the header separator line without overlapping it. Use CSS spacing utilities or layout adjustments to position the slogan below the separator while keeping visual proximity to the logo minimal. Ensure the separator line remains fully visible and unobstructed by the slogan text."
         }
       ]
     }

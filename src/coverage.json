@@ -1,23 +1,36 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-21T18:22:05.893Z",
+  "generatedAt": "2026-02-21T19:35:55.827Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 0,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
-        "id": "REQ-22",
-        "summary": "Crop the speaker logo image file to remove excess white space underneath the graphic, allowing the slogan to sit much closer to the logo and creating a more compact header overall",
-        "status": "missing",
+        "id": "REQ-23",
+        "summary": "Replace the current logo in the Header component with the user's uploaded speaker logo image (file_000000008744720abc6dc9f1fb80f8e2-7.png) as a static asset in frontend/public/assets/generated",
+        "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/layout/BrandingBanner.tsx"
+          "frontend/src/components/layout/Header.tsx"
         ],
-        "matchedFiles": []
+        "matchedFiles": [
+          "frontend/src/components/layout/Header.tsx"
+        ]
+      },
+      {
+        "id": "REQ-24",
+        "summary": "Position the slogan text below the header separator line (not overlapping it) while maintaining close proximity to the logo above",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/layout/Header.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/layout/Header.tsx"
+        ]
       }
     ]
   },
@@ -26,7 +39,7 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/assets/generated/speakr-logo-cropped.dim_800x400.png",
+    "frontend/public/assets/generated/speaker-logo.dim_800x200.png",
     "frontend/src/components/layout/Header.tsx",
     "project_state.json",
     "scratch/component-selection.json",

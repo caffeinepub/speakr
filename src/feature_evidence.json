@@ -1,4 +1,45 @@
 {
   "kind": "feature_evidence_report",
-  "features": []
+  "features": [
+    {
+      "featureId": "feature-replace-the-current-logo-in-the-header-component-with-the-user-s-uploaded-speaker-logo-image-file-000000008744720abc6dc9f1fb80f8e2-7-png-as-a-static-asset-in-frontend-public-assets-generated",
+      "featureTitle": "Replace the current logo in the Header component with the user's uploaded speaker logo image (file_000000008744720abc6dc9f1fb80f8e2-7.png) as a static asset in frontend/public/assets/generated",
+      "files": [
+        "frontend/src/components/layout/Header.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-23"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-position-the-slogan-text-below-the-header-separator-line-not-overlapping-it-while-maintaining-close-proximity-to-the-logo-above",
+      "featureTitle": "Position the slogan text below the header separator line (not overlapping it) while maintaining close proximity to the logo above",
+      "files": [
+        "frontend/src/components/layout/Header.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-24"
+      ],
+      "confidence": "high"
+    }
+  ]
 }

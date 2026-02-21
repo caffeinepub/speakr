@@ -55,7 +55,7 @@ export default function Header() {
     <header className="z-10 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 shadow-sm">
       <div className="container px-4 md:px-6">
         {/* Main header row with centered logo */}
-        <div className="relative flex h-44 md:h-48 items-center py-1">
+        <div className="relative flex h-32 md:h-36 items-center py-2">
           {/* Left: Menu dropdown and login button stacked vertically */}
           <div className="flex flex-col gap-1 shrink-0">
             <DropdownMenu>
@@ -128,31 +128,28 @@ export default function Header() {
             )}
           </div>
 
-          {/* Center: Logo with slogan (absolutely centered) */}
+          {/* Center: Logo only (absolutely centered) */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <Link to="/" className="flex flex-col items-center gap-0">
+            <Link to="/" className="flex items-center justify-center">
               {!logoError ? (
-                <>
-                  <img
-                    src="/assets/generated/speakr-logo-cropped.dim_800x400.png"
-                    alt="SPEAKR"
-                    className="h-48 md:h-56 w-auto object-contain"
-                    onError={() => setLogoError(true)}
-                  />
-                  <p className="text-xl md:text-2xl font-bold text-primary tracking-wide whitespace-nowrap text-center mt-1 mb-6">
-                    Giving Everyone A Voice!
-                  </p>
-                </>
+                <img
+                  src="/assets/generated/speaker-logo.dim_800x200.png"
+                  alt="SPEAKR"
+                  className="h-24 md:h-28 w-auto object-contain"
+                  onError={() => setLogoError(true)}
+                />
               ) : (
-                <>
-                  <span className="text-5xl md:text-6xl font-bold text-primary tracking-tight">SPEAKR</span>
-                  <p className="text-xl md:text-2xl font-bold text-primary tracking-wide whitespace-nowrap text-center mt-1 mb-6">
-                    Giving Everyone A Voice!
-                  </p>
-                </>
+                <span className="text-5xl md:text-6xl font-bold text-primary tracking-tight">SPEAKR</span>
               )}
             </Link>
           </div>
+        </div>
+
+        {/* Slogan positioned below the header separator line */}
+        <div className="flex justify-center border-t border-border/40 pt-2 pb-3">
+          <p className="text-lg md:text-xl font-bold text-primary tracking-wide whitespace-nowrap text-center">
+            Giving Everyone A Voice!
+          </p>
         </div>
 
         {/* Desktop: Primary Navigation + Search */}

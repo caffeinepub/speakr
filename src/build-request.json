@@ -1,44 +1,59 @@
 {
   "kind": "build_request",
-  "title": "Crop logo image to remove bottom white space for compact header",
+  "title": "Replace logo with cropped speaker logo and fix slogan positioning",
+  "projectName": "SPEAKR",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-22",
-      "text": "Crop the speaker logo image file to remove excess white space underneath the graphic, allowing the slogan to sit much closer to the logo and creating a more compact header overall",
+      "id": "REQ-23",
+      "text": "Replace the current logo in the Header component with the user's uploaded speaker logo image (file_000000008744720abc6dc9f1fb80f8e2-7.png) as a static asset in frontend/public/assets/generated",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-current"
+          "msg-last"
         ],
         "quotes": [
-          "There is still too much white space between the logo and the slogan. Can you crop the logo underneath, so it'll allow the slogan to be much closer underneath it and the overall header to be much more compact"
+          "I've attached the logo again"
         ]
       },
       "acceptanceCriteria": [
-        "The logo image file has visible white space cropped from the bottom edge",
-        "The slogan appears visually closer to the logo graphic due to reduced image padding",
-        "The overall header section height is reduced as a result of the tighter logo-slogan spacing",
-        "The logo graphic itself remains intact and centered within the cropped image"
+        "The speaker logo with gradient text and speaker icon is displayed in the header",
+        "The logo image is served as a static asset from frontend/public/assets/generated",
+        "The logo replaces any existing logo or placeholder in the Header component"
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "text": "Position the slogan text below the header separator line (not overlapping it) while maintaining close proximity to the logo above",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-last"
+        ],
+        "quotes": [
+          "There is the header line, to seperate the header from the rest of the page. The slogan was positioned exactly over it"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The slogan appears completely below the header separator line with no overlap",
+        "Visual spacing between the logo and slogan remains minimal",
+        "The header separator line is clearly visible and unobstructed"
       ]
     }
   ],
   "constraints": [
-    "Do not modify frontend/src/hooks/useInternetIdentity.ts",
-    "Do not modify frontend/src/hooks/useInternetIdentity.tsx",
-    "Do not modify frontend/src/hooks/useActor.ts",
-    "Do not modify frontend/src/main.tsx",
-    "Do not modify frontend/src/components/ui"
+    "Do not modify the structure of immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui",
+    "Keep the backend actor architecture unchanged (single-actor model in backend/main.mo)"
   ],
   "nonGoals": [
-    "Adjusting CSS margins or padding between logo and slogan",
-    "Changing the slogan text content or styling",
-    "Modifying header layout or component structure"
+    "Modifying the slogan text content",
+    "Changing the header separator line styling or thickness",
+    "Adjusting the overall header layout beyond logo and slogan positioning"
   ],
   "imageRequirements": {
-    "required": [],
-    "edits": [
-      "Crop the bottom edge to remove excess white space underneath the speaker graphic (speakr-logo.png > speakr-logo-cropped.dim_800x400.png)"
-    ]
+    "required": [
+      "Crop the speaker logo to remove excess white background space around the graphic, keeping the SPEAKR gradient text and speaker icon tightly framed (speaker-logo.dim_800x200.png)"
+    ],
+    "edits": []
   }
 }

@@ -1,15 +1,17 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 17,
+  "projectStateVersion": 19,
   "summary": "Web application with prominent speaker logo, branded slogan, and audio upload system featuring favorites and audio replies for logged-in members",
   "architectural_notes": [
     "Audio uploads exist in general feed and category-specific views",
     "Audio reply system creates independent uploads with linkage to original audio",
     "Favorite and reply features require user authentication"
   ],
-  "known_issues": [],
-  "isFixRequest": false,
-  "imageRequirements": "## Edit Images\n- Crop the bottom edge to remove excess white space underneath the speaker graphic (speakr-logo.png > speakr-logo-cropped.dim_800x400.png)",
+  "known_issues": [
+    "Slogan is currently positioned on top of the header separator line instead of below it"
+  ],
+  "isFixRequest": true,
+  "imageRequirements": "## Required Images\n- Crop the speaker logo to remove excess white background space around the graphic, keeping the SPEAKR gradient text and speaker icon tightly framed (speaker-logo.dim_800x200.png)",
   "existing_features": [
     {
       "id": "feature-move-the-brandingbannerdropdown-component-containing-about-and-privacy-policy-links-to-be-positioned-next-to-the-logo-in-the-top-left-area-of-the-header",
@@ -154,6 +156,22 @@
         "REQ-21"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-replace-the-current-logo-in-the-header-component-with-the-user-s-uploaded-speaker-logo-image-file-000000008744720abc6dc9f1fb80f8e2-7-png-as-a-static-asset-in-frontend-public-assets-generated",
+      "title": "Replace the current logo in the Header component with the user's uploaded speaker logo image (file_000000008744720abc6dc9f1fb80f8e2-7.png) as a static asset in frontend/public/assets/generated",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-position-the-slogan-text-below-the-header-separator-line-not-overlapping-it-while-maintaining-close-proximity-to-the-logo-above",
+      "title": "Position the slogan text below the header separator line (not overlapping it) while maintaining close proximity to the logo above",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -271,6 +289,18 @@
       "reqIds": [
         "REQ-22"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Replace current logo with user's uploaded speaker logo image",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Position slogan below the header separator line (not on top of it) while keeping it close to the logo",
+      "reqIds": [],
       "status": "pending"
     }
   ],
