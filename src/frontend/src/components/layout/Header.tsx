@@ -55,18 +55,18 @@ export default function Header() {
     <header className="z-10 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 shadow-sm">
       <div className="container px-4 md:px-6">
         {/* Main header row with centered logo */}
-        <div className="relative flex h-64 md:h-80 items-center">
+        <div className="relative flex h-52 md:h-60 items-center py-2">
           {/* Left: Menu dropdown and login button stacked vertically */}
-          <div className="flex flex-col gap-2 shrink-0">
+          <div className="flex flex-col gap-1 shrink-0">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
                   aria-label="Open navigation menu"
-                  className="h-11 w-11 hover:bg-muted/80"
+                  className="h-10 w-10 hover:bg-muted/80"
                 >
-                  <Menu className="h-6 w-6" />
+                  <Menu className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-48">
@@ -94,24 +94,24 @@ export default function Header() {
 
             {/* Login/Dashboard/Logout button directly underneath dropdown */}
             {isAuthenticated ? (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => navigate({ to: '/dashboard' })}
-                  className="h-11 w-11 hover:bg-muted/80"
+                  className="h-10 w-10 hover:bg-muted/80"
                   aria-label="Dashboard"
                 >
-                  <LayoutDashboard className="h-6 w-6" />
+                  <LayoutDashboard className="h-5 w-5" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={handleLogout}
-                  className="h-11 w-11 hover:bg-muted/80"
+                  className="h-10 w-10 hover:bg-muted/80"
                   aria-label="Logout"
                 >
-                  <LogOut className="h-6 w-6" />
+                  <LogOut className="h-5 w-5" />
                 </Button>
               </div>
             ) : (
@@ -120,17 +120,17 @@ export default function Header() {
                 size="icon"
                 onClick={handleLogin}
                 disabled={isLoggingIn}
-                className="h-11 w-11 hover:bg-muted/80"
+                className="h-10 w-10 hover:bg-muted/80"
                 aria-label={isLoggingIn ? 'Logging in...' : 'Login'}
               >
-                <LogIn className="h-6 w-6" />
+                <LogIn className="h-5 w-5" />
               </Button>
             )}
           </div>
 
           {/* Center: Logo with slogan (absolutely centered) */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <Link to="/" className="flex flex-col items-center gap-3">
+            <Link to="/" className="flex flex-col items-center gap-1.5">
               {!logoError ? (
                 <>
                   <img
@@ -160,16 +160,16 @@ export default function Header() {
               variant="ghost"
               size="icon"
               onClick={() => navigate({ to: '/upload' })}
-              className="shrink-0 h-11 w-11 hover:bg-muted/80"
+              className="shrink-0 h-10 w-10 hover:bg-muted/80"
             >
-              <Upload className="h-6 w-6" />
+              <Upload className="h-5 w-5" />
               <span className="sr-only">Upload</span>
             </Button>
           </div>
         </div>
 
         {/* Desktop: Primary Navigation + Search */}
-        <div className="hidden md:flex items-center gap-6 border-t border-border/40 py-3">
+        <div className="hidden md:flex items-center gap-6 border-t border-border/40 py-2">
           <nav className="flex items-center gap-2">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -197,7 +197,7 @@ export default function Header() {
       </div>
 
       {/* Mobile: Search bar */}
-      <div className="md:hidden border-t border-border/40 px-4 py-3">
+      <div className="md:hidden border-t border-border/40 px-4 py-2">
         <SearchBar />
       </div>
 

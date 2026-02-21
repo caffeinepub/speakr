@@ -2,8 +2,8 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-move-the-brandingbannerdropdown-component-containing-about-and-privacy-policy-links-to-be-positioned-next-to-the-logo-in-the-top-left-area-of-the-header",
-      "featureTitle": "Move the BrandingBannerDropdown component (containing About and Privacy Policy links) to be positioned next to the logo in the top left area of the header",
+      "featureId": "feature-reduce-the-vertical-padding-and-spacing-around-all-header-elements-in-the-header-component-to-create-a-more-compact-top-section",
+      "featureTitle": "Reduce the vertical padding and spacing around all header elements in the Header component to create a more compact top section",
       "files": [
         "frontend/src/components/layout/Header.tsx"
       ],
@@ -17,13 +17,13 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-3"
+        "REQ-6"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-reposition-the-login-button-currently-on-the-right-side-to-be-directly-underneath-the-dropdown-menu-in-the-top-left-area",
-      "featureTitle": "Reposition the login button (currently on the right side) to be directly underneath the dropdown menu in the top left area",
+      "featureId": "feature-decrease-the-vertical-spacing-between-the-logo-brandingbannerdropdown-menu-and-login-button-that-are-stacked-in-the-top-left-area",
+      "featureTitle": "Decrease the vertical spacing between the logo, BrandingBannerDropdown menu, and login button that are stacked in the top left area",
       "files": [
         "frontend/src/components/layout/Header.tsx"
       ],
@@ -37,13 +37,13 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-4"
+        "REQ-7"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-small-spacing-between-the-dropdown-menu-and-login-button-to-ensure-easy-touch-click-targets",
-      "featureTitle": "Add small spacing between the dropdown menu and login button to ensure easy touch/click targets",
+      "featureId": "feature-move-the-slogan-text-closer-to-the-header-content-to-reduce-the-overall-header-height-and-create-a-more-compact-top-section",
+      "featureTitle": "Move the slogan text closer to the header content to reduce the overall header height and create a more compact top section",
       "files": [
         "frontend/src/components/layout/Header.tsx"
       ],
@@ -57,7 +57,7 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-5"
+        "REQ-8"
       ],
       "confidence": "high"
     }

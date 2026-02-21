@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 5,
+  "projectStateVersion": 7,
   "summary": "Web application with prominent speaker logo and branded slogan",
   "architectural_notes": [],
   "known_issues": [],
@@ -27,6 +27,30 @@
       "title": "Add small spacing between the dropdown menu and login button to ensure easy touch/click targets",
       "reqIds": [
         "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-reduce-the-vertical-padding-and-spacing-around-all-header-elements-in-the-header-component-to-create-a-more-compact-top-section",
+      "title": "Reduce the vertical padding and spacing around all header elements in the Header component to create a more compact top section",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-decrease-the-vertical-spacing-between-the-logo-brandingbannerdropdown-menu-and-login-button-that-are-stacked-in-the-top-left-area",
+      "title": "Decrease the vertical spacing between the logo, BrandingBannerDropdown menu, and login button that are stacked in the top left area",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-move-the-slogan-text-closer-to-the-header-content-to-reduce-the-overall-header-height-and-create-a-more-compact-top-section",
+      "title": "Move the slogan text closer to the header content to reduce the overall header height and create a more compact top section",
+      "reqIds": [
+        "REQ-8"
       ],
       "version": 1
     }
@@ -63,6 +87,12 @@
     {
       "id": "AR-5",
       "summary": "Move dropdown menu (About/Privacy Policy) next to logo in top left, place login button underneath with small spacing",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Make header more compact by reducing spacing/padding and moving slogan closer",
       "reqIds": [],
       "status": "pending"
     }

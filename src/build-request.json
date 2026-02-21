@@ -1,72 +1,73 @@
 {
   "kind": "build_request",
-  "title": "Reorganize header layout: move dropdown and login button to top left",
+  "title": "Reduce header vertical spacing and compact layout",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-3",
-      "text": "Move the BrandingBannerDropdown component (containing About and Privacy Policy links) to be positioned next to the logo in the top left area of the header",
+      "id": "REQ-6",
+      "text": "Reduce the vertical padding and spacing around all header elements in the Header component to create a more compact top section",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-recent-1"
+          "msg-latest"
         ],
         "quotes": [
-          "Where the about section and privacy policy is",
-          "Move the drop down menu next to the logo, more to the top left"
+          "Adjust spacing/padding"
         ]
       },
       "acceptanceCriteria": [
-        "The dropdown menu is positioned in the top left area of the header, adjacent to the logo",
-        "The dropdown remains fully functional with all existing links (About, Privacy Policy, etc.)"
+        "The overall height of the header section is visibly reduced",
+        "Padding around header elements is decreased while maintaining visual balance",
+        "All header elements remain properly aligned and readable"
       ]
     },
     {
-      "id": "REQ-4",
-      "text": "Reposition the login button (currently on the right side) to be directly underneath the dropdown menu in the top left area",
+      "id": "REQ-7",
+      "text": "Decrease the vertical spacing between the logo, BrandingBannerDropdown menu, and login button that are stacked in the top left area",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-recent-2"
+          "msg-latest"
         ],
         "quotes": [
-          "place the login button that is now positioned on the right side of the logo",
-          "Directly underneath"
+          "Yes"
         ]
       },
       "acceptanceCriteria": [
-        "The login button appears directly below the dropdown menu",
-        "The login button maintains full functionality for authentication"
+        "The gap between the logo and dropdown menu is reduced",
+        "The gap between the dropdown menu and login button is reduced",
+        "Elements remain easily clickable with sufficient touch targets",
+        "Visual hierarchy is maintained"
       ]
     },
     {
-      "id": "REQ-5",
-      "text": "Add small spacing between the dropdown menu and login button to ensure easy touch/click targets",
+      "id": "REQ-8",
+      "text": "Move the slogan text closer to the header content to reduce the overall header height and create a more compact top section",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-recent-3"
+          "msg-latest"
         ],
         "quotes": [
-          "Small spacing for easy pressing"
+          "Moved closer to reduce overall header height"
         ]
       },
       "acceptanceCriteria": [
-        "There is visible spacing between the dropdown menu and login button",
-        "The spacing is optimized for mobile and desktop interaction"
+        "The slogan text is positioned closer to the header elements above it",
+        "The overall vertical space consumed by the top section is noticeably reduced",
+        "The slogan remains readable and properly styled"
       ]
     }
   ],
   "constraints": [
-    "Do not modify the BrandingBannerDropdown component functionality or links",
-    "Preserve all existing authentication logic in the login button",
-    "Maintain responsive design for mobile and desktop viewports"
+    "Maintain touch-friendly click targets for all interactive elements",
+    "Preserve existing header functionality and navigation structure",
+    "Keep the logo size unchanged as per previous requirements"
   ],
   "nonGoals": [
-    "Changing the content or styling of the dropdown menu items",
-    "Modifying the logo size or appearance",
-    "Altering the search bar position or functionality",
-    "Changing authentication flow or Internet Identity integration"
+    "Changing the size of the speaker logo",
+    "Modifying the slogan text content",
+    "Rearranging the layout structure of header elements"
   ],
   "imageRequirements": {
     "required": [],

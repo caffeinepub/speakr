@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Reorganize the header layout by moving the dropdown menu and login button to the top left area next to the logo.
+**Goal:** Reduce the vertical spacing and padding in the header section to create a more compact top layout.
 
 **Planned changes:**
-- Move the BrandingBannerDropdown component (containing About and Privacy Policy links) to the top left area, adjacent to the logo
-- Reposition the login button from the right side to directly underneath the dropdown menu in the top left area
-- Add small spacing between the dropdown menu and login button for easy touch/click targets
+- Reduce vertical padding and spacing around all header elements in the Header component
+- Decrease the vertical spacing between the logo, BrandingBannerDropdown menu, and login button in the top left area
+- Move the slogan text closer to the header content to reduce overall header height
 
-**User-visible outcome:** Users will see a reorganized header with the dropdown menu and login button grouped together in the top left area next to the logo, with improved layout and spacing for easier interaction.
+**User-visible outcome:** Users will see a more compact header section with reduced vertical spacing, allowing more content to be visible on the page while maintaining readability and usability.
