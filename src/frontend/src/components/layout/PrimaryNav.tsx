@@ -1,10 +1,12 @@
 import { Link, useRouterState } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
-import { Home, Compass, Upload } from 'lucide-react';
+import { Home, Compass, Upload, Smile } from 'lucide-react';
+import { useKidsModeStore } from '@/state/kidsMode';
 
 export default function PrimaryNav() {
   const router = useRouterState();
   const currentPath = router.location.pathname;
+  const { isKidsMode, toggleKidsMode } = useKidsModeStore();
 
   const navItems = [
     { path: '/', label: 'Feed', icon: Home },
@@ -30,6 +32,15 @@ export default function PrimaryNav() {
           </Link>
         );
       })}
+      <Button
+        variant={isKidsMode ? 'default' : 'ghost'}
+        size="default"
+        className="gap-2 text-base px-5 ml-2"
+        onClick={toggleKidsMode}
+      >
+        <Smile className="h-5 w-5" />
+        KIDS
+      </Button>
     </nav>
   );
 }

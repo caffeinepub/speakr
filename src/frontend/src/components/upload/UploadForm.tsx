@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
 import CategoryPicker from './CategoryPicker';
 import AudioSourceSelector from './AudioSourceSelector';
 import LanguageMultiSelectDropdown from '@/components/language/LanguageMultiSelectDropdown';
@@ -15,10 +16,12 @@ import { toast } from 'sonner';
 import { useAddAudioPost } from '@/hooks/useQueries';
 import { ExternalBlob } from '@/backend';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
+import { useKidsModeStore } from '@/state/kidsMode';
 
 export default function UploadForm() {
   const navigate = useNavigate();
   const { identity } = useInternetIdentity();
+  const { isKidsMode } = useKidsModeStore();
   const isAuthenticated = !!identity;
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -27,7 +30,10 @@ export default function UploadForm() {
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const { durationError, validateAudioFile } = useAudioDurationValidation();
+  const [kidFriendly, setKidFriendly] = useState(isKidsMode);
+  
+  const maxDurationHours = isKidsMode ? 1 : 3;
+  const { durationError, validateAudioFile } = useAudioDurationValidation(maxDurationHours);
   const addAudioPost = useAddAudioPost();
 
   const handleAudioFileChange = (file: File | null) => {
@@ -51,7 +57,7 @@ export default function UploadForm() {
     }
     
     if (durationError) {
-      toast.error('Audio file exceeds the 3-hour maximum duration');
+      toast.error(`Audio file exceeds the ${maxDurationHours}-hour maximum duration`);
       return;
     }
     
@@ -76,6 +82,7 @@ export default function UploadForm() {
         description: description.trim(),
         audioBlob,
         replyTo: null,
+        kidFriendly: isKidsMode ? true : kidFriendly,
       });
 
       toast.success('Audio uploaded successfully!', {
@@ -90,6 +97,7 @@ export default function UploadForm() {
       setAudioFile(null);
       setSelectedLanguages([]);
       setUploadProgress(0);
+      setKidFriendly(isKidsMode);
 
       // Navigate to dashboard
       navigate({ to: '/dashboard' });
@@ -107,7 +115,7 @@ export default function UploadForm() {
   return (
     <Card className="max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle>Upload Audio</CardTitle>
+        <CardTitle>{isKidsMode ? 'Upload Kid-Friendly Audio' : 'Upload Audio'}</CardTitle>
       </CardHeader>
       <CardContent>
         {!isAuthenticated && (
@@ -120,32 +128,53 @@ export default function UploadForm() {
         )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="title">Title *</Label>
+            <Label htmlFor="title">{isKidsMode ? 'Your Awesome Title' : 'Title'} *</Label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter audio title"
+              placeholder={isKidsMode ? 'Give your audio a cool name!' : 'Enter audio title'}
               required
               disabled={!isAuthenticated}
+              className={isKidsMode ? 'text-lg' : ''}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{isKidsMode ? 'Tell Us About It' : 'Description'}</Label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe your audio (optional)"
+              placeholder={isKidsMode ? 'What is your recording about?' : 'Describe your audio (optional)'}
               rows={4}
               disabled={!isAuthenticated}
+              className={isKidsMode ? 'text-base' : ''}
             />
           </div>
 
+          {!isKidsMode && (
+            <div className="flex items-center justify-between space-x-4 p-4 border border-border rounded-lg">
+              <div className="space-y-0.5">
+                <Label htmlFor="kid-friendly" className="text-base font-medium">
+                  Kid-Friendly Content
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Mark this audio as appropriate for children
+                </p>
+              </div>
+              <Switch
+                id="kid-friendly"
+                checked={kidFriendly}
+                onCheckedChange={setKidFriendly}
+                disabled={!isAuthenticated}
+              />
+            </div>
+          )}
+
           <div className="space-y-2">
-            <Label>Audio Source *</Label>
-            <AudioSourceSelector onFileChange={handleAudioFileChange} />
+            <Label>{isKidsMode ? 'Your Recording' : 'Audio Source'} *</Label>
+            <AudioSourceSelector onFileChange={handleAudioFileChange} maxDurationHours={maxDurationHours} />
             {durationError && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
@@ -154,7 +183,9 @@ export default function UploadForm() {
             )}
             {!durationError && (
               <p className="text-sm text-muted-foreground">
-                Maximum audio length: 3 hours
+                {isKidsMode 
+                  ? 'Maximum audio length: 1 hour' 
+                  : 'Maximum audio length: 3 hours'}
               </p>
             )}
           </div>
@@ -176,7 +207,7 @@ export default function UploadForm() {
 
           <Button 
             type="submit" 
-            className="w-full" 
+            className={`w-full ${isKidsMode ? 'text-lg py-6' : ''}`}
             size="lg" 
             disabled={isSubmitting || !isAuthenticated || !!durationError}
           >
@@ -188,7 +219,7 @@ export default function UploadForm() {
             ) : (
               <>
                 <Upload className="h-4 w-4 mr-2" />
-                Upload
+                {isKidsMode ? 'Share Your Audio!' : 'Upload'}
               </>
             )}
           </Button>

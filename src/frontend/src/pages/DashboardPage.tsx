@@ -1,6 +1,6 @@
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 import { useNavigate } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,11 +9,13 @@ import StatisticsSection from '@/components/dashboard/StatisticsSection';
 import FavoritesSection from '@/components/dashboard/FavoritesSection';
 import DashboardEmptyHero from '@/components/dashboard/DashboardEmptyHero';
 import { useMyContent } from '@/hooks/useMyContent';
+import { useKidsModeStore } from '@/state/kidsMode';
 
 export default function DashboardPage() {
   const { identity, loginStatus } = useInternetIdentity();
   const navigate = useNavigate();
   const { data: myContent, isLoading: contentLoading } = useMyContent();
+  const { isKidsMode } = useKidsModeStore();
   const isAuthenticated = !!identity;
   const isInitializing = loginStatus === 'initializing';
 
@@ -22,6 +24,15 @@ export default function DashboardPage() {
       navigate({ to: '/' });
     }
   }, [isAuthenticated, isInitializing, navigate]);
+
+  // Filter content based on kids mode
+  const filteredContent = useMemo(() => {
+    if (!myContent) return [];
+    if (isKidsMode) {
+      return myContent.filter((post) => post.kidFriendly === true);
+    }
+    return myContent;
+  }, [myContent, isKidsMode]);
 
   if (isInitializing) {
     return (
@@ -55,7 +66,7 @@ export default function DashboardPage() {
 
   const principalId = identity.getPrincipal().toString();
   const displayName = principalId.substring(0, 8) + '...' + principalId.substring(principalId.length - 6);
-  const hasContent = myContent && myContent.length > 0;
+  const hasContent = filteredContent && filteredContent.length > 0;
   const showEmptyHero = !contentLoading && !hasContent;
 
   return (
@@ -63,7 +74,9 @@ export default function DashboardPage() {
       <div className="max-w-6xl mx-auto space-y-8 fade-in-up">
         {/* Header */}
         <div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 tracking-tight">Dashboard</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-2 tracking-tight">
+            {isKidsMode ? 'My Kid-Friendly Dashboard' : 'Dashboard'}
+          </h1>
           <p className="text-lg text-muted-foreground">Welcome back, {displayName}</p>
         </div>
 
@@ -71,14 +84,14 @@ export default function DashboardPage() {
         {showEmptyHero ? (
           <DashboardEmptyHero hasProfile={true} />
         ) : (
-          <StatisticsSection />
+          <StatisticsSection isKidsMode={isKidsMode} />
         )}
 
         {/* Favorites Section */}
-        <FavoritesSection />
+        <FavoritesSection isKidsMode={isKidsMode} />
 
         {/* My Content Section */}
-        <MyContentSection />
+        <MyContentSection isKidsMode={isKidsMode} />
       </div>
     </div>
   );

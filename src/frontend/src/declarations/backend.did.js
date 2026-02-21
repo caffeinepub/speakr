@@ -34,6 +34,7 @@ export const AudioPost = IDL.Record({
   'audioPath' : IDL.Text,
   'author' : IDL.Principal,
   'replyTo' : IDL.Opt(IDL.Text),
+  'kidFriendly' : IDL.Bool,
 });
 export const UserProfile = IDL.Record({ 'name' : IDL.Text });
 export const UserStatistics = IDL.Record({
@@ -70,7 +71,7 @@ export const idlService = IDL.Service({
   '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'addAudioPost' : IDL.Func(
-      [IDL.Text, IDL.Text, ExternalBlob, IDL.Opt(IDL.Text)],
+      [IDL.Text, IDL.Text, ExternalBlob, IDL.Opt(IDL.Text), IDL.Bool],
       [IDL.Text],
       [],
     ),
@@ -82,6 +83,7 @@ export const idlService = IDL.Service({
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getFavoritePosts' : IDL.Func([], [IDL.Vec(AudioPost)], []),
+  'getKidFriendlyPosts' : IDL.Func([], [IDL.Vec(AudioPost)], ['query']),
   'getMyContent' : IDL.Func([], [IDL.Vec(AudioPost)], []),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
@@ -125,6 +127,7 @@ export const idlFactory = ({ IDL }) => {
     'audioPath' : IDL.Text,
     'author' : IDL.Principal,
     'replyTo' : IDL.Opt(IDL.Text),
+    'kidFriendly' : IDL.Bool,
   });
   const UserProfile = IDL.Record({ 'name' : IDL.Text });
   const UserStatistics = IDL.Record({
@@ -161,7 +164,7 @@ export const idlFactory = ({ IDL }) => {
     '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'addAudioPost' : IDL.Func(
-        [IDL.Text, IDL.Text, ExternalBlob, IDL.Opt(IDL.Text)],
+        [IDL.Text, IDL.Text, ExternalBlob, IDL.Opt(IDL.Text), IDL.Bool],
         [IDL.Text],
         [],
       ),
@@ -173,6 +176,7 @@ export const idlFactory = ({ IDL }) => {
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getFavoritePosts' : IDL.Func([], [IDL.Vec(AudioPost)], []),
+    'getKidFriendlyPosts' : IDL.Func([], [IDL.Vec(AudioPost)], ['query']),
     'getMyContent' : IDL.Func([], [IDL.Vec(AudioPost)], []),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],

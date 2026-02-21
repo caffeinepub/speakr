@@ -105,6 +105,7 @@ export interface AudioPost {
     audioPath: string;
     author: Principal;
     replyTo?: string;
+    kidFriendly: boolean;
 }
 export interface _CaffeineStorageCreateCertificateResult {
     method: string;
@@ -130,7 +131,7 @@ export interface backendInterface {
     _caffeineStorageRefillCashier(refillInformation: _CaffeineStorageRefillInformation | null): Promise<_CaffeineStorageRefillResult>;
     _caffeineStorageUpdateGatewayPrincipals(): Promise<void>;
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
-    addAudioPost(title: string, description: string, audio: ExternalBlob, replyTo: string | null): Promise<string>;
+    addAudioPost(title: string, description: string, audio: ExternalBlob, replyTo: string | null, kidFriendly: boolean): Promise<string>;
     addToFavorites(postId: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     editAudioPost(postId: string, title: string, description: string): Promise<boolean>;
@@ -139,6 +140,7 @@ export interface backendInterface {
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getFavoritePosts(): Promise<Array<AudioPost>>;
+    getKidFriendlyPosts(): Promise<Array<AudioPost>>;
     getMyContent(): Promise<Array<AudioPost>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     getUserStatistics(): Promise<UserStatistics>;
@@ -249,17 +251,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async addAudioPost(arg0: string, arg1: string, arg2: ExternalBlob, arg3: string | null): Promise<string> {
+    async addAudioPost(arg0: string, arg1: string, arg2: ExternalBlob, arg3: string | null, arg4: boolean): Promise<string> {
         if (this.processError) {
             try {
-                const result = await this.actor.addAudioPost(arg0, arg1, await to_candid_ExternalBlob_n8(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n9(this._uploadFile, this._downloadFile, arg3));
+                const result = await this.actor.addAudioPost(arg0, arg1, await to_candid_ExternalBlob_n8(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n9(this._uploadFile, this._downloadFile, arg3), arg4);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.addAudioPost(arg0, arg1, await to_candid_ExternalBlob_n8(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n9(this._uploadFile, this._downloadFile, arg3));
+            const result = await this.actor.addAudioPost(arg0, arg1, await to_candid_ExternalBlob_n8(this._uploadFile, this._downloadFile, arg2), to_candid_opt_n9(this._uploadFile, this._downloadFile, arg3), arg4);
             return result;
         }
     }
@@ -372,6 +374,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getFavoritePosts();
+            return from_candid_vec_n21(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getKidFriendlyPosts(): Promise<Array<AudioPost>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getKidFriendlyPosts();
+                return from_candid_vec_n21(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getKidFriendlyPosts();
             return from_candid_vec_n21(this._uploadFile, this._downloadFile, result);
         }
     }
@@ -527,6 +543,7 @@ async function from_candid_record_n16(_uploadFile: (file: ExternalBlob) => Promi
     audioPath: string;
     author: Principal;
     replyTo: [] | [string];
+    kidFriendly: boolean;
 }): Promise<{
     id: string;
     listens: bigint;
@@ -536,6 +553,7 @@ async function from_candid_record_n16(_uploadFile: (file: ExternalBlob) => Promi
     audioPath: string;
     author: Principal;
     replyTo?: string;
+    kidFriendly: boolean;
 }> {
     return {
         id: value.id,
@@ -545,7 +563,8 @@ async function from_candid_record_n16(_uploadFile: (file: ExternalBlob) => Promi
         description: value.description,
         audioPath: value.audioPath,
         author: value.author,
-        replyTo: record_opt_to_undefined(from_candid_opt_n17(_uploadFile, _downloadFile, value.replyTo))
+        replyTo: record_opt_to_undefined(from_candid_opt_n17(_uploadFile, _downloadFile, value.replyTo)),
+        kidFriendly: value.kidFriendly
     };
 }
 function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {

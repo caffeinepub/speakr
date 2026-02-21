@@ -5,10 +5,12 @@ import Runtime "mo:core/Runtime";
 import Text "mo:core/Text";
 import Iter "mo:core/Iter";
 import Principal "mo:core/Principal";
+
 import MixinAuthorization "authorization/MixinAuthorization";
 import MixinStorage "blob-storage/Mixin";
 import Storage "blob-storage/Storage";
 import AccessControl "authorization/access-control";
+
 
 actor {
   let accessControlState = AccessControl.initState();
@@ -30,6 +32,7 @@ actor {
     listens : Nat;
     audioPath : Text;
     replyTo : ?Text;
+    kidFriendly : Bool;
   };
 
   public type UserStatistics = {
@@ -64,7 +67,13 @@ actor {
   };
 
   // Audio Post Management
-  public shared ({ caller }) func addAudioPost(title : Text, description : Text, audio : Storage.ExternalBlob, replyTo : ?Text) : async Text {
+  public shared ({ caller }) func addAudioPost(
+    title : Text,
+    description : Text,
+    audio : Storage.ExternalBlob,
+    replyTo : ?Text,
+    kidFriendly : Bool,
+  ) : async Text {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can add audio posts");
     };
@@ -81,6 +90,7 @@ actor {
       listens = 0;
       audioPath = "";
       replyTo;
+      kidFriendly;
     };
 
     audioPosts.add(postId, newPost);
@@ -94,6 +104,18 @@ actor {
     userContent.add(caller, updatedList);
 
     postId;
+  };
+
+  public query func getKidFriendlyPosts() : async [AudioPost] {
+    let filteredPosts = List.empty<AudioPost>();
+
+    for (post in audioPosts.values()) {
+      if (post.kidFriendly) {
+        filteredPosts.add(post);
+      };
+    };
+
+    filteredPosts.reverse().toArray();
   };
 
   public shared ({ caller }) func addToFavorites(postId : Text) : async () {
@@ -161,19 +183,19 @@ actor {
     switch (audioPosts.get(postId)) {
       case (null) { Runtime.trap("Audio post not found") };
       case (?post) {
-        if (post.author != caller) {
-          Runtime.trap("Unauthorized: Only the author can remove this post");
+        if (post.author != caller and not AccessControl.isAdmin(accessControlState, caller)) {
+          Runtime.trap("Unauthorized: Only the author or an admin can remove this post");
         };
 
         // Remove post from audioPosts map
         audioPosts.remove(postId);
 
-        // Remove post from user's content list
-        switch (userContent.get(caller)) {
+        // Remove post from the author's content list (not the caller's if admin is deleting)
+        switch (userContent.get(post.author)) {
           case (null) { Runtime.trap("Failed to update user content") };
           case (?postIds) {
             let updatedList = postIds.filter(func(id) { id != postId });
-            userContent.add(caller, updatedList);
+            userContent.add(post.author, updatedList);
           };
         };
         true;

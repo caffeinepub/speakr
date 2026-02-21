@@ -20,17 +20,39 @@ import FloatingBackToFeedButton from './components/layout/FloatingBackToFeedButt
 import FloatingLanguageSelector from './components/layout/FloatingLanguageSelector';
 import { useOnboarding } from './hooks/useOnboarding';
 import { useEffect } from 'react';
+import { useKidsModeStore } from './state/kidsMode';
+import ErrorBoundary from './components/layout/ErrorBoundary';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,
+      staleTime: 5000,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function AppLayout() {
   const { isComplete } = useOnboarding();
+  const { isKidsMode } = useKidsModeStore();
 
   useEffect(() => {
+    // Only redirect if we're not already on the onboarding page
     if (!isComplete && window.location.pathname !== '/onboarding') {
-      window.location.href = '/onboarding';
+      // Use router navigation instead of window.location to avoid full page reload
+      window.history.pushState({}, '', '/onboarding');
+      window.dispatchEvent(new PopStateEvent('popstate'));
     }
   }, [isComplete]);
+
+  useEffect(() => {
+    if (isKidsMode) {
+      document.documentElement.classList.add('kids-mode');
+    } else {
+      document.documentElement.classList.remove('kids-mode');
+    }
+  }, [isKidsMode]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
@@ -133,13 +155,15 @@ const router = createRouter({ routeTree });
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <InternetIdentityProvider>
-        <PlayerProvider>
-          <RouterProvider router={router} />
-          <Toaster />
-        </PlayerProvider>
-      </InternetIdentityProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <InternetIdentityProvider>
+          <PlayerProvider>
+            <RouterProvider router={router} />
+            <Toaster />
+          </PlayerProvider>
+        </InternetIdentityProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }

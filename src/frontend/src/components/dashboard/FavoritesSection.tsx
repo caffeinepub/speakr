@@ -1,19 +1,30 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Heart } from 'lucide-react';
 import { useFavorites } from '@/hooks/useFavorites';
+import { Skeleton } from '@/components/ui/skeleton';
 import AudioCard from '@/components/feed/AudioCard';
 import type { MockAudioItem } from '@/mock/mockAudio';
 import type { AudioPost } from '@/backend';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useMemo } from 'react';
 
-export default function FavoritesSection() {
-  const { data: favoritePosts, isLoading } = useFavorites();
+interface FavoritesSectionProps {
+  isKidsMode?: boolean;
+}
 
-  // Convert AudioPost to MockAudioItem format
+export default function FavoritesSection({ isKidsMode = false }: FavoritesSectionProps) {
+  const { data: favorites, isLoading } = useFavorites();
+
+  const filteredFavorites = useMemo(() => {
+    if (!favorites) return [];
+    if (isKidsMode) {
+      return favorites.filter((post) => post.kidFriendly === true);
+    }
+    return favorites;
+  }, [favorites, isKidsMode]);
+
   const convertToMockItem = (post: AudioPost): MockAudioItem => ({
     id: post.id,
     title: post.title,
-    creator: 'Author',
+    creator: 'User',
     category: 'Podcast',
     thumbnail: '/assets/file_000000008744720abc6dc9f1fb80f8e2.png',
     audioUrl: post.audio.getDirectURL(),
@@ -24,41 +35,51 @@ export default function FavoritesSection() {
     author: post.author,
   });
 
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Favorites</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} className="h-48 w-full" />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!filteredFavorites || filteredFavorites.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{isKidsMode ? 'Kid-Friendly Favorites' : 'Favorites'}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-center text-muted-foreground py-8">
+            {isKidsMode 
+              ? "You haven't favorited any kid-friendly content yet. Explore and favorite awesome content!" 
+              : "You haven't favorited any content yet. Explore and favorite content you love!"}
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Heart className="h-5 w-5 text-red-500" />
-          Favorite Audio
-          {favoritePosts && favoritePosts.length > 0 && (
-            <span className="text-sm font-normal text-muted-foreground">
-              ({favoritePosts.length})
-            </span>
-          )}
-        </CardTitle>
+        <CardTitle>{isKidsMode ? 'Kid-Friendly Favorites' : 'Favorites'}</CardTitle>
       </CardHeader>
       <CardContent>
-        {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-64 w-full" />
-            ))}
-          </div>
-        ) : favoritePosts && favoritePosts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {favoritePosts.map((post) => (
-              <AudioCard key={post.id} audio={convertToMockItem(post)} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8">
-            <Heart className="h-12 w-12 mx-auto mb-3 text-muted-foreground/50" />
-            <p className="text-muted-foreground">No favorite audio yet</p>
-            <p className="text-sm text-muted-foreground/70 mt-1">
-              Click the heart icon on any audio to add it to your favorites
-            </p>
-          </div>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredFavorites.map((post) => (
+            <AudioCard key={post.id} audio={convertToMockItem(post)} />
+          ))}
+        </div>
       </CardContent>
     </Card>
   );

@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
-const MAX_DURATION_SECONDS = 3 * 60 * 60; // 3 hours
-
-export function useAudioDurationValidation() {
+export function useAudioDurationValidation(maxDurationHours: number = 3) {
   const [durationError, setDurationError] = useState<string | null>(null);
+  const MAX_DURATION_SECONDS = maxDurationHours * 60 * 60;
 
   const validateAudioFile = (file: File) => {
     setDurationError(null);
@@ -16,7 +15,7 @@ export function useAudioDurationValidation() {
       
       if (audio.duration > MAX_DURATION_SECONDS) {
         setDurationError(
-          `Audio file exceeds the maximum duration of 3 hours. Your file is ${formatDuration(audio.duration)}.`
+          `Audio file exceeds the maximum duration of ${maxDurationHours} hour${maxDurationHours > 1 ? 's' : ''}. Your file is ${formatDuration(audio.duration)}.`
         );
       }
     });
@@ -39,5 +38,5 @@ export function useAudioDurationValidation() {
     return `${mins} minute${mins !== 1 ? 's' : ''}`;
   };
 
-  return { durationError, validateAudioFile };
+  return { durationError, validateAudioFile, maxDurationSeconds: MAX_DURATION_SECONDS };
 }

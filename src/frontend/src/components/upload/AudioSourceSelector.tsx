@@ -8,9 +8,8 @@ import { AlertCircle } from 'lucide-react';
 
 interface AudioSourceSelectorProps {
   onFileChange: (file: File | null) => void;
+  maxDurationHours?: number;
 }
-
-const MAX_RECORDING_DURATION = 3 * 60 * 60; // 3 hours in seconds
 
 // Detect supported audio MIME type
 function getSupportedMimeType(): { mimeType: string; extension: string } | null {
@@ -30,7 +29,9 @@ function getSupportedMimeType(): { mimeType: string; extension: string } | null 
   return null;
 }
 
-export default function AudioSourceSelector({ onFileChange }: AudioSourceSelectorProps) {
+export default function AudioSourceSelector({ onFileChange, maxDurationHours = 3 }: AudioSourceSelectorProps) {
+  const MAX_RECORDING_DURATION = maxDurationHours * 60 * 60; // Convert hours to seconds
+  
   const [selectedTab, setSelectedTab] = useState<'upload' | 'record'>('upload');
   const [isRecording, setIsRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
@@ -195,12 +196,12 @@ export default function AudioSourceSelector({ onFileChange }: AudioSourceSelecto
       setIsRecording(true);
       setRecordingTime(0);
       
-      // Start timer with 3-hour max duration check
+      // Start timer with max duration check
       timerRef.current = window.setInterval(() => {
         setRecordingTime(prev => {
           const newTime = prev + 1;
           
-          // Auto-stop at 3 hours
+          // Auto-stop at max duration
           if (newTime >= MAX_RECORDING_DURATION) {
             setMaxDurationReached(true);
             stopRecording();
@@ -296,7 +297,7 @@ export default function AudioSourceSelector({ onFileChange }: AudioSourceSelecto
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              Maximum recording duration of 3 hours reached. Recording has been stopped automatically.
+              Maximum recording duration of {maxDurationHours} hour{maxDurationHours > 1 ? 's' : ''} reached. Recording has been stopped automatically.
             </AlertDescription>
           </Alert>
         )}

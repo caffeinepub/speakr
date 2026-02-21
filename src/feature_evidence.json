@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-replace-the-current-logo-in-the-header-component-with-the-user-s-uploaded-speaker-logo-image-file-000000008744720abc6dc9f1fb80f8e2-7-png-as-a-static-asset-in-frontend-public-assets-generated",
-      "featureTitle": "Replace the current logo in the Header component with the user's uploaded speaker logo image (file_000000008744720abc6dc9f1fb80f8e2-7.png) as a static asset in frontend/public/assets/generated",
+      "featureId": "feature-investigate-and-fix-the-deployment-issue-in-version-44-that-causes-the-site-to-display-a-going-live-loading-message-spinner-indefinitely-on-mobile-devices-preventing-the-application-from-loading-or-initializing-properly",
+      "featureTitle": "Investigate and fix the deployment issue in Version 44 that causes the site to display a 'going live' loading message/spinner indefinitely on mobile devices, preventing the application from loading or initializing properly",
       "files": [
-        "frontend/src/components/layout/Header.tsx"
+        "frontend/index.html",
+        "frontend/src/App.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -17,15 +18,16 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-23"
+        "REQ-44"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-position-the-slogan-text-below-the-header-separator-line-not-overlapping-it-while-maintaining-close-proximity-to-the-logo-above",
-      "featureTitle": "Position the slogan text below the header separator line (not overlapping it) while maintaining close proximity to the logo above",
+      "featureId": "feature-add-comprehensive-error-handling-and-logging-to-the-frontend-initialization-process-in-frontend-src-main-tsx-and-frontend-src-app-tsx-to-capture-and-display-any-errors-that-prevent-the-application-from-loading",
+      "featureTitle": "Add comprehensive error handling and logging to the frontend initialization process in frontend/src/main.tsx and frontend/src/App.tsx to capture and display any errors that prevent the application from loading",
       "files": [
-        "frontend/src/components/layout/Header.tsx"
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/ErrorBoundary.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -37,7 +39,28 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-24"
+        "REQ-45"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-test-the-deployed-version-44-on-multiple-mobile-browsers-safari-chrome-firefox-to-identify-browser-specific-issues-that-may-cause-the-loading-problem",
+      "featureTitle": "Test the deployed Version 44 on multiple mobile browsers (Safari, Chrome, Firefox) to identify browser-specific issues that may cause the loading problem",
+      "files": [
+        "frontend/index.html",
+        "frontend/src/player/PlayerProvider.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-47"
       ],
       "confidence": "high"
     }

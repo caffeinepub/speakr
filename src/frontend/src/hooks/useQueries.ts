@@ -12,24 +12,27 @@ export function useAddAudioPost() {
       title, 
       description, 
       audioBlob, 
-      replyTo 
+      replyTo,
+      kidFriendly = false,
     }: { 
       title: string; 
       description: string; 
       audioBlob: ExternalBlob;
       replyTo?: string | null;
+      kidFriendly?: boolean;
     }) => {
       if (!actor) throw new Error('Actor not available');
       
       // Ensure replyTo is either a string or null (not undefined)
       const replyToValue = replyTo !== undefined ? replyTo : null;
       
-      return actor.addAudioPost(title, description, audioBlob, replyToValue);
+      return actor.addAudioPost(title, description, audioBlob, replyToValue, kidFriendly);
     },
     onSuccess: (_, variables) => {
       // Invalidate user's content
       queryClient.invalidateQueries({ queryKey: ['myContent'] });
       queryClient.invalidateQueries({ queryKey: ['userStatistics'] });
+      queryClient.invalidateQueries({ queryKey: ['kidFriendlyPosts'] });
       
       // If this is a reply, invalidate the replies for the parent post
       if (variables.replyTo) {
@@ -66,6 +69,7 @@ export function useRemoveAudioPost() {
       queryClient.invalidateQueries({ queryKey: ['myContent'] });
       queryClient.invalidateQueries({ queryKey: ['userStatistics'] });
       queryClient.invalidateQueries({ queryKey: ['favoritePosts'] });
+      queryClient.invalidateQueries({ queryKey: ['kidFriendlyPosts'] });
       toast.success('Post deleted successfully');
     },
     onError: (error: Error) => {

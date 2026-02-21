@@ -133,7 +133,7 @@ export default function Header() {
             <Link to="/" className="flex items-center justify-center">
               {!logoError ? (
                 <img
-                  src="/assets/generated/speaker-logo.dim_800x200.png"
+                  src="/assets/generated/file_000000008744720abc6dc9f1fb80f8e2-8.png"
                   alt="SPEAKR"
                   className="h-24 md:h-28 w-auto object-contain"
                   onError={() => setLogoError(true)}

@@ -11,6 +11,7 @@ import { AlertCircle, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAddAudioPost } from '@/hooks/useQueries';
 import { ExternalBlob } from '@/backend';
+import { useKidsModeStore } from '@/state/kidsMode';
 
 interface AudioReplyDialogProps {
   open: boolean;
@@ -30,7 +31,10 @@ export default function AudioReplyDialog({
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const { durationError, validateAudioFile } = useAudioDurationValidation();
+  const { isKidsMode } = useKidsModeStore();
+  
+  const maxDurationHours = isKidsMode ? 1 : 3;
+  const { durationError, validateAudioFile } = useAudioDurationValidation(maxDurationHours);
   const addAudioPost = useAddAudioPost();
 
   const handleAudioFileChange = (file: File | null) => {
@@ -54,7 +58,7 @@ export default function AudioReplyDialog({
     }
 
     if (durationError) {
-      const error = 'Audio file exceeds the 3-hour maximum duration';
+      const error = `Audio file exceeds the ${maxDurationHours}-hour maximum duration`;
       setErrorMessage(error);
       toast.error(error);
       return;
@@ -77,12 +81,13 @@ export default function AudioReplyDialog({
         setUploadProgress(percentage);
       });
 
-      // Upload to backend with replyTo parameter
+      // Upload to backend with replyTo parameter and kidFriendly flag
       await addAudioPost.mutateAsync({
         title: title.trim(),
         description: description.trim(),
         audioBlob,
         replyTo: originalPostId,
+        kidFriendly: isKidsMode,
       });
 
       toast.success('Audio reply posted successfully!');
@@ -126,7 +131,7 @@ export default function AudioReplyDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Record Audio Reply</DialogTitle>
+          <DialogTitle>{isKidsMode ? 'Record Your Reply' : 'Record Audio Reply'}</DialogTitle>
           <DialogDescription>
             Replying to: <span className="font-medium text-foreground">{originalPostTitle}</span>
           </DialogDescription>
@@ -141,32 +146,34 @@ export default function AudioReplyDialog({
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="reply-title">Title *</Label>
+            <Label htmlFor="reply-title">{isKidsMode ? 'Your Reply Title' : 'Title'} *</Label>
             <Input
               id="reply-title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter reply title"
+              placeholder={isKidsMode ? 'Give your reply a name!' : 'Enter reply title'}
               required
               disabled={isSubmitting}
+              className={isKidsMode ? 'text-lg' : ''}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="reply-description">Description</Label>
+            <Label htmlFor="reply-description">{isKidsMode ? 'Tell Us More' : 'Description'}</Label>
             <Textarea
               id="reply-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe your reply (optional)"
+              placeholder={isKidsMode ? 'What is your reply about?' : 'Describe your reply (optional)'}
               rows={3}
               disabled={isSubmitting}
+              className={isKidsMode ? 'text-base' : ''}
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Audio Source *</Label>
-            <AudioSourceSelector onFileChange={handleAudioFileChange} />
+            <Label>{isKidsMode ? 'Your Recording' : 'Audio Source'} *</Label>
+            <AudioSourceSelector onFileChange={handleAudioFileChange} maxDurationHours={maxDurationHours} />
             {durationError && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
@@ -175,7 +182,9 @@ export default function AudioReplyDialog({
             )}
             {!durationError && (
               <p className="text-sm text-muted-foreground">
-                Maximum audio length: 3 hours
+                {isKidsMode 
+                  ? 'Maximum audio length: 1 hour' 
+                  : 'Maximum audio length: 3 hours'}
               </p>
             )}
           </div>
@@ -204,7 +213,11 @@ export default function AudioReplyDialog({
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting || !!durationError || !audioFile}>
+            <Button 
+              type="submit" 
+              disabled={isSubmitting || !!durationError || !audioFile}
+              className={isKidsMode ? 'text-base px-6' : ''}
+            >
               {isSubmitting ? (
                 <>
                   <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -213,7 +226,7 @@ export default function AudioReplyDialog({
               ) : (
                 <>
                   <Send className="h-4 w-4 mr-2" />
-                  Post Reply
+                  {isKidsMode ? 'Share Reply!' : 'Post Reply'}
                 </>
               )}
             </Button>

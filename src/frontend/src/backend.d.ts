@@ -27,6 +27,7 @@ export interface AudioPost {
     audioPath: string;
     author: Principal;
     replyTo?: string;
+    kidFriendly: boolean;
 }
 export interface UserProfile {
     name: string;
@@ -37,7 +38,7 @@ export enum UserRole {
     guest = "guest"
 }
 export interface backendInterface {
-    addAudioPost(title: string, description: string, audio: ExternalBlob, replyTo: string | null): Promise<string>;
+    addAudioPost(title: string, description: string, audio: ExternalBlob, replyTo: string | null, kidFriendly: boolean): Promise<string>;
     addToFavorites(postId: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     editAudioPost(postId: string, title: string, description: string): Promise<boolean>;
@@ -46,6 +47,7 @@ export interface backendInterface {
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getFavoritePosts(): Promise<Array<AudioPost>>;
+    getKidFriendlyPosts(): Promise<Array<AudioPost>>;
     getMyContent(): Promise<Array<AudioPost>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     getUserStatistics(): Promise<UserStatistics>;

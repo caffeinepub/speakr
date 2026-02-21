@@ -3,9 +3,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Button } from '@/components/ui/button';
 import { ChevronDown, MessageSquare } from 'lucide-react';
 import { useAudioReplies } from '@/hooks/useAudioReplies';
+import { useKidsModeStore } from '@/state/kidsMode';
 import AudioCard from './AudioCard';
 import type { MockAudioItem } from '@/mock/mockAudio';
 import type { AudioPost } from '@/backend';
+import { useMemo } from 'react';
 
 interface AudioRepliesSectionProps {
   postId: string;
@@ -14,8 +16,17 @@ interface AudioRepliesSectionProps {
 export default function AudioRepliesSection({ postId }: AudioRepliesSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { data: replies, isLoading } = useAudioReplies(postId);
+  const { isKidsMode } = useKidsModeStore();
 
-  const replyCount = replies?.length || 0;
+  const filteredReplies = useMemo(() => {
+    if (!replies) return [];
+    if (isKidsMode) {
+      return replies.filter((reply) => reply.kidFriendly === true);
+    }
+    return replies;
+  }, [replies, isKidsMode]);
+
+  const replyCount = filteredReplies.length;
 
   // Convert AudioPost to MockAudioItem format
   const convertToMockItem = (post: AudioPost): MockAudioItem => ({
@@ -73,7 +84,7 @@ export default function AudioRepliesSection({ postId }: AudioRepliesSectionProps
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="space-y-4 mt-4">
-          {replies?.map((reply) => (
+          {filteredReplies.map((reply) => (
             <div key={reply.id} className="pl-4 border-l-2 border-muted">
               <AudioCard audio={convertToMockItem(reply)} />
             </div>

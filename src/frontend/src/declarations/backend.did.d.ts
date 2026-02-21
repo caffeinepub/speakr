@@ -19,6 +19,7 @@ export interface AudioPost {
   'audioPath' : string,
   'author' : Principal,
   'replyTo' : [] | [string],
+  'kidFriendly' : boolean,
 }
 export type ExternalBlob = Uint8Array;
 export interface UserProfile { 'name' : string }
@@ -58,7 +59,7 @@ export interface _SERVICE {
   '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'addAudioPost' : ActorMethod<
-    [string, string, ExternalBlob, [] | [string]],
+    [string, string, ExternalBlob, [] | [string], boolean],
     string
   >,
   'addToFavorites' : ActorMethod<[string], undefined>,
@@ -69,6 +70,7 @@ export interface _SERVICE {
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getFavoritePosts' : ActorMethod<[], Array<AudioPost>>,
+  'getKidFriendlyPosts' : ActorMethod<[], Array<AudioPost>>,
   'getMyContent' : ActorMethod<[], Array<AudioPost>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'getUserStatistics' : ActorMethod<[], UserStatistics>,

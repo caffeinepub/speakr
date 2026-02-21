@@ -6,13 +6,17 @@ import { MOCK_AUDIO_ITEMS } from '@/mock/mockAudio';
 import { getDraftItems, subscribeToDraftChanges } from '@/lib/draftFeedItems';
 import { useMyContent } from '@/hooks/useMyContent';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
+import { useKidsModeStore } from '@/state/kidsMode';
+import { useKidFriendlyContent } from '@/hooks/useKidFriendlyContent';
 import type { MockAudioItem } from '@/mock/mockAudio';
 import type { AudioPost } from '@/backend';
 
 export default function FeedPage() {
   const { searchQuery, selectedCategory, selectedLanguages } = useFeedFilters();
   const { data: myBackendContent } = useMyContent();
+  const { data: kidFriendlyContent } = useKidFriendlyContent();
   const { identity } = useInternetIdentity();
+  const { isKidsMode } = useKidsModeStore();
   const [draftItems, setDraftItems] = useState<MockAudioItem[]>([]);
 
   // Subscribe to draft changes
@@ -29,6 +33,31 @@ export default function FeedPage() {
   }, []);
 
   const allItems = useMemo(() => {
+    // In kids mode, use kid-friendly content from backend
+    if (isKidsMode) {
+      const kidFriendlyItems: MockAudioItem[] = kidFriendlyContent
+        ? kidFriendlyContent.map((post: AudioPost) => ({
+            id: post.id,
+            title: post.title,
+            creator: 'User',
+            category: 'Podcast',
+            thumbnail: '/assets/file_000000008744720abc6dc9f1fb80f8e2.png',
+            audioUrl: post.audio.getDirectURL(),
+            listenCount: Number(post.listens),
+            languages: ['en'],
+            comments: [],
+            isBackendItem: true,
+            author: post.author,
+          }))
+        : [];
+
+      // Filter draft items to only show kid-friendly ones
+      const kidFriendlyDrafts = draftItems.filter((item) => item.kidFriendly === true);
+
+      return [...kidFriendlyDrafts, ...kidFriendlyItems];
+    }
+
+    // Regular mode: show all content
     const backendItems: MockAudioItem[] = identity && myBackendContent
       ? myBackendContent.map((post: AudioPost) => ({
           id: post.id,
@@ -46,7 +75,7 @@ export default function FeedPage() {
       : [];
 
     return [...MOCK_AUDIO_ITEMS, ...draftItems, ...backendItems];
-  }, [myBackendContent, identity, draftItems]);
+  }, [myBackendContent, identity, draftItems, isKidsMode, kidFriendlyContent]);
 
   // First filter by language only to detect language-specific empty state
   const languageFilteredItems = useMemo(() => {
@@ -73,6 +102,12 @@ export default function FeedPage() {
 
   // Determine empty state message
   const getEmptyStateMessage = () => {
+    if (isKidsMode) {
+      return {
+        title: 'No kid-friendly audio found',
+        subtitle: 'Check back later for awesome kid-friendly content!',
+      };
+    }
     if (selectedLanguages.length > 0 && languageFilteredItems.length === 0) {
       return {
         title: 'No uploads yet in this language',

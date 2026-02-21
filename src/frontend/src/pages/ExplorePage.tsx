@@ -4,10 +4,17 @@ import { useFeedFilters } from '@/state/feedFilters';
 import { useNavigate } from '@tanstack/react-router';
 import { getCategoryColorClass } from '@/constants/categoryColors';
 import { getProceduralCoverUrl } from '@/lib/proceduralCovers';
+import { useKidsModeStore } from '@/state/kidsMode';
+import { useKidFriendlyContent } from '@/hooks/useKidFriendlyContent';
+import { useMyContent } from '@/hooks/useMyContent';
+import { useMemo } from 'react';
 
 export default function ExplorePage() {
   const { setSelectedCategory } = useFeedFilters();
   const navigate = useNavigate();
+  const { isKidsMode } = useKidsModeStore();
+  const { data: kidFriendlyContent } = useKidFriendlyContent();
+  const { data: myContent } = useMyContent();
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
@@ -16,13 +23,31 @@ export default function ExplorePage() {
 
   const categories = CATEGORIES.filter((cat) => cat !== 'All');
 
+  // Calculate category counts based on mode
+  const categoryCounts = useMemo(() => {
+    const content = isKidsMode ? kidFriendlyContent : myContent;
+    const counts: Record<string, number> = {};
+    
+    categories.forEach((cat) => {
+      counts[cat] = 0;
+    });
+
+    // For now, we don't have category info in backend posts
+    // This is a placeholder for future enhancement
+    return counts;
+  }, [isKidsMode, kidFriendlyContent, myContent, categories]);
+
   return (
     <div className="min-h-screen pb-24">
       <div className="container px-4 md:px-6 py-8">
         <div className="space-y-3 mb-8 fade-in-up">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Explore Categories</h1>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            {isKidsMode ? 'Explore Kid-Friendly Categories' : 'Explore Categories'}
+          </h1>
           <p className="text-lg text-muted-foreground">
-            Discover audio content across different topics
+            {isKidsMode 
+              ? 'Discover awesome kid-friendly audio content' 
+              : 'Discover audio content across different topics'}
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 fade-in-up">

@@ -26,63 +26,100 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio();
-      audioRef.current.addEventListener('timeupdate', () => {
-        if (audioRef.current) {
-          setProgress({
-            currentTime: audioRef.current.currentTime,
-            duration: audioRef.current.duration || 0,
-          });
-        }
-      });
-      audioRef.current.addEventListener('ended', () => {
-        setIsPlaying(false);
-      });
+    try {
+      if (!audioRef.current) {
+        console.log('[PlayerProvider] Initializing audio element');
+        audioRef.current = new Audio();
+        
+        audioRef.current.addEventListener('timeupdate', () => {
+          if (audioRef.current) {
+            setProgress({
+              currentTime: audioRef.current.currentTime,
+              duration: audioRef.current.duration || 0,
+            });
+          }
+        });
+        
+        audioRef.current.addEventListener('ended', () => {
+          setIsPlaying(false);
+        });
+
+        audioRef.current.addEventListener('error', (e) => {
+          console.error('[PlayerProvider] Audio error:', e);
+          setIsPlaying(false);
+        });
+
+        console.log('[PlayerProvider] Audio element initialized successfully');
+      }
+    } catch (error) {
+      console.error('[PlayerProvider] Failed to initialize audio element:', error);
     }
   }, []);
 
   const play = (item?: MockAudioItem) => {
-    if (!audioRef.current) return;
-
-    if (item && item.id !== currentItem?.id) {
-      setCurrentItem(item);
-      audioRef.current.src = item.audioUrl;
-      audioRef.current.load();
+    if (!audioRef.current) {
+      console.error('[PlayerProvider] Audio element not initialized');
+      return;
     }
 
-    audioRef.current.play().then(() => {
-      setIsPlaying(true);
-    }).catch((error) => {
-      console.error('Playback failed:', error);
-    });
+    try {
+      if (item && item.id !== currentItem?.id) {
+        setCurrentItem(item);
+        audioRef.current.src = item.audioUrl;
+        audioRef.current.load();
+      }
+
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch((error) => {
+        console.error('[PlayerProvider] Playback failed:', error);
+      });
+    } catch (error) {
+      console.error('[PlayerProvider] Play error:', error);
+    }
   };
 
   const pause = () => {
     if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
+      try {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } catch (error) {
+        console.error('[PlayerProvider] Pause error:', error);
+      }
     }
   };
 
   const seek = (time: number) => {
     if (audioRef.current) {
-      audioRef.current.currentTime = time;
+      try {
+        audioRef.current.currentTime = time;
+      } catch (error) {
+        console.error('[PlayerProvider] Seek error:', error);
+      }
     }
   };
 
   const setVolume = (vol: number) => {
     if (audioRef.current) {
-      audioRef.current.volume = vol;
-      setVolumeState(vol);
+      try {
+        audioRef.current.volume = vol;
+        setVolumeState(vol);
+      } catch (error) {
+        console.error('[PlayerProvider] Volume error:', error);
+      }
     }
   };
 
   const close = () => {
     if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = '';
-      audioRef.current.currentTime = 0;
+      try {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+        audioRef.current.currentTime = 0;
+      } catch (error) {
+        console.error('[PlayerProvider] Close error:', error);
+      }
     }
     setIsPlaying(false);
     setCurrentItem(null);

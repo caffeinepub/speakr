@@ -1,59 +1,93 @@
 {
   "kind": "build_request",
-  "title": "Replace logo with cropped speaker logo and fix slogan positioning",
-  "projectName": "SPEAKR",
-  "priority": "normal",
+  "title": "Fix deployment issue causing site to be stuck on 'going live' loading screen",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-23",
-      "text": "Replace the current logo in the Header component with the user's uploaded speaker logo image (file_000000008744720abc6dc9f1fb80f8e2-7.png) as a static asset in frontend/public/assets/generated",
-      "target": "frontend",
+      "id": "REQ-44",
+      "text": "Investigate and fix the deployment issue in Version 44 that causes the site to display a 'going live' loading message/spinner indefinitely on mobile devices, preventing the application from loading or initializing properly",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-last"
+          "msg-latest"
         ],
         "quotes": [
-          "I've attached the logo again"
+          "It just keeps saying \"going live\", but it doesn't",
+          "After the latest changes it gave this issue, which makes me believe it's an issue in the code itself",
+          "I can only view on mobile now"
         ]
       },
       "acceptanceCriteria": [
-        "The speaker logo with gradient text and speaker icon is displayed in the header",
-        "The logo image is served as a static asset from frontend/public/assets/generated",
-        "The logo replaces any existing logo or placeholder in the Header component"
+        "The site loads successfully on mobile devices without getting stuck on a loading screen",
+        "The React application initializes properly and displays the main interface",
+        "All features from Version 44 (kids mode, content filtering, original styling) are accessible on mobile",
+        "No JavaScript errors prevent the application from loading",
+        "The Internet Computer canister responds correctly to requests on mobile browsers"
       ]
     },
     {
-      "id": "REQ-24",
-      "text": "Position the slogan text below the header separator line (not overlapping it) while maintaining close proximity to the logo above",
+      "id": "REQ-45",
+      "text": "Add comprehensive error handling and logging to the frontend initialization process in frontend/src/main.tsx and frontend/src/App.tsx to capture and display any errors that prevent the application from loading",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-last"
-        ],
-        "quotes": [
-          "There is the header line, to seperate the header from the rest of the page. The slogan was positioned exactly over it"
+          "msg-latest"
         ]
       },
       "acceptanceCriteria": [
-        "The slogan appears completely below the header separator line with no overlap",
-        "Visual spacing between the logo and slogan remains minimal",
-        "The header separator line is clearly visible and unobstructed"
+        "Any initialization errors are caught and logged to the browser console",
+        "A user-friendly error message is displayed if the application fails to load",
+        "Error messages include specific details about what failed (actor initialization, authentication, routing, etc.)",
+        "The error handling does not interfere with normal application loading when no errors occur"
+      ]
+    },
+    {
+      "id": "REQ-46",
+      "text": "Verify that the backend canister in backend/main.mo compiles successfully and deploys without errors, ensuring all query functions and mutations are accessible",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The backend canister compiles without Motoko syntax or type errors",
+        "All query functions (getKidFriendlyPosts, getUserPosts, getFavorites, etc.) are callable from the frontend",
+        "The backend actor initializes correctly with all mixins (StorageMixin, AuthorizationMixin)",
+        "No runtime errors occur during backend initialization"
+      ]
+    },
+    {
+      "id": "REQ-47",
+      "text": "Test the deployed Version 44 on multiple mobile browsers (Safari, Chrome, Firefox) to identify browser-specific issues that may cause the loading problem",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The site is tested on at least Safari (iOS) and Chrome (Android) mobile browsers",
+        "Any browser-specific compatibility issues are identified and documented",
+        "Polyfills or fallbacks are added for any unsupported browser features",
+        "The site loads successfully on all tested mobile browsers"
       ]
     }
   ],
   "constraints": [
-    "Do not modify the structure of immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui",
-    "Keep the backend actor architecture unchanged (single-actor model in backend/main.mo)"
+    "Must maintain all existing functionality from Version 44 (kids mode, content filtering, favorites, replies)",
+    "Must not break the single-actor backend architecture in backend/main.mo",
+    "Must preserve the original logo, header styling, and site appearance that was restored in Version 44",
+    "Fix must work specifically on mobile devices as the user can only access the site via mobile"
   ],
   "nonGoals": [
-    "Modifying the slogan text content",
-    "Changing the header separator line styling or thickness",
-    "Adjusting the overall header layout beyond logo and slogan positioning"
+    "Adding new features beyond fixing the loading issue",
+    "Redesigning the user interface or changing existing styling",
+    "Implementing desktop-specific fixes (user can only test on mobile)",
+    "Reverting to Version 43 or removing Version 44 features"
   ],
   "imageRequirements": {
-    "required": [
-      "Crop the speaker logo to remove excess white background space around the graphic, keeping the SPEAKR gradient text and speaker icon tightly framed (speaker-logo.dim_800x200.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }

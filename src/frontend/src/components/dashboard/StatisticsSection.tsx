@@ -1,74 +1,82 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useUserStatistics } from '@/hooks/useUserStatistics';
+import { useMyContent } from '@/hooks/useMyContent';
 import { Headphones, Upload } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
-import { formatCompactNumber } from '@/lib/formatters';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useMemo } from 'react';
 
-export default function StatisticsSection() {
-  const { data: stats, isLoading, error } = useUserStatistics();
+interface StatisticsSectionProps {
+  isKidsMode?: boolean;
+}
+
+export default function StatisticsSection({ isKidsMode = false }: StatisticsSectionProps) {
+  const { data: statistics, isLoading } = useUserStatistics();
+  const { data: myContent } = useMyContent();
+
+  const filteredStatistics = useMemo(() => {
+    if (!statistics || !myContent) return statistics;
+    
+    if (isKidsMode) {
+      const kidFriendlyPosts = myContent.filter((post) => post.kidFriendly === true);
+      const totalUploads = BigInt(kidFriendlyPosts.length);
+      const totalListens = kidFriendlyPosts.reduce(
+        (sum, post) => sum + post.listens,
+        BigInt(0)
+      );
+      return { totalUploads, totalListens };
+    }
+    
+    return statistics;
+  }, [statistics, myContent, isKidsMode]);
+
+  const formatNumber = (num: bigint): string => {
+    const n = Number(num);
+    if (n >= 1000000000) return (n / 1000000000).toFixed(1) + 'B';
+    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+    return n.toString();
+  };
 
   if (isLoading) {
     return (
-      <Card className="card-elevated">
-        <CardHeader>
-          <CardTitle className="text-2xl">Statistics</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">Loading statistics...</p>
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Skeleton className="h-32" />
+        <Skeleton className="h-32" />
+      </div>
     );
   }
 
-  if (error) {
-    return (
-      <Card className="card-elevated">
-        <CardHeader>
-          <CardTitle className="text-2xl">Statistics</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Failed to load statistics: {error instanceof Error ? error.message : 'Unknown error'}
-            </AlertDescription>
-          </Alert>
-        </CardContent>
-      </Card>
-    );
+  if (!filteredStatistics) {
+    return null;
   }
-
-  const totalUploads = stats ? Number(stats.totalUploads) : 0;
-  const totalListens = stats ? Number(stats.totalListens) : 0;
 
   return (
-    <Card className="card-elevated">
-      <CardHeader>
-        <CardTitle className="text-2xl">Statistics</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex items-center gap-4 p-5 rounded-lg border border-border/50 bg-gradient-to-br from-primary/5 to-primary/10 hover:shadow-md transition-shadow">
-            <div className="p-4 rounded-full bg-primary/20 shadow-sm">
-              <Upload className="h-7 w-7 text-primary" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground font-medium">Total Uploads</p>
-              <p className="text-3xl font-bold tracking-tight">{formatCompactNumber(totalUploads)}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 p-5 rounded-lg border border-border/50 bg-gradient-to-br from-accent/5 to-accent/10 hover:shadow-md transition-shadow">
-            <div className="p-4 rounded-full bg-accent/20 shadow-sm">
-              <Headphones className="h-7 w-7 text-accent" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground font-medium">Total Listens</p>
-              <p className="text-3xl font-bold tracking-tight">{formatCompactNumber(totalListens)}</p>
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Total Uploads</CardTitle>
+          <Upload className="h-5 w-5 text-primary" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-3xl font-bold">{formatNumber(filteredStatistics.totalUploads)}</div>
+          <p className="text-xs text-muted-foreground mt-1">
+            {isKidsMode ? 'Kid-friendly audio files' : 'Audio files shared'}
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Total Listens</CardTitle>
+          <Headphones className="h-5 w-5 text-accent" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-3xl font-bold">{formatNumber(filteredStatistics.totalListens)}</div>
+          <p className="text-xs text-muted-foreground mt-1">
+            {isKidsMode ? 'Times your kid-friendly content was played' : 'Times your content was played'}
+          </p>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

@@ -1,11 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Replace the header logo with the cropped speaker logo and fix slogan positioning below the header separator line.
+**Goal:** Fix the deployment issue in Version 44 that causes the site to be stuck on a "going live" loading screen on mobile devices.
 
 **Planned changes:**
-- Crop the speaker logo to remove excess white background space around the graphic
-- Replace the current logo in the Header component with the cropped speaker logo
-- Position the slogan text below the header separator line without overlap
+- Investigate and resolve the infinite loading issue preventing the application from initializing on mobile
+- Add comprehensive error handling and logging to frontend initialization (main.tsx and App.tsx)
+- Verify backend canister compiles and deploys correctly with all query functions accessible
+- Test the deployed site on multiple mobile browsers (Safari iOS, Chrome Android, Firefox) to identify browser-specific issues
+- Add polyfills or fallbacks for any unsupported mobile browser features
 
-**User-visible outcome:** The header displays a properly cropped SPEAKR logo with gradient text and speaker icon, with the slogan positioned clearly below the header separator line.
+**User-visible outcome:** The site loads successfully on mobile devices, displaying the main interface with all Version 44 features (kids mode, content filtering, original styling) accessible without getting stuck on a loading screen.

@@ -1,5 +1,12 @@
 import type { Principal } from '@dfinity/principal';
 
+export interface Comment {
+  id: string;
+  author: string;
+  content: string;
+  timestamp: string;
+}
+
 export interface MockAudioItem {
   id: string;
   title: string;
@@ -12,104 +19,50 @@ export interface MockAudioItem {
   comments: Comment[];
   isBackendItem?: boolean;
   author?: Principal;
-}
-
-export interface Comment {
-  id: string;
-  author: string;
-  content: string;
-  timestamp: string;
-  avatar: string;
+  kidFriendly?: boolean;
 }
 
 export const MOCK_AUDIO_ITEMS: MockAudioItem[] = [
   {
     id: '1',
-    title: 'The Future of AI in Healthcare',
-    creator: 'Dr. Sarah Chen',
-    category: 'Technology',
-    thumbnail: '/assets/file_000000008744720abc6dc9f1fb80f8e2.png',
+    title: 'Introduction to Web Development',
+    creator: 'Tech Guru',
+    category: 'Education',
+    thumbnail: '/assets/file_000000008744720abc6dc9f1fb80f8e2-1.png',
     audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    listenCount: 15234,
+    listenCount: 1234,
     languages: ['en'],
     comments: [
       {
         id: 'c1',
         author: 'John Doe',
-        content: 'Great insights on AI applications!',
-        timestamp: '2 hours ago',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John',
-      },
-      {
-        id: 'c2',
-        author: 'Jane Smith',
-        content: 'Very informative, thanks for sharing.',
-        timestamp: '5 hours ago',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jane',
+        content: 'Great content! Very informative.',
+        timestamp: '2024-01-15T10:30:00Z',
       },
     ],
   },
   {
     id: '2',
-    title: 'Meditation for Beginners',
-    creator: 'Mindful Mike',
+    title: 'Morning Meditation Session',
+    creator: 'Zen Master',
     category: 'Wellness',
-    thumbnail: '/assets/file_000000008744720abc6dc9f1fb80f8e2-1.png',
+    thumbnail: '/assets/file_000000008744720abc6dc9f1fb80f8e2-2.png',
     audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-    listenCount: 8921,
-    languages: ['en', 'es'],
-    comments: [],
-  },
-  {
-    id: '3',
-    title: 'Jazz Piano Improvisation',
-    creator: 'Piano Pete',
-    category: 'Music',
-    thumbnail: '/assets/file_000000008744720abc6dc9f1fb80f8e2.png',
-    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-    listenCount: 23456,
-    languages: ['none'],
-    comments: [
-      {
-        id: 'c3',
-        author: 'Music Lover',
-        content: 'Beautiful improvisation!',
-        timestamp: '1 day ago',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Music',
-      },
-    ],
-  },
-  {
-    id: '4',
-    title: 'Spanish Conversation Practice',
-    creator: 'Language Lab',
-    category: 'Education',
-    thumbnail: '/assets/file_000000008744720abc6dc9f1fb80f8e2-1.png',
-    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-    listenCount: 5432,
-    languages: ['es'],
-    comments: [],
-  },
-  {
-    id: '5',
-    title: 'Startup Success Stories',
-    creator: 'Business Insider',
-    category: 'Business',
-    thumbnail: '/assets/file_000000008744720abc6dc9f1fb80f8e2.png',
-    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-    listenCount: 12789,
+    listenCount: 856,
     languages: ['en'],
     comments: [],
   },
   {
-    id: '6',
-    title: 'Ambient Nature Sounds',
-    creator: 'Nature Sounds',
+    id: '3',
+    title: 'Jazz Improvisation Techniques',
+    creator: 'Music Pro',
     category: 'Music',
-    thumbnail: '/assets/file_000000008744720abc6dc9f1fb80f8e2-1.png',
-    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
-    listenCount: 34567,
-    languages: ['none'],
+    thumbnail: '/assets/file_000000008744720abc6dc9f1fb80f8e2-3.png',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+    listenCount: 2341,
+    languages: ['en'],
     comments: [],
   },
 ];
+
+export type { Comment as CommentType };

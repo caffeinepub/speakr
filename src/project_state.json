@@ -1,17 +1,23 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 19,
-  "summary": "Web application with prominent speaker logo, branded slogan, and audio upload system featuring favorites and audio replies for logged-in members",
+  "projectStateVersion": 27,
+  "summary": "Web application with prominent speaker logo, branded slogan, and audio upload system featuring favorites and audio replies for logged-in members, with upload persistence and admin management capabilities. Includes a kid-friendly section with content filtering, simplified authentication (username + PIN), and playful styling accessible via navigation toggle.",
   "architectural_notes": [
     "Audio uploads exist in general feed and category-specific views",
     "Audio reply system creates independent uploads with linkage to original audio",
-    "Favorite and reply features require user authentication"
+    "Favorite and reply features require user authentication",
+    "Upload persistence layer protects content during site updates and alterations",
+    "Admin role with elevated permissions limited to site owner",
+    "Deletion permissions restricted to uploader or admin only",
+    "Content rating system tags uploads as 'Kid-Friendly' or 'Adult Content' via toggle",
+    "Kids section uses username + PIN authentication instead of email/Internet Identity",
+    "Kids mode filters all views (feed, explore, dashboard) to show only kid-friendly content",
+    "Kids section maintains full feature parity with main site (favorites, replies, categories)"
   ],
   "known_issues": [
-    "Slogan is currently positioned on top of the header separator line instead of below it"
+    "Version 44 deployment causing site to be stuck on 'going live' loading message/spinner on mobile devices, preventing site from loading entirely"
   ],
   "isFixRequest": true,
-  "imageRequirements": "## Required Images\n- Crop the speaker logo to remove excess white background space around the graphic, keeping the SPEAKR gradient text and speaker icon tightly framed (speaker-logo.dim_800x200.png)",
   "existing_features": [
     {
       "id": "feature-move-the-brandingbannerdropdown-component-containing-about-and-privacy-policy-links-to-be-positioned-next-to-the-logo-in-the-top-left-area-of-the-header",
@@ -172,6 +178,118 @@
         "REQ-24"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-replace-the-current-logo-in-the-header-component-with-the-new-cropped-speaker-logo-image-file-000000008744720abc6dc9f1fb80f8e2-8-png-as-a-static-asset-in-frontend-public-assets-generated-maintaining-the-current-logo-size-and-positioning-that-was-previously-approved",
+      "title": "Replace the current logo in the Header component with the new cropped speaker logo image (file_000000008744720abc6dc9f1fb80f8e2-8.png) as a static asset in frontend/public/assets/generated, maintaining the current logo size and positioning that was previously approved",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-kid-friendly-toggle-field-to-the-audio-upload-interface-in-the-uploadform-component-that-allows-users-to-mark-their-audio-content-as-either-kid-friendly-or-adult-content-during-the-upload-process",
+      "title": "Add a 'Kid-Friendly' toggle field to the audio upload interface in the UploadForm component that allows users to mark their audio content as either 'Kid-Friendly' or 'Adult Content' during the upload process",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-kids-navigation-button-in-the-primarynav-component-positioned-next-to-the-existing-feed-explore-and-upload-buttons-that-toggles-kids-mode-when-clicked",
+      "title": "Create a 'KIDS' navigation button in the PrimaryNav component positioned next to the existing FEED, EXPLORE, and UPLOAD buttons that toggles kids mode when clicked",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-global-kids-mode-state-in-a-zustand-store-that-controls-whether-the-application-displays-in-kids-mode-or-regular-mode-affecting-content-filtering-and-visual-styling-throughout-the-application",
+      "title": "Implement a global kids mode state in a Zustand store that controls whether the application displays in kids mode or regular mode, affecting content filtering and visual styling throughout the application",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-feedpage-component-to-filter-and-display-only-kid-friendly-audio-posts-when-kids-mode-is-active-using-the-backend-query-function-that-returns-kidfriendly-content",
+      "title": "Update the FeedPage component to filter and display only kid-friendly audio posts when kids mode is active, using the backend query function that returns kidFriendly content",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-explorepage-component-to-filter-and-display-only-kid-friendly-content-in-category-cards-when-kids-mode-is-active",
+      "title": "Update the ExplorePage component to filter and display only kid-friendly content in category cards when kids mode is active",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-dashboardpage-component-to-filter-and-display-only-kid-friendly-uploads-in-the-mycontentsection-and-favoritessection-when-kids-mode-is-active",
+      "title": "Update the DashboardPage component to filter and display only kid-friendly uploads in the MyContentSection and FavoritesSection when kids mode is active",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-kid-friendly-visual-styling-to-the-entire-application-when-kids-mode-is-active-including-colorful-and-playful-colors-rounded-shapes-larger-interactive-elements-and-fun-typography",
+      "title": "Apply kid-friendly visual styling to the entire application when kids mode is active, including colorful and playful colors, rounded shapes, larger interactive elements, and fun typography",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enforce-a-1-hour-maximum-upload-duration-limit-in-kids-mode-for-all-audio-recordings-and-file-uploads",
+      "title": "Enforce a 1-hour maximum upload duration limit in kids mode for all audio recordings and file uploads",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-uploadform-component-to-respect-kids-mode-state-enforce-1-hour-limit-ensure-kid-friendly-toggle-defaults-to-kid-friendly-in-kids-mode-and-apply-kid-friendly-styling",
+      "title": "Update the UploadForm component to respect kids mode state: enforce 1-hour limit, ensure kid-friendly toggle defaults to 'Kid-Friendly' in kids mode, and apply kid-friendly styling",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-audiorepliessection-and-audioreplydialog-components-to-filter-replies-to-show-only-kid-friendly-replies-when-kids-mode-is-active",
+      "title": "Update AudioRepliesSection and AudioReplyDialog components to filter replies to show only kid-friendly replies when kids mode is active",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-investigate-and-fix-the-deployment-issue-in-version-44-that-causes-the-site-to-display-a-going-live-loading-message-spinner-indefinitely-on-mobile-devices-preventing-the-application-from-loading-or-initializing-properly",
+      "title": "Investigate and fix the deployment issue in Version 44 that causes the site to display a 'going live' loading message/spinner indefinitely on mobile devices, preventing the application from loading or initializing properly",
+      "reqIds": [
+        "REQ-44"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-comprehensive-error-handling-and-logging-to-the-frontend-initialization-process-in-frontend-src-main-tsx-and-frontend-src-app-tsx-to-capture-and-display-any-errors-that-prevent-the-application-from-loading",
+      "title": "Add comprehensive error handling and logging to the frontend initialization process in frontend/src/main.tsx and frontend/src/App.tsx to capture and display any errors that prevent the application from loading",
+      "reqIds": [
+        "REQ-45"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-test-the-deployed-version-44-on-multiple-mobile-browsers-safari-chrome-firefox-to-identify-browser-specific-issues-that-may-cause-the-loading-problem",
+      "title": "Test the deployed Version 44 on multiple mobile browsers (Safari, Chrome, Firefox) to identify browser-specific issues that may cause the loading problem",
+      "reqIds": [
+        "REQ-47"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -301,6 +419,144 @@
       "id": "AR-22",
       "summary": "Position slogan below the header separator line (not on top of it) while keeping it close to the logo",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Replace current logo with new cropped speaker logo (file_000000008744720abc6dc9f1fb80f8e2-8.png) while maintaining current size and positioning",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Implement upload persistence system to prevent accidental deletion during site updates or alterations",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Create admin role with special permissions accessible only to the site owner for managing all uploads",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Restrict upload deletion to original uploader or admin only",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Apply favorite and audio reply functionality retroactively to all existing uploads created before these features were implemented",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-28",
+      "summary": "Implement a backend upload persistence system that prevents audio posts from being accidentally deleted during site updates, alterations, or code changes. Audio posts should remain in stable storage and only be removable through explicit delete operations by authorized users.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "Create an admin role system in the backend that grants special permissions to delete any audio post. The admin role must be restricted so that only the site owner (specific principal ID) can access admin privileges.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Update the backend audio post deletion logic to restrict deletion permissions: only the original uploader of a post or an admin can delete that post. Regular users cannot delete posts created by other users.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Update the frontend AudioCard component to ensure that all existing audio posts created before the favorite and reply features were implemented now display the favorite button (heart icon), audio reply button, and Audio Replies section with the same functionality as newer posts.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Verify that the backend audio post data model supports favorite and reply functionality for all existing posts, ensuring that posts created before these features were added can be favorited and replied to without data migration issues.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Add content rating toggle to upload interface allowing users to mark audio as 'Kid-Friendly' or 'Adult Content'",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-34",
+      "summary": "Create kid-friendly authentication system using username + PIN code instead of email login",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-35",
+      "summary": "Add 'KIDS' button to main navigation (next to FEED/EXPLORE/UPLOAD) that switches entire site to kids mode",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-36",
+      "summary": "Implement kids mode with filtered feed showing only kid-friendly uploads and playful, colorful styling",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-37",
+      "summary": "Apply same core functionality in kids section (favorites, replies, upload, categories) with kid-friendly content filter",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-38",
+      "summary": "Enforce 1-hour upload limit in kids section",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-40",
+      "summary": "Update the backend AudioPost data model in backend/main.mo to include a 'kidFriendly' boolean field that stores whether the audio content is marked as kid-friendly",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-41",
+      "summary": "Add a backend query function in backend/main.mo that filters and returns only audio posts marked as kid-friendly (kidFriendly = true)",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-48",
+      "summary": "Create a simplified authentication system for kids mode using username and PIN code instead of Internet Identity email login, stored securely in the backend",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-51",
+      "summary": "Verify that the backend canister in backend/main.mo compiles successfully and deploys without errors, ensuring all query functions and mutations are accessible",
+      "reqIds": [
+        "REQ-46"
+      ],
       "status": "pending"
     }
   ],

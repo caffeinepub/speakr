@@ -1,37 +1,107 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Replace logo with cropped speaker logo and fix slogan positioning",
+  "title": "Fix deployment issue causing site to be stuck on 'going live' loading screen",
   "requirements": [
     {
-      "id": "REQ-23",
-      "summary": "Replace the current logo in the Header component with the cropped speaker logo image served as a static asset",
+      "id": "REQ-44",
+      "summary": "Investigate and fix the deployment issue causing infinite loading on mobile devices",
       "acceptanceCriteria": [
-        "The speaker logo with gradient text and speaker icon is displayed in the header",
-        "The logo image is served as a static asset from frontend/public/assets/generated",
-        "The logo replaces any existing logo or placeholder in the Header component"
+        "The site loads successfully on mobile devices without getting stuck on a loading screen",
+        "The React application initializes properly and displays the main interface",
+        "All features from Version 44 (kids mode, content filtering, original styling) are accessible on mobile",
+        "No JavaScript errors prevent the application from loading",
+        "The Internet Computer canister responds correctly to requests on mobile browsers"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/layout/Header.tsx",
+          "path": "frontend/src/main.tsx",
           "operation": "modify",
-          "description": "Replace the existing logo implementation with an <img> element that references the generated cropped speaker logo at frontend/public/assets/generated/speaker-logo.dim_800x200.png. Remove or update any existing logo text/SVG with this static asset reference. Ensure appropriate alt text and styling for the logo image."
+          "description": "Add comprehensive error boundary and initialization error handling to catch and display any errors that prevent the application from loading. Wrap the root component with an error boundary that displays user-friendly error messages with specific details about initialization failures. Add loading state visibility and timeout detection for stuck initialization states."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add error handling and logging throughout the App component initialization, particularly around the QueryClient setup, router configuration, and authentication state initialization. Add fallback UI for failed initialization states and ensure the kids mode class application doesn't cause rendering issues on mobile browsers."
+        },
+        {
+          "path": "frontend/src/hooks/useActor.ts",
+          "operation": "modify",
+          "description": "Add detailed error logging and retry logic for actor initialization failures. Include mobile-specific browser compatibility checks and handle cases where the actor creation might hang or fail silently on mobile devices. Add timeout mechanisms for actor initialization."
+        },
+        {
+          "path": "frontend/src/hooks/useInternetIdentity.ts",
+          "operation": "modify",
+          "description": "Add error handling for Internet Identity initialization failures on mobile browsers. Include checks for delegation validity issues and localStorage access problems that might occur on mobile Safari or Chrome. Add fallback anonymous authentication when Internet Identity fails to initialize."
+        },
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Add a visible loading indicator in the initial HTML that will be replaced by React once the application initializes successfully. This ensures users see feedback while the app loads and helps identify if the issue is in the React initialization or earlier. Add meta tags for mobile viewport optimization and compatibility."
         }
       ]
     },
     {
-      "id": "REQ-24",
-      "summary": "Position the slogan text below the header separator line while maintaining proximity to the logo",
+      "id": "REQ-45",
+      "summary": "Add comprehensive error handling and logging to frontend initialization",
       "acceptanceCriteria": [
-        "The slogan appears completely below the header separator line with no overlap",
-        "Visual spacing between the logo and slogan remains minimal",
-        "The header separator line is clearly visible and unobstructed"
+        "Any initialization errors are caught and logged to the browser console",
+        "A user-friendly error message is displayed if the application fails to load",
+        "Error messages include specific details about what failed (actor initialization, authentication, routing, etc.)",
+        "The error handling does not interfere with normal application loading when no errors occur"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/layout/Header.tsx",
+          "path": "frontend/src/main.tsx",
           "operation": "modify",
-          "description": "Adjust the slogan positioning to ensure it appears completely below the header separator line without overlapping it. Use CSS spacing utilities or layout adjustments to position the slogan below the separator while keeping visual proximity to the logo minimal. Ensure the separator line remains fully visible and unobstructed by the slogan text."
+          "description": "Wrap the root render in a try-catch block with detailed error logging. Add error boundary component that catches React rendering errors and displays specific error messages indicating which initialization step failed (QueryClient, Router, Authentication, etc.). Log all errors to console with stack traces and browser/device information."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add error state management and logging for router initialization, QueryClient setup failures, and authentication state loading errors. Create a fallback error UI component that displays when any critical initialization fails. Include a retry button and option to reset localStorage if corruption is suspected."
+        },
+        {
+          "path": "frontend/src/components/layout/ErrorBoundary.tsx",
+          "operation": "create",
+          "description": "Create a new error boundary component that catches React errors during initialization and rendering. Display user-friendly error messages with details about what failed, include a retry button, and provide options to clear localStorage or reload the app. Log detailed error information to console for debugging."
+        }
+      ]
+    },
+    {
+      "id": "REQ-47",
+      "summary": "Add mobile browser compatibility checks and polyfills",
+      "acceptanceCriteria": [
+        "The site is tested on at least Safari (iOS) and Chrome (Android) mobile browsers",
+        "Any browser-specific compatibility issues are identified and documented",
+        "Polyfills or fallbacks are added for any unsupported browser features",
+        "The site loads successfully on all tested mobile browsers"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/lib/browserCompat.ts",
+          "operation": "create",
+          "description": "Create a browser compatibility utility module that detects mobile browsers (Safari iOS, Chrome Android, Firefox), checks for required Web API support (localStorage, MediaRecorder, Audio, IndexedDB), and provides polyfills or fallbacks where needed. Export functions to log browser capabilities and warn about missing features."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Import and run browser compatibility checks before initializing the React app. Display warnings or fallback UI if critical features are missing on mobile browsers. Log detected browser type, version, and feature support to help diagnose mobile-specific issues."
+        },
+        {
+          "path": "frontend/src/hooks/useActor.ts",
+          "operation": "modify",
+          "description": "Add mobile browser-specific handling for actor initialization, particularly for Safari iOS which may have stricter security policies. Include checks for IndexedDB availability (used by agent-js for identity storage) and provide fallback anonymous actors if storage is unavailable."
+        },
+        {
+          "path": "frontend/src/player/PlayerProvider.tsx",
+          "operation": "modify",
+          "description": "Add mobile browser-specific audio handling, particularly for iOS Safari which has restrictions on autoplay and background audio. Ensure the Audio element initialization doesn't fail silently on mobile browsers and add error logging for audio playback issues."
+        },
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Add mobile-specific meta tags for iOS Safari (viewport, apple-mobile-web-app-capable, format-detection) and ensure proper mobile viewport scaling. Add preconnect hints for faster IC canister connections on mobile networks."
         }
       ]
     }
