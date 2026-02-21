@@ -55,7 +55,7 @@ export default function Header() {
     <header className="z-10 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 shadow-sm">
       <div className="container px-4 md:px-6">
         {/* Main header row with centered logo */}
-        <div className="relative flex h-52 md:h-60 items-center py-2">
+        <div className="relative flex h-44 md:h-48 items-center py-1">
           {/* Left: Menu dropdown and login button stacked vertically */}
           <div className="flex flex-col gap-1 shrink-0">
             <DropdownMenu>
@@ -130,41 +130,28 @@ export default function Header() {
 
           {/* Center: Logo with slogan (absolutely centered) */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <Link to="/" className="flex flex-col items-center gap-1.5">
+            <Link to="/" className="flex flex-col items-center gap-0">
               {!logoError ? (
                 <>
                   <img
-                    src="/assets/file_000000008744720abc6dc9f1fb80f8e2-5.png"
+                    src="/assets/generated/speakr-logo-cropped.dim_800x400.png"
                     alt="SPEAKR"
                     className="h-48 md:h-56 w-auto object-contain"
                     onError={() => setLogoError(true)}
                   />
-                  <p className="text-xl md:text-2xl font-bold text-primary tracking-wide whitespace-nowrap text-center">
+                  <p className="text-xl md:text-2xl font-bold text-primary tracking-wide whitespace-nowrap text-center mt-1 mb-6">
                     Giving Everyone A Voice!
                   </p>
                 </>
               ) : (
                 <>
                   <span className="text-5xl md:text-6xl font-bold text-primary tracking-tight">SPEAKR</span>
-                  <p className="text-xl md:text-2xl font-bold text-primary tracking-wide whitespace-nowrap text-center">
+                  <p className="text-xl md:text-2xl font-bold text-primary tracking-wide whitespace-nowrap text-center mt-1 mb-6">
                     Giving Everyone A Voice!
                   </p>
                 </>
               )}
             </Link>
-          </div>
-
-          {/* Right: Upload button only */}
-          <div className="ml-auto flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate({ to: '/upload' })}
-              className="shrink-0 h-10 w-10 hover:bg-muted/80"
-            >
-              <Upload className="h-5 w-5" />
-              <span className="sr-only">Upload</span>
-            </Button>
           </div>
         </div>
 

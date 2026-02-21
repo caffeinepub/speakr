@@ -11,13 +11,14 @@ import Storage "blob-storage/Storage";
 import AccessControl "authorization/access-control";
 
 actor {
-  include MixinStorage();
-
   let accessControlState = AccessControl.initState();
-  let audioPosts = Map.empty<Text, AudioPost>();
   let userContent = Map.empty<Principal, List.List<Text>>();
   var nextPostId = 0;
+  let audioPosts = Map.empty<Text, AudioPost>();
+  let favorites = Map.empty<Principal, List.List<Text>>();
+  let userProfiles = Map.empty<Principal, UserProfile>();
 
+  include MixinStorage();
   include MixinAuthorization(accessControlState);
 
   public type AudioPost = {
@@ -28,6 +29,7 @@ actor {
     audio : Storage.ExternalBlob;
     listens : Nat;
     audioPath : Text;
+    replyTo : ?Text;
   };
 
   public type UserStatistics = {
@@ -35,7 +37,34 @@ actor {
     totalListens : Nat;
   };
 
-  public shared ({ caller }) func addAudioPost(title : Text, description : Text, audio : Storage.ExternalBlob) : async Text {
+  public type UserProfile = {
+    name : Text;
+  };
+
+  // User Profile Management
+  public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can view profiles");
+    };
+    userProfiles.get(caller);
+  };
+
+  public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
+    if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Can only view your own profile");
+    };
+    userProfiles.get(user);
+  };
+
+  public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can save profiles");
+    };
+    userProfiles.add(caller, profile);
+  };
+
+  // Audio Post Management
+  public shared ({ caller }) func addAudioPost(title : Text, description : Text, audio : Storage.ExternalBlob, replyTo : ?Text) : async Text {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can add audio posts");
     };
@@ -51,6 +80,7 @@ actor {
       audio;
       listens = 0;
       audioPath = "";
+      replyTo;
     };
 
     audioPosts.add(postId, newPost);
@@ -64,6 +94,41 @@ actor {
     userContent.add(caller, updatedList);
 
     postId;
+  };
+
+  public shared ({ caller }) func addToFavorites(postId : Text) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can add favorites");
+    };
+    if (audioPosts.get(postId) == null) {
+      Runtime.trap("Audio post not found");
+    };
+
+    let userFavorites = switch (favorites.get(caller)) {
+      case (null) { List.empty<Text>() };
+      case (?posts) { posts };
+    };
+
+    if (userFavorites.any(func(favId) { favId == postId })) {
+      Runtime.trap("Audio post already favorited");
+    };
+
+    userFavorites.add(postId);
+    favorites.add(caller, userFavorites);
+  };
+
+  public shared ({ caller }) func removeFromFavorites(postId : Text) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can remove favorites");
+    };
+
+    switch (favorites.get(caller)) {
+      case (null) { () };
+      case (?posts) {
+        let updatedList = posts.filter(func(id) { id != postId });
+        favorites.add(caller, updatedList);
+      };
+    };
   };
 
   public shared ({ caller }) func editAudioPost(postId : Text, title : Text, description : Text) : async Bool {
@@ -131,6 +196,26 @@ actor {
     };
 
     myPosts.reverse().toArray().map(
+      func(postId) {
+        switch (audioPosts.get(postId)) {
+          case (null) { Runtime.trap("Audio post not found. This should never happen.") };
+          case (?post) { post };
+        };
+      }
+    );
+  };
+
+  public shared ({ caller }) func getFavoritePosts() : async [AudioPost] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("This is only available for authenticated users. Please sign in and try again.");
+    };
+
+    let favoritePostIds = switch (favorites.get(caller)) {
+      case (null) { List.empty<Text>() };
+      case (?posts) { posts };
+    };
+
+    favoritePostIds.reverse().toArray().map(
       func(postId) {
         switch (audioPosts.get(postId)) {
           case (null) { Runtime.trap("Audio post not found. This should never happen.") };

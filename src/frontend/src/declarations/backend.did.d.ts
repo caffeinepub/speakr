@@ -18,8 +18,10 @@ export interface AudioPost {
   'description' : string,
   'audioPath' : string,
   'author' : Principal,
+  'replyTo' : [] | [string],
 }
 export type ExternalBlob = Uint8Array;
+export interface UserProfile { 'name' : string }
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
@@ -55,17 +57,26 @@ export interface _SERVICE {
   >,
   '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
-  'addAudioPost' : ActorMethod<[string, string, ExternalBlob], string>,
+  'addAudioPost' : ActorMethod<
+    [string, string, ExternalBlob, [] | [string]],
+    string
+  >,
+  'addToFavorites' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'editAudioPost' : ActorMethod<[string, string, string], boolean>,
   'getAudioBlob' : ActorMethod<[string], [] | [ExternalBlob]>,
   'getAudioPost' : ActorMethod<[string], [] | [AudioPost]>,
+  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getFavoritePosts' : ActorMethod<[], Array<AudioPost>>,
   'getMyContent' : ActorMethod<[], Array<AudioPost>>,
+  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'getUserStatistics' : ActorMethod<[], UserStatistics>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'listenToAudioPost' : ActorMethod<[string], undefined>,
   'removeAudioPost' : ActorMethod<[string], boolean>,
+  'removeFromFavorites' : ActorMethod<[string], undefined>,
+  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

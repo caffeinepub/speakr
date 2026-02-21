@@ -1,10 +1,15 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 7,
-  "summary": "Web application with prominent speaker logo and branded slogan",
-  "architectural_notes": [],
+  "projectStateVersion": 17,
+  "summary": "Web application with prominent speaker logo, branded slogan, and audio upload system featuring favorites and audio replies for logged-in members",
+  "architectural_notes": [
+    "Audio uploads exist in general feed and category-specific views",
+    "Audio reply system creates independent uploads with linkage to original audio",
+    "Favorite and reply features require user authentication"
+  ],
   "known_issues": [],
   "isFixRequest": false,
+  "imageRequirements": "## Edit Images\n- Crop the bottom edge to remove excess white space underneath the speaker graphic (speakr-logo.png > speakr-logo-cropped.dim_800x400.png)",
   "existing_features": [
     {
       "id": "feature-move-the-brandingbannerdropdown-component-containing-about-and-privacy-policy-links-to-be-positioned-next-to-the-logo-in-the-top-left-area-of-the-header",
@@ -53,6 +58,102 @@
         "REQ-8"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-a-favorite-button-with-heart-icon-to-each-audio-upload-card-in-the-feed-and-dashboard-visible-and-functional-only-for-logged-in-members",
+      "title": "Add a favorite button with heart icon to each audio upload card in the feed and dashboard, visible and functional only for logged-in members",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-audio-reply-button-to-each-audio-upload-card-that-opens-the-audio-recording-interface-for-logged-in-members-to-record-a-response",
+      "title": "Add an audio reply button to each audio upload card that opens the audio recording interface for logged-in members to record a response",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-audio-replies-section-below-each-audio-card-that-displays-all-linked-audio-replies-as-a-list-of-playable-audio-cards",
+      "title": "Add an 'Audio Replies' section below each audio card that displays all linked audio replies as a list of playable audio cards",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-audiocard-component-to-include-favorite-and-reply-buttons-with-proper-authentication-checks-and-integrate-with-backend-services",
+      "title": "Update the AudioCard component to include favorite and reply buttons with proper authentication checks and integrate with backend services",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-error-that-occurs-when-clicking-the-reply-button-to-post-an-audio-reply-after-recording-has-completed-successfully-ensure-the-reply-is-properly-submitted-to-the-backend-with-the-correct-replyto-reference-linking-it-to-the-original-post",
+      "title": "Fix the error that occurs when clicking the reply button to post an audio reply after recording has completed successfully. Ensure the reply is properly submitted to the backend with the correct replyTo reference linking it to the original post.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-proper-error-handling-and-user-feedback-in-the-audioreplydialog-component-to-display-specific-error-messages-when-reply-submission-fails-including-backend-validation-errors-and-network-issues",
+      "title": "Add proper error handling and user feedback in the AudioReplyDialog component to display specific error messages when reply submission fails, including backend validation errors and network issues.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-stationary-upload-button-that-is-positioned-to-the-right-of-the-logo-in-the-header-underneath-the-floating-buttons",
+      "title": "Remove the stationary upload button that is positioned to the right of the logo in the header (underneath the floating buttons)",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-reduce-the-vertical-spacing-between-the-logo-and-slogan-to-make-them-appear-more-compact-and-closely-grouped-together",
+      "title": "Reduce the vertical spacing between the logo and slogan to make them appear more compact and closely grouped together",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-increase-the-vertical-spacing-below-the-slogan-to-create-clear-separation-between-the-slogan-and-the-search-bar-underneath-it",
+      "title": "Increase the vertical spacing below the slogan to create clear separation between the slogan and the search bar underneath it",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-further-reduce-the-overall-vertical-padding-around-all-header-elements-in-the-header-component-to-create-an-even-more-compact-header-section",
+      "title": "Further reduce the overall vertical padding around all header elements in the Header component to create an even more compact header section",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-further-decrease-the-vertical-spacing-between-the-logo-and-slogan-beyond-the-current-implementation-to-group-them-even-more-closely-together",
+      "title": "Further decrease the vertical spacing between the logo and slogan beyond the current implementation to group them even more closely together",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-adequate-vertical-spacing-remains-between-the-slogan-and-the-search-bar-below-it-to-maintain-clear-visual-separation",
+      "title": "Ensure adequate vertical spacing remains between the slogan and the search bar below it to maintain clear visual separation",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -94,6 +195,82 @@
       "id": "AR-6",
       "summary": "Make header more compact by reducing spacing/padding and moving slogan closer",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Add favorite button (heart icon) to each audio upload, accessible only to logged-in members",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Add audio reply button to record responses directly to any audio upload, accessible only to logged-in members",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Store audio replies as independent uploads linked to the original audio file",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Create separate 'Audio Replies' section to display linked responses for each audio upload",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Store audio replies as independent audio posts in the backend with a reference link to the original audio post they are replying to",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Remove the stationary upload button positioned to the right of the logo (underneath the floating buttons)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Reduce spacing between the logo and slogan to make them more compact",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Increase spacing below the slogan to separate it from the search bar",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Further reduce overall header spacing and padding to make it even more compact",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Move slogan even closer underneath the logo while maintaining separation from search bar",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Crop the logo image to remove excess white space underneath, allowing the slogan to sit much closer to the logo",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Crop the speaker logo image file to remove excess white space underneath the graphic, allowing the slogan to sit much closer to the logo and creating a more compact header overall",
+      "reqIds": [
+        "REQ-22"
+      ],
       "status": "pending"
     }
   ],

@@ -1,11 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Reduce the vertical spacing and padding in the header section to create a more compact top layout.
+**Goal:** Crop the logo image to remove bottom white space for a more compact header.
 
 **Planned changes:**
-- Reduce vertical padding and spacing around all header elements in the Header component
-- Decrease the vertical spacing between the logo, BrandingBannerDropdown menu, and login button in the top left area
-- Move the slogan text closer to the header content to reduce overall header height
+- Crop excess white space from the bottom of the speaker logo image file
+- Update the logo reference to use the cropped version
 
-**User-visible outcome:** Users will see a more compact header section with reduced vertical spacing, allowing more content to be visible on the page while maintaining readability and usability.
+**User-visible outcome:** The slogan will appear closer to the logo graphic, creating a more compact and visually tighter header section.

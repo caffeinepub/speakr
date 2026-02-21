@@ -33,7 +33,9 @@ export const AudioPost = IDL.Record({
   'description' : IDL.Text,
   'audioPath' : IDL.Text,
   'author' : IDL.Principal,
+  'replyTo' : IDL.Opt(IDL.Text),
 });
+export const UserProfile = IDL.Record({ 'name' : IDL.Text });
 export const UserStatistics = IDL.Record({
   'totalListens' : IDL.Nat,
   'totalUploads' : IDL.Nat,
@@ -67,17 +69,31 @@ export const idlService = IDL.Service({
     ),
   '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
-  'addAudioPost' : IDL.Func([IDL.Text, IDL.Text, ExternalBlob], [IDL.Text], []),
+  'addAudioPost' : IDL.Func(
+      [IDL.Text, IDL.Text, ExternalBlob, IDL.Opt(IDL.Text)],
+      [IDL.Text],
+      [],
+    ),
+  'addToFavorites' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'editAudioPost' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [IDL.Bool], []),
   'getAudioBlob' : IDL.Func([IDL.Text], [IDL.Opt(ExternalBlob)], ['query']),
   'getAudioPost' : IDL.Func([IDL.Text], [IDL.Opt(AudioPost)], ['query']),
+  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getFavoritePosts' : IDL.Func([], [IDL.Vec(AudioPost)], []),
   'getMyContent' : IDL.Func([], [IDL.Vec(AudioPost)], []),
+  'getUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(UserProfile)],
+      ['query'],
+    ),
   'getUserStatistics' : IDL.Func([], [UserStatistics], []),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'listenToAudioPost' : IDL.Func([IDL.Text], [], []),
   'removeAudioPost' : IDL.Func([IDL.Text], [IDL.Bool], []),
+  'removeFromFavorites' : IDL.Func([IDL.Text], [], []),
+  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
 });
 
 export const idlInitArgs = [];
@@ -108,7 +124,9 @@ export const idlFactory = ({ IDL }) => {
     'description' : IDL.Text,
     'audioPath' : IDL.Text,
     'author' : IDL.Principal,
+    'replyTo' : IDL.Opt(IDL.Text),
   });
+  const UserProfile = IDL.Record({ 'name' : IDL.Text });
   const UserStatistics = IDL.Record({
     'totalListens' : IDL.Nat,
     'totalUploads' : IDL.Nat,
@@ -143,20 +161,30 @@ export const idlFactory = ({ IDL }) => {
     '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'addAudioPost' : IDL.Func(
-        [IDL.Text, IDL.Text, ExternalBlob],
+        [IDL.Text, IDL.Text, ExternalBlob, IDL.Opt(IDL.Text)],
         [IDL.Text],
         [],
       ),
+    'addToFavorites' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'editAudioPost' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [IDL.Bool], []),
     'getAudioBlob' : IDL.Func([IDL.Text], [IDL.Opt(ExternalBlob)], ['query']),
     'getAudioPost' : IDL.Func([IDL.Text], [IDL.Opt(AudioPost)], ['query']),
+    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getFavoritePosts' : IDL.Func([], [IDL.Vec(AudioPost)], []),
     'getMyContent' : IDL.Func([], [IDL.Vec(AudioPost)], []),
+    'getUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserProfile)],
+        ['query'],
+      ),
     'getUserStatistics' : IDL.Func([], [UserStatistics], []),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'listenToAudioPost' : IDL.Func([IDL.Text], [], []),
     'removeAudioPost' : IDL.Func([IDL.Text], [IDL.Bool], []),
+    'removeFromFavorites' : IDL.Func([IDL.Text], [], []),
+    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   });
 };
 

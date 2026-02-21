@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Play, ThumbsUp, ThumbsDown, MessageCircle, Pause, Headphones, MoreVertical, Trash2 } from 'lucide-react';
+import { Play, ThumbsUp, ThumbsDown, MessageCircle, Pause, Headphones, MoreVertical, Trash2, Heart, MessageSquare } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import CommentsPanel from './CommentsPanel';
 import ProceduralCover from './ProceduralCover';
+import AudioRepliesSection from './AudioRepliesSection';
+import AudioReplyDialog from './AudioReplyDialog';
 import { usePlayer } from '@/player/PlayerProvider';
 import type { MockAudioItem } from '@/mock/mockAudio';
-import { useListenToAudioPost, useRemoveAudioPost } from '@/hooks/useQueries';
+import { useListenToAudioPost, useRemoveAudioPost, useAddToFavorites, useRemoveFromFavorites } from '@/hooks/useQueries';
+import { useFavorites } from '@/hooks/useFavorites';
 import { formatCompactNumber } from '@/lib/formatters';
 import { getCategoryBadgeClass } from '@/constants/categoryColors';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
@@ -39,12 +42,17 @@ export default function AudioCard({ audio }: AudioCardProps) {
   const [isLikeAnimating, setIsLikeAnimating] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showReplyDialog, setShowReplyDialog] = useState(false);
   const { play, pause, currentItem, isPlaying } = usePlayer();
   const listenMutation = useListenToAudioPost();
   const removeMutation = useRemoveAudioPost();
+  const addToFavoritesMutation = useAddToFavorites();
+  const removeFromFavoritesMutation = useRemoveFromFavorites();
   const { identity } = useInternetIdentity();
+  const { data: favoritePosts } = useFavorites();
 
   const isCurrentlyPlaying = currentItem?.id === audio.id && isPlaying;
+  const isAuthenticated = !!identity;
 
   // Check if this is a backend item
   const isBackendItem = (audio as any).isBackendItem === true;
@@ -58,6 +66,9 @@ export default function AudioCard({ audio }: AudioCardProps) {
 
   // Show delete option for backend items authored by user, or for draft items
   const canDelete = (isBackendItem && isAuthor) || isDraftItem;
+
+  // Check if this post is favorited
+  const isFavorited = favoritePosts?.some(post => post.id === audio.id) || false;
 
   const handlePlayPause = () => {
     if (isCurrentlyPlaying) {
@@ -75,6 +86,43 @@ export default function AudioCard({ audio }: AudioCardProps) {
   const handleLike = () => {
     setIsLikeAnimating(true);
     setTimeout(() => setIsLikeAnimating(false), 300);
+  };
+
+  const handleFavoriteToggle = async () => {
+    if (!isAuthenticated) {
+      toast.error('Please sign in to add favorites');
+      return;
+    }
+
+    if (!isBackendItem) {
+      toast.error('Only uploaded posts can be favorited');
+      return;
+    }
+
+    try {
+      if (isFavorited) {
+        await removeFromFavoritesMutation.mutateAsync(audio.id);
+      } else {
+        await addToFavoritesMutation.mutateAsync(audio.id);
+      }
+    } catch (error) {
+      // Error handling is done in the mutation hooks
+      console.error('Failed to toggle favorite:', error);
+    }
+  };
+
+  const handleReplyClick = () => {
+    if (!isAuthenticated) {
+      toast.error('Please sign in to reply');
+      return;
+    }
+
+    if (!isBackendItem) {
+      toast.error('Only uploaded posts can be replied to');
+      return;
+    }
+
+    setShowReplyDialog(true);
   };
 
   const handleDelete = async () => {
@@ -99,6 +147,8 @@ export default function AudioCard({ audio }: AudioCardProps) {
       setIsDeleting(false);
     }
   };
+
+  const isFavoriteLoading = addToFavoritesMutation.isPending || removeFromFavoritesMutation.isPending;
 
   return (
     <>
@@ -204,7 +254,46 @@ export default function AudioCard({ audio }: AudioCardProps) {
             </div>
           </div>
 
+          {/* New action buttons row for favorite and reply */}
+          {isBackendItem && (
+            <div className="flex items-center gap-2 pt-2 border-t border-border/50">
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`gap-1.5 transition-colors ${
+                  isFavorited 
+                    ? 'text-red-500 hover:text-red-600' 
+                    : 'hover:text-red-500'
+                }`}
+                onClick={handleFavoriteToggle}
+                disabled={!isAuthenticated || isFavoriteLoading}
+              >
+                {isFavoriteLoading ? (
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                ) : (
+                  <Heart className={`h-4 w-4 ${isFavorited ? 'fill-current' : ''}`} />
+                )}
+                <span className="text-xs font-medium">
+                  {isFavorited ? 'Favorited' : 'Favorite'}
+                </span>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-1.5 hover:text-blue-500 transition-colors"
+                onClick={handleReplyClick}
+                disabled={!isAuthenticated}
+              >
+                <MessageSquare className="h-4 w-4" />
+                <span className="text-xs font-medium">Reply</span>
+              </Button>
+            </div>
+          )}
+
           {showComments && <CommentsPanel comments={audio.comments} />}
+
+          {/* Audio Replies Section */}
+          {isBackendItem && <AudioRepliesSection postId={audio.id} />}
         </CardContent>
       </Card>
 
@@ -228,6 +317,14 @@ export default function AudioCard({ audio }: AudioCardProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Audio Reply Dialog */}
+      <AudioReplyDialog
+        open={showReplyDialog}
+        onOpenChange={setShowReplyDialog}
+        originalPostId={audio.id}
+        originalPostTitle={audio.title}
+      />
     </>
   );
 }

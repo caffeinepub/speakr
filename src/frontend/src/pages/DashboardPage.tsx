@@ -6,6 +6,7 @@ import { AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import MyContentSection from '@/components/dashboard/MyContentSection';
 import StatisticsSection from '@/components/dashboard/StatisticsSection';
+import FavoritesSection from '@/components/dashboard/FavoritesSection';
 import DashboardEmptyHero from '@/components/dashboard/DashboardEmptyHero';
 import { useMyContent } from '@/hooks/useMyContent';
 
@@ -72,6 +73,9 @@ export default function DashboardPage() {
         ) : (
           <StatisticsSection />
         )}
+
+        {/* Favorites Section */}
+        <FavoritesSection />
 
         {/* My Content Section */}
         <MyContentSection />

@@ -70,11 +70,12 @@ export default function UploadForm() {
         setUploadProgress(percentage);
       });
 
-      // Upload to backend
+      // Upload to backend (no replyTo for regular uploads)
       await addAudioPost.mutateAsync({
         title: title.trim(),
         description: description.trim(),
         audioBlob,
+        replyTo: null,
       });
 
       toast.success('Audio uploaded successfully!', {

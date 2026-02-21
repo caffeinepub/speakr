@@ -1,76 +1,44 @@
 {
   "kind": "build_request",
-  "title": "Reduce header vertical spacing and compact layout",
+  "title": "Crop logo image to remove bottom white space for compact header",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-6",
-      "text": "Reduce the vertical padding and spacing around all header elements in the Header component to create a more compact top section",
+      "id": "REQ-22",
+      "text": "Crop the speaker logo image file to remove excess white space underneath the graphic, allowing the slogan to sit much closer to the logo and creating a more compact header overall",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-current"
         ],
         "quotes": [
-          "Adjust spacing/padding"
+          "There is still too much white space between the logo and the slogan. Can you crop the logo underneath, so it'll allow the slogan to be much closer underneath it and the overall header to be much more compact"
         ]
       },
       "acceptanceCriteria": [
-        "The overall height of the header section is visibly reduced",
-        "Padding around header elements is decreased while maintaining visual balance",
-        "All header elements remain properly aligned and readable"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Decrease the vertical spacing between the logo, BrandingBannerDropdown menu, and login button that are stacked in the top left area",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "Yes"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The gap between the logo and dropdown menu is reduced",
-        "The gap between the dropdown menu and login button is reduced",
-        "Elements remain easily clickable with sufficient touch targets",
-        "Visual hierarchy is maintained"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Move the slogan text closer to the header content to reduce the overall header height and create a more compact top section",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-latest"
-        ],
-        "quotes": [
-          "Moved closer to reduce overall header height"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The slogan text is positioned closer to the header elements above it",
-        "The overall vertical space consumed by the top section is noticeably reduced",
-        "The slogan remains readable and properly styled"
+        "The logo image file has visible white space cropped from the bottom edge",
+        "The slogan appears visually closer to the logo graphic due to reduced image padding",
+        "The overall header section height is reduced as a result of the tighter logo-slogan spacing",
+        "The logo graphic itself remains intact and centered within the cropped image"
       ]
     }
   ],
   "constraints": [
-    "Maintain touch-friendly click targets for all interactive elements",
-    "Preserve existing header functionality and navigation structure",
-    "Keep the logo size unchanged as per previous requirements"
+    "Do not modify frontend/src/hooks/useInternetIdentity.ts",
+    "Do not modify frontend/src/hooks/useInternetIdentity.tsx",
+    "Do not modify frontend/src/hooks/useActor.ts",
+    "Do not modify frontend/src/main.tsx",
+    "Do not modify frontend/src/components/ui"
   ],
   "nonGoals": [
-    "Changing the size of the speaker logo",
-    "Modifying the slogan text content",
-    "Rearranging the layout structure of header elements"
+    "Adjusting CSS margins or padding between logo and slogan",
+    "Changing the slogan text content or styling",
+    "Modifying header layout or component structure"
   ],
   "imageRequirements": {
     "required": [],
-    "edits": []
+    "edits": [
+      "Crop the bottom edge to remove excess white space underneath the speaker graphic (speakr-logo.png > speakr-logo-cropped.dim_800x400.png)"
+    ]
   }
 }

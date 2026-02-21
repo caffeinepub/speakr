@@ -1,11 +1,22 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-21T01:11:22.089Z",
-  "summary": "The diff implements all three requirements (REQ-6, REQ-7, REQ-8) for reducing header vertical spacing and creating a more compact layout. The changes are evidenced in the Header.tsx file summary, which documents reduced header height (h-52 md:h-60), smaller button sizes (h-10 w-10), smaller icon sizes (h-5 w-5), minimal spacing between stacked elements (gap-1), and reduced spacing between logo and slogan (gap-1.5).",
-  "missing_requirements": [],
+  "generatedAt": "2026-02-21T18:22:05.890Z",
+  "summary": "The diff shows modifications to Header.tsx and documentation files, but does not provide evidence of the actual image file being cropped. The BuildRequest specifies an image edit to crop speakr-logo.png and generate speakr-logo-cropped.dim_800x400.png, which should appear as a new file addition. The Header.tsx references the cropped image path, but without the actual image file change, the core requirement remains unimplemented.",
+  "missing_requirements": [
+    {
+      "id": "REQ-22",
+      "requirement": "Crop the speaker logo image file to remove excess white space underneath the graphic",
+      "reason": "The BuildRequest explicitly specifies an image edit operation: 'Crop the bottom edge to remove excess white space underneath the speaker graphic (speakr-logo.png > speakr-logo-cropped.dim_800x400.png)'. The diff shows no added image files. While Header.tsx references the cropped image path '/assets/generated/speakr-logo-cropped.dim_800x400.png', the actual cropped image file is not present in the diff as a new or modified file.",
+      "evidence": [
+        "Diff shows 'Added: 0' files",
+        "No image files in ADDED FILES or MODIFIED FILES sections",
+        "BuildRequest specifies 'speakr-logo.png > speakr-logo-cropped.dim_800x400.png' image edit"
+      ]
+    }
+  ],
   "hallucinated_features": [],
-  "confidence": 0.92,
+  "confidence": 0.85,
   "changed_files": [
     "frontend-file-summaries.txt",
     "frontend/src/components/layout/Header.tsx",

@@ -26,6 +26,10 @@ export interface AudioPost {
     description: string;
     audioPath: string;
     author: Principal;
+    replyTo?: string;
+}
+export interface UserProfile {
+    name: string;
 }
 export enum UserRole {
     admin = "admin",
@@ -33,15 +37,21 @@ export enum UserRole {
     guest = "guest"
 }
 export interface backendInterface {
-    addAudioPost(title: string, description: string, audio: ExternalBlob): Promise<string>;
+    addAudioPost(title: string, description: string, audio: ExternalBlob, replyTo: string | null): Promise<string>;
+    addToFavorites(postId: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     editAudioPost(postId: string, title: string, description: string): Promise<boolean>;
     getAudioBlob(id: string): Promise<ExternalBlob | null>;
     getAudioPost(postId: string): Promise<AudioPost | null>;
+    getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getFavoritePosts(): Promise<Array<AudioPost>>;
     getMyContent(): Promise<Array<AudioPost>>;
+    getUserProfile(user: Principal): Promise<UserProfile | null>;
     getUserStatistics(): Promise<UserStatistics>;
     isCallerAdmin(): Promise<boolean>;
     listenToAudioPost(postId: string): Promise<void>;
     removeAudioPost(postId: string): Promise<boolean>;
+    removeFromFavorites(postId: string): Promise<void>;
+    saveCallerUserProfile(profile: UserProfile): Promise<void>;
 }
