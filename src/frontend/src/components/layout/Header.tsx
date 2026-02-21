@@ -55,9 +55,9 @@ export default function Header() {
     <header className="z-10 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 shadow-sm">
       <div className="container px-4 md:px-6">
         {/* Main header row with centered logo */}
-        <div className="relative flex h-20 items-center">
-          {/* Left: Menu */}
-          <div className="flex items-center gap-3 shrink-0">
+        <div className="relative flex h-64 md:h-80 items-center">
+          {/* Left: Menu dropdown and login button stacked vertically */}
+          <div className="flex flex-col gap-2 shrink-0">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -89,40 +89,67 @@ export default function Header() {
                 <DropdownMenuItem onClick={() => handleMenuNavigate('/privacy')}>
                   Privacy Policy
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {isAuthenticated ? (
-                  <>
-                    <DropdownMenuItem onClick={() => handleMenuNavigate('/dashboard')}>
-                      <LayoutDashboard className="h-4 w-4 mr-2" />
-                      Dashboard
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogout}>
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Logout
-                    </DropdownMenuItem>
-                  </>
-                ) : (
-                  <DropdownMenuItem onClick={handleLogin} disabled={isLoggingIn}>
-                    <LogIn className="h-4 w-4 mr-2" />
-                    {isLoggingIn ? 'Logging in...' : 'Login'}
-                  </DropdownMenuItem>
-                )}
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Login/Dashboard/Logout button directly underneath dropdown */}
+            {isAuthenticated ? (
+              <div className="flex flex-col gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => navigate({ to: '/dashboard' })}
+                  className="h-11 w-11 hover:bg-muted/80"
+                  aria-label="Dashboard"
+                >
+                  <LayoutDashboard className="h-6 w-6" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleLogout}
+                  className="h-11 w-11 hover:bg-muted/80"
+                  aria-label="Logout"
+                >
+                  <LogOut className="h-6 w-6" />
+                </Button>
+              </div>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleLogin}
+                disabled={isLoggingIn}
+                className="h-11 w-11 hover:bg-muted/80"
+                aria-label={isLoggingIn ? 'Logging in...' : 'Login'}
+              >
+                <LogIn className="h-6 w-6" />
+              </Button>
+            )}
           </div>
 
-          {/* Center: Logo (absolutely centered) */}
+          {/* Center: Logo with slogan (absolutely centered) */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <Link to="/" className="flex items-center">
+            <Link to="/" className="flex flex-col items-center gap-3">
               {!logoError ? (
-                <img
-                  src="/assets/generated/speakr-logo-reupload.dim_1536x864.png"
-                  alt="SPEAKR"
-                  className="h-16 w-auto object-contain drop-shadow-lg contrast-125"
-                  onError={() => setLogoError(true)}
-                />
+                <>
+                  <img
+                    src="/assets/file_000000008744720abc6dc9f1fb80f8e2-5.png"
+                    alt="SPEAKR"
+                    className="h-48 md:h-56 w-auto object-contain"
+                    onError={() => setLogoError(true)}
+                  />
+                  <p className="text-xl md:text-2xl font-bold text-primary tracking-wide whitespace-nowrap text-center">
+                    Giving Everyone A Voice!
+                  </p>
+                </>
               ) : (
-                <span className="text-3xl font-bold text-primary drop-shadow-md tracking-tight">SPEAKR</span>
+                <>
+                  <span className="text-5xl md:text-6xl font-bold text-primary tracking-tight">SPEAKR</span>
+                  <p className="text-xl md:text-2xl font-bold text-primary tracking-wide whitespace-nowrap text-center">
+                    Giving Everyone A Voice!
+                  </p>
+                </>
               )}
             </Link>
           </div>

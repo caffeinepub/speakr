@@ -1,22 +1,50 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Replace placeholder header banner with uploaded image",
+  "title": "Reorganize header layout: move dropdown and login button to top left",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Replace the placeholder header banner image in the BrandingBanner component with the custom banner image from frontend/public/assets/generated",
+      "id": "REQ-3",
+      "summary": "Move the BrandingBannerDropdown component to be positioned next to the logo in the top left area of the header",
       "acceptanceCriteria": [
-        "The BrandingBanner component displays the custom banner image instead of the placeholder",
-        "The banner image is loaded from a static asset path in frontend/public/assets/generated",
-        "The banner maintains proper aspect ratio and responsive sizing",
-        "No placeholder or default banner is visible after the change"
+        "The dropdown menu is positioned in the top left area of the header, adjacent to the logo",
+        "The dropdown remains fully functional with all existing links (About, Privacy Policy, etc.)"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/layout/BrandingBanner.tsx",
+          "path": "frontend/src/components/layout/Header.tsx",
           "operation": "modify",
-          "description": "Replace the placeholder banner image with the generated custom header banner located at frontend/public/assets/generated/header-banner.dim_1200x300.png. Update the image source to reference the static asset path, ensuring proper responsive sizing and aspect ratio maintenance. Remove any placeholder or default banner references to display only the custom banner image."
+          "description": "Restructure the header layout to move the BrandingBannerDropdown from its current position to the top left area, adjacent to the logo. Update the flex layout and positioning classes to place the dropdown next to the logo element while maintaining responsive design for both mobile and desktop viewports."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Reposition the login button to be directly underneath the dropdown menu in the top left area",
+      "acceptanceCriteria": [
+        "The login button appears directly below the dropdown menu",
+        "The login button maintains full functionality for authentication"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/layout/Header.tsx",
+          "operation": "modify",
+          "description": "Move the login/logout button from its current position (right side) to be positioned directly underneath the BrandingBannerDropdown in the top left area. Wrap the dropdown and login button in a vertical flex container to stack them, ensuring the authentication logic and Internet Identity integration remain unchanged."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Add small spacing between the dropdown menu and login button to ensure easy touch/click targets",
+      "acceptanceCriteria": [
+        "There is visible spacing between the dropdown menu and login button",
+        "The spacing is optimized for mobile and desktop interaction"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/layout/Header.tsx",
+          "operation": "modify",
+          "description": "Apply appropriate spacing utilities (such as gap-2 or space-y-2) between the dropdown menu and login button in the vertical stack to ensure adequate touch/click target separation. Test and adjust spacing to work well on both mobile and desktop viewports for optimal user interaction."
         }
       ]
     }

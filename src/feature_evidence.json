@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-replace-the-placeholder-header-banner-image-in-the-brandingbanner-component-with-the-user-s-uploaded-custom-banner-image-rendering-it-as-a-static-asset-from-frontend-public-assets-generated",
-      "featureTitle": "Replace the placeholder header banner image in the BrandingBanner component with the user's uploaded custom banner image, rendering it as a static asset from frontend/public/assets/generated",
+      "featureId": "feature-move-the-brandingbannerdropdown-component-containing-about-and-privacy-policy-links-to-be-positioned-next-to-the-logo-in-the-top-left-area-of-the-header",
+      "featureTitle": "Move the BrandingBannerDropdown component (containing About and Privacy Policy links) to be positioned next to the logo in the top left area of the header",
       "files": [
-        "frontend/src/components/layout/BrandingBanner.tsx"
+        "frontend/src/components/layout/Header.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -17,7 +17,47 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-1"
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-reposition-the-login-button-currently-on-the-right-side-to-be-directly-underneath-the-dropdown-menu-in-the-top-left-area",
+      "featureTitle": "Reposition the login button (currently on the right side) to be directly underneath the dropdown menu in the top left area",
+      "files": [
+        "frontend/src/components/layout/Header.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-small-spacing-between-the-dropdown-menu-and-login-button-to-ensure-easy-touch-click-targets",
+      "featureTitle": "Add small spacing between the dropdown menu and login button to ensure easy touch/click targets",
+      "files": [
+        "frontend/src/components/layout/Header.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
       ],
       "confidence": "high"
     }

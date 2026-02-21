@@ -1,42 +1,75 @@
 {
   "kind": "build_request",
-  "title": "Replace placeholder header banner with uploaded image",
-  "projectName": "SPEAKR Audio",
+  "title": "Reorganize header layout: move dropdown and login button to top left",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Replace the placeholder header banner image in the BrandingBanner component with the user's uploaded custom banner image, rendering it as a static asset from frontend/public/assets/generated",
+      "id": "REQ-3",
+      "text": "Move the BrandingBannerDropdown component (containing About and Privacy Policy links) to be positioned next to the logo in the top left area of the header",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-20"
+          "msg-recent-1"
         ],
         "quotes": [
-          "Can we replace the placeholder header at the top?"
+          "Where the about section and privacy policy is",
+          "Move the drop down menu next to the logo, more to the top left"
         ]
       },
       "acceptanceCriteria": [
-        "The BrandingBanner component displays the custom banner image instead of the placeholder",
-        "The banner image is loaded from a static asset path in frontend/public/assets/generated",
-        "The banner maintains proper aspect ratio and responsive sizing",
-        "No placeholder or default banner is visible after the change"
+        "The dropdown menu is positioned in the top left area of the header, adjacent to the logo",
+        "The dropdown remains fully functional with all existing links (About, Privacy Policy, etc.)"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Reposition the login button (currently on the right side) to be directly underneath the dropdown menu in the top left area",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-recent-2"
+        ],
+        "quotes": [
+          "place the login button that is now positioned on the right side of the logo",
+          "Directly underneath"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The login button appears directly below the dropdown menu",
+        "The login button maintains full functionality for authentication"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add small spacing between the dropdown menu and login button to ensure easy touch/click targets",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-recent-3"
+        ],
+        "quotes": [
+          "Small spacing for easy pressing"
+        ]
+      },
+      "acceptanceCriteria": [
+        "There is visible spacing between the dropdown menu and login button",
+        "The spacing is optimized for mobile and desktop interaction"
       ]
     }
   ],
   "constraints": [
-    "Do not modify Internet Identity integration files",
-    "Do not edit read-only UI component sources in frontend/src/components/ui"
+    "Do not modify the BrandingBannerDropdown component functionality or links",
+    "Preserve all existing authentication logic in the login button",
+    "Maintain responsive design for mobile and desktop viewports"
   ],
   "nonGoals": [
-    "Changing the banner's layout or positioning",
-    "Adding animation or transition effects to the banner",
-    "Modifying other header components beyond the banner image"
+    "Changing the content or styling of the dropdown menu items",
+    "Modifying the logo size or appearance",
+    "Altering the search bar position or functionality",
+    "Changing authentication flow or Internet Identity integration"
   ],
   "imageRequirements": {
-    "required": [
-      "Custom header banner image for SPEAKR audio platform with modern, professional design (header-banner.dim_1200x300.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }

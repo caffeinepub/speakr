@@ -1,21 +1,32 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
-  "summary": "Audio sharing web app with like/dislike counters, favorites feature, and custom banner image",
-  "architectural_notes": [
-    "Audio feed with like/dislike functionality",
-    "Frontend components need React-based audio player",
-    "Backend storage for audio posts and engagement metrics"
-  ],
+  "projectStateVersion": 5,
+  "summary": "Web application with prominent speaker logo and branded slogan",
+  "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Custom header banner image for SPEAKR audio platform with modern, professional design (header-banner.dim_1200x300.png)",
   "existing_features": [
     {
-      "id": "feature-replace-the-placeholder-header-banner-image-in-the-brandingbanner-component-with-the-user-s-uploaded-custom-banner-image-rendering-it-as-a-static-asset-from-frontend-public-assets-generated",
-      "title": "Replace the placeholder header banner image in the BrandingBanner component with the user's uploaded custom banner image, rendering it as a static asset from frontend/public/assets/generated",
+      "id": "feature-move-the-brandingbannerdropdown-component-containing-about-and-privacy-policy-links-to-be-positioned-next-to-the-logo-in-the-top-left-area-of-the-header",
+      "title": "Move the BrandingBannerDropdown component (containing About and Privacy Policy links) to be positioned next to the logo in the top left area of the header",
       "reqIds": [
-        "REQ-1"
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-reposition-the-login-button-currently-on-the-right-side-to-be-directly-underneath-the-dropdown-menu-in-the-top-left-area",
+      "title": "Reposition the login button (currently on the right side) to be directly underneath the dropdown menu in the top left area",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-small-spacing-between-the-dropdown-menu-and-login-button-to-ensure-easy-touch-click-targets",
+      "title": "Add small spacing between the dropdown menu and login button to ensure easy touch/click targets",
+      "reqIds": [
+        "REQ-5"
       ],
       "version": 1
     }
@@ -23,25 +34,40 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add like and dislike counters to audio files",
+      "summary": "Enlarge speaker logo to fill available white space at top of page",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Add favorites option for audio files",
+      "summary": "Update slogan to 'Giving Everyone A Voice!' with capital G and exclamation mark",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-3",
-      "summary": "Replace placeholder header banner with custom image",
+      "summary": "Increase the size of the speaker logo/placeholder at the top of the page to fill the available white space, making it significantly larger than its current size",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Update the slogan text to 'Giving Everyone A Voice!' with a capital 'G' at the beginning and an exclamation mark at the end",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Move dropdown menu (About/Privacy Policy) next to logo in top left, place login button underneath with small spacing",
       "reqIds": [],
-      "status": "in_progress"
+      "status": "pending"
     }
   ],
-  "gameProjectType": "none",
-  "projectName": "SPEAKR Audio",
+  "projectName": "Enlarge logo and update slogan formatting",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }
