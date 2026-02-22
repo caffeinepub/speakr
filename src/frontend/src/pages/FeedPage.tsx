@@ -8,24 +8,28 @@ import { useMyContent } from '@/hooks/useMyContent';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 import { useKidsModeStore } from '@/state/kidsMode';
 import { useKidFriendlyContent } from '@/hooks/useKidFriendlyContent';
+import { usePerformanceMonitoring } from '@/hooks/usePerformanceMonitoring';
 import type { MockAudioItem } from '@/mock/mockAudio';
 import type { AudioPost } from '@/backend';
+import { AlertCircle } from 'lucide-react';
 
 export default function FeedPage() {
   const { searchQuery, selectedCategory, selectedLanguages } = useFeedFilters();
-  const { data: myBackendContent } = useMyContent();
-  const { data: kidFriendlyContent } = useKidFriendlyContent();
+  const { data: myBackendContent, error: myContentError } = useMyContent();
+  const { data: kidFriendlyContent, error: kidFriendlyError } = useKidFriendlyContent();
   const { identity } = useInternetIdentity();
   const { isKidsMode } = useKidsModeStore();
   const [draftItems, setDraftItems] = useState<MockAudioItem[]>([]);
 
+  usePerformanceMonitoring();
+
   // Subscribe to draft changes
   useEffect(() => {
-    // Initial load
+    console.log('[FeedPage] Mounting, loading draft items');
     setDraftItems(getDraftItems());
 
-    // Subscribe to changes
     const unsubscribe = subscribeToDraftChanges(() => {
+      console.log('[FeedPage] Draft items changed, reloading');
       setDraftItems(getDraftItems());
     });
 
@@ -51,7 +55,6 @@ export default function FeedPage() {
           }))
         : [];
 
-      // Filter draft items to only show kid-friendly ones
       const kidFriendlyDrafts = draftItems.filter((item) => item.kidFriendly === true);
 
       return [...kidFriendlyDrafts, ...kidFriendlyItems];
@@ -77,7 +80,6 @@ export default function FeedPage() {
     return [...MOCK_AUDIO_ITEMS, ...draftItems, ...backendItems];
   }, [myBackendContent, identity, draftItems, isKidsMode, kidFriendlyContent]);
 
-  // First filter by language only to detect language-specific empty state
   const languageFilteredItems = useMemo(() => {
     if (selectedLanguages.length === 0) {
       return allItems;
@@ -87,7 +89,6 @@ export default function FeedPage() {
     );
   }, [allItems, selectedLanguages]);
 
-  // Then apply all filters
   const filteredItems = useMemo(() => {
     return languageFilteredItems.filter((item) => {
       const matchesSearch = !searchQuery || 
@@ -100,7 +101,6 @@ export default function FeedPage() {
     });
   }, [languageFilteredItems, searchQuery, selectedCategory]);
 
-  // Determine empty state message
   const getEmptyStateMessage = () => {
     if (isKidsMode) {
       return {
@@ -121,11 +121,24 @@ export default function FeedPage() {
   };
 
   const emptyState = getEmptyStateMessage();
+  const hasError = myContentError || kidFriendlyError;
 
   return (
     <div className="min-h-screen pb-24">
       <CategoryChips />
       <div className="container px-4 md:px-6 py-6">
+        {hasError && (
+          <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-medium text-destructive">Failed to load some content</p>
+              <p className="text-sm text-destructive/80 mt-1">
+                Some features may not be available. Please check your connection and try again.
+              </p>
+            </div>
+          </div>
+        )}
+        
         {filteredItems.length === 0 ? (
           <div className="text-center py-16 fade-in-up">
             <p className="text-lg text-muted-foreground">

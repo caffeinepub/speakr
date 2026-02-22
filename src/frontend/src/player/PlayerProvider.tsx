@@ -31,25 +31,41 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         console.log('[PlayerProvider] Initializing audio element');
         audioRef.current = new Audio();
         
-        audioRef.current.addEventListener('timeupdate', () => {
+        const handleTimeUpdate = () => {
           if (audioRef.current) {
             setProgress({
               currentTime: audioRef.current.currentTime,
               duration: audioRef.current.duration || 0,
             });
           }
-        });
+        };
         
-        audioRef.current.addEventListener('ended', () => {
+        const handleEnded = () => {
           setIsPlaying(false);
-        });
+        };
 
-        audioRef.current.addEventListener('error', (e) => {
+        const handleError = (e: Event) => {
           console.error('[PlayerProvider] Audio error:', e);
           setIsPlaying(false);
-        });
+        };
+
+        audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
+        audioRef.current.addEventListener('ended', handleEnded);
+        audioRef.current.addEventListener('error', handleError);
 
         console.log('[PlayerProvider] Audio element initialized successfully');
+
+        // Cleanup function
+        return () => {
+          if (audioRef.current) {
+            audioRef.current.removeEventListener('timeupdate', handleTimeUpdate);
+            audioRef.current.removeEventListener('ended', handleEnded);
+            audioRef.current.removeEventListener('error', handleError);
+            audioRef.current.pause();
+            audioRef.current.src = '';
+            audioRef.current = null;
+          }
+        };
       }
     } catch (error) {
       console.error('[PlayerProvider] Failed to initialize audio element:', error);

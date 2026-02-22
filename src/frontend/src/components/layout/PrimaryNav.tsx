@@ -1,44 +1,53 @@
-import { Link, useRouterState } from '@tanstack/react-router';
+import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
-import { Home, Compass, Upload, Smile } from 'lucide-react';
+import { Home, Compass, Upload, Baby } from 'lucide-react';
 import { useKidsModeStore } from '@/state/kidsMode';
+import { useTouchFeedback } from '@/hooks/useTouchFeedback';
 
 export default function PrimaryNav() {
-  const router = useRouterState();
-  const currentPath = router.location.pathname;
+  const navigate = useNavigate();
+  const routerState = useRouterState();
+  const currentPath = routerState.location.pathname;
   const { isKidsMode, toggleKidsMode } = useKidsModeStore();
 
+  const feedTouchFeedback = useTouchFeedback();
+  const exploreTouchFeedback = useTouchFeedback();
+  const uploadTouchFeedback = useTouchFeedback();
+  const kidsTouchFeedback = useTouchFeedback();
+
   const navItems = [
-    { path: '/', label: 'Feed', icon: Home },
-    { path: '/explore', label: 'Explore', icon: Compass },
-    { path: '/upload', label: 'Upload', icon: Upload },
+    { path: '/', label: 'Feed', icon: Home, touchFeedback: feedTouchFeedback },
+    { path: '/explore', label: 'Explore', icon: Compass, touchFeedback: exploreTouchFeedback },
+    { path: '/upload', label: 'Upload', icon: Upload, touchFeedback: uploadTouchFeedback },
   ];
 
   return (
-    <nav className="flex items-center gap-2 border-b border-border/40 px-4 md:px-6 py-2">
+    <nav className="flex items-center justify-center gap-2 flex-wrap">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = currentPath === item.path;
         return (
-          <Link key={item.path} to={item.path}>
-            <Button
-              variant={isActive ? 'default' : 'ghost'}
-              size="default"
-              className="gap-2 text-base px-5"
-            >
-              <Icon className="h-5 w-5" />
-              {item.label}
-            </Button>
-          </Link>
+          <Button
+            key={item.path}
+            onClick={() => navigate({ to: item.path })}
+            variant={isActive ? 'default' : 'ghost'}
+            size="sm"
+            className="gap-2 touch-target touch-feedback"
+            {...item.touchFeedback.touchHandlers}
+          >
+            <Icon className="w-4 h-4" />
+            {item.label}
+          </Button>
         );
       })}
       <Button
-        variant={isKidsMode ? 'default' : 'ghost'}
-        size="default"
-        className="gap-2 text-base px-5 ml-2"
         onClick={toggleKidsMode}
+        variant={isKidsMode ? 'default' : 'outline'}
+        size="sm"
+        className="gap-2 touch-target touch-feedback"
+        {...kidsTouchFeedback.touchHandlers}
       >
-        <Smile className="h-5 w-5" />
+        <Baby className="w-4 h-4" />
         KIDS
       </Button>
     </nav>

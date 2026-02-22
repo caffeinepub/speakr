@@ -2,10 +2,11 @@
 <html lang='en'>
     <head>
         <meta charset='UTF-8' />
-        <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover' />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <title>SPEAKR</title>
         <style>
             #loading-screen {
@@ -22,6 +23,7 @@
                 z-index: 9999;
                 color: white;
                 font-family: system-ui, -apple-system, sans-serif;
+                padding: 20px;
             }
             #loading-screen.hidden {
                 display: none;
@@ -41,6 +43,7 @@
                 margin-top: 20px;
                 font-size: 18px;
                 font-weight: 500;
+                text-align: center;
             }
             .error-screen {
                 display: none;
@@ -54,6 +57,7 @@
                 padding: 20px;
                 overflow-y: auto;
                 z-index: 10000;
+                -webkit-overflow-scrolling: touch;
             }
             .error-screen.visible {
                 display: block;
@@ -61,6 +65,7 @@
             .error-content {
                 max-width: 600px;
                 margin: 0 auto;
+                padding-bottom: 40px;
             }
             .error-title {
                 font-size: 24px;
@@ -81,6 +86,7 @@
                 font-size: 12px;
                 margin-bottom: 20px;
                 word-break: break-word;
+                overflow-x: auto;
             }
             .error-actions {
                 display: flex;
@@ -88,16 +94,22 @@
                 flex-wrap: wrap;
             }
             .error-button {
-                padding: 12px 24px;
+                padding: 14px 24px;
                 border: none;
                 border-radius: 8px;
                 font-size: 16px;
                 font-weight: 500;
                 cursor: pointer;
                 transition: opacity 0.2s;
+                flex: 1;
+                min-width: 140px;
+                min-height: 48px;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
             }
-            .error-button:hover {
-                opacity: 0.8;
+            .error-button:active {
+                opacity: 0.7;
+                transform: scale(0.98);
             }
             .error-button.primary {
                 background: #3b82f6;
@@ -106,6 +118,21 @@
             .error-button.secondary {
                 background: rgba(255, 255, 255, 0.2);
                 color: white;
+            }
+            .network-status {
+                margin-top: 16px;
+                padding: 12px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+                font-size: 14px;
+            }
+            .network-status.online {
+                background: rgba(34, 197, 94, 0.2);
+                color: #86efac;
+            }
+            .network-status.offline {
+                background: rgba(239, 68, 68, 0.2);
+                color: #fca5a5;
             }
         </style>
     </head>
@@ -121,6 +148,7 @@
                 <div class="error-message" id="error-message">
                     The application failed to load. This might be due to a network issue or browser compatibility problem.
                 </div>
+                <div class="network-status" id="network-status"></div>
                 <div class="error-details" id="error-details"></div>
                 <div class="error-actions">
                     <button class="error-button primary" onclick="window.location.reload()">
@@ -136,8 +164,25 @@
         <div id='root'></div>
         
         <script>
-            // Hide loading screen after 30 seconds to prevent infinite loading
-            setTimeout(() => {
+            console.log('[Init] Starting SPEAKR initialization at', new Date().toISOString());
+            console.log('[Init] User agent:', navigator.userAgent);
+            console.log('[Init] Network status:', navigator.onLine ? 'Online' : 'Offline');
+            
+            // Update network status display
+            function updateNetworkStatus() {
+                const statusEl = document.getElementById('network-status');
+                if (statusEl) {
+                    const isOnline = navigator.onLine;
+                    statusEl.className = 'network-status ' + (isOnline ? 'online' : 'offline');
+                    statusEl.textContent = isOnline 
+                        ? '✓ Network connection detected' 
+                        : '✗ No network connection - Please check your internet';
+                }
+            }
+            
+            // Hide loading screen after 15 seconds to prevent infinite loading
+            const loadingTimeout = setTimeout(() => {
+                console.error('[Init] Loading timeout after 15 seconds');
                 const loadingScreen = document.getElementById('loading-screen');
                 const errorScreen = document.getElementById('error-screen');
                 const root = document.getElementById('root');
@@ -145,47 +190,80 @@
                 if (loadingScreen && !loadingScreen.classList.contains('hidden') && (!root || !root.hasChildNodes())) {
                     loadingScreen.classList.add('hidden');
                     errorScreen.classList.add('visible');
+                    updateNetworkStatus();
                     document.getElementById('error-message').textContent = 
                         'The application is taking too long to load. This might be a network issue or the app failed to initialize.';
                     document.getElementById('error-details').textContent = 
+                        'Timeout: App failed to load within 15 seconds\n' +
                         'Browser: ' + navigator.userAgent + '\n' +
-                        'Time: ' + new Date().toISOString();
+                        'Network: ' + (navigator.onLine ? 'Online' : 'Offline') + '\n' +
+                        'Time: ' + new Date().toISOString() + '\n' +
+                        'Screen: ' + window.innerWidth + 'x' + window.innerHeight;
                 }
-            }, 30000);
+            }, 15000);
+            
+            // Clear timeout if app loads successfully
+            window.addEventListener('load', () => {
+                console.log('[Init] Window load event fired');
+                setTimeout(() => {
+                    const root = document.getElementById('root');
+                    if (root && root.hasChildNodes()) {
+                        console.log('[Init] App loaded successfully, clearing timeout');
+                        clearTimeout(loadingTimeout);
+                    }
+                }, 1000);
+            });
             
             function clearStorageAndReload() {
+                console.log('[Init] Clearing storage and reloading');
                 try {
                     localStorage.clear();
                     sessionStorage.clear();
                     window.location.reload();
                 } catch (e) {
+                    console.error('[Init] Failed to clear storage:', e);
                     alert('Failed to clear storage: ' + e.message);
                 }
             }
             
             // Global error handler
             window.addEventListener('error', (event) => {
-                console.error('Global error:', event.error);
+                console.error('[Init] Global error:', event.error);
                 showError('JavaScript Error', event.error?.message || 'Unknown error', event.error?.stack);
             });
             
             window.addEventListener('unhandledrejection', (event) => {
-                console.error('Unhandled promise rejection:', event.reason);
+                console.error('[Init] Unhandled promise rejection:', event.reason);
                 showError('Promise Rejection', event.reason?.message || 'Unknown error', event.reason?.stack);
             });
             
+            // Network status monitoring
+            window.addEventListener('online', () => {
+                console.log('[Init] Network connection restored');
+                updateNetworkStatus();
+            });
+            
+            window.addEventListener('offline', () => {
+                console.error('[Init] Network connection lost');
+                updateNetworkStatus();
+            });
+            
             function showError(title, message, details) {
+                console.error('[Init] Showing error screen:', title, message);
                 const loadingScreen = document.getElementById('loading-screen');
                 const errorScreen = document.getElementById('error-screen');
                 
                 if (loadingScreen) loadingScreen.classList.add('hidden');
                 if (errorScreen) {
                     errorScreen.classList.add('visible');
+                    updateNetworkStatus();
                     document.getElementById('error-message').textContent = message;
                     document.getElementById('error-details').textContent = 
                         'Error: ' + title + '\n' +
                         'Details: ' + (details || 'No additional details') + '\n' +
                         'Browser: ' + navigator.userAgent + '\n' +
+                        'Network: ' + (navigator.onLine ? 'Online' : 'Offline') + '\n' +
+                        'Screen: ' + window.innerWidth + 'x' + window.innerHeight + '\n' +
                         'Time: ' + new Date().toISOString();
                 }
             }

@@ -3,6 +3,8 @@ import { useActor } from './useActor';
 import { ExternalBlob } from '@/backend';
 import { toast } from 'sonner';
 
+const MUTATION_TIMEOUT = 30000; // 30 seconds
+
 export function useAddAudioPost() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
@@ -23,24 +25,31 @@ export function useAddAudioPost() {
     }) => {
       if (!actor) throw new Error('Actor not available');
       
-      // Ensure replyTo is either a string or null (not undefined)
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Upload timed out after 30 seconds. Please check your connection and try again.')), MUTATION_TIMEOUT);
+      });
+
       const replyToValue = replyTo !== undefined ? replyTo : null;
       
-      return actor.addAudioPost(title, description, audioBlob, replyToValue, kidFriendly);
+      return Promise.race([
+        actor.addAudioPost(title, description, audioBlob, replyToValue, kidFriendly),
+        timeoutPromise
+      ]) as Promise<string>;
     },
     onSuccess: (_, variables) => {
-      // Invalidate user's content
       queryClient.invalidateQueries({ queryKey: ['myContent'] });
       queryClient.invalidateQueries({ queryKey: ['userStatistics'] });
       queryClient.invalidateQueries({ queryKey: ['kidFriendlyPosts'] });
       
-      // If this is a reply, invalidate the replies for the parent post
       if (variables.replyTo) {
         queryClient.invalidateQueries({ queryKey: ['audioReplies', variables.replyTo] });
       }
     },
     onError: (error: Error) => {
       console.error('Add audio post mutation error:', error);
+      toast.error('Failed to upload', {
+        description: error.message,
+      });
     },
   });
 }
@@ -51,7 +60,15 @@ export function useListenToAudioPost() {
   return useMutation({
     mutationFn: async (postId: string) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.listenToAudioPost(postId);
+      
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timed out')), MUTATION_TIMEOUT);
+      });
+      
+      return Promise.race([
+        actor.listenToAudioPost(postId),
+        timeoutPromise
+      ]) as Promise<void>;
     },
   });
 }
@@ -63,7 +80,15 @@ export function useRemoveAudioPost() {
   return useMutation({
     mutationFn: async (postId: string) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.removeAudioPost(postId);
+      
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Delete timed out. Please try again.')), MUTATION_TIMEOUT);
+      });
+      
+      return Promise.race([
+        actor.removeAudioPost(postId),
+        timeoutPromise
+      ]) as Promise<boolean>;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myContent'] });
@@ -91,7 +116,15 @@ export function useAddToFavorites() {
   return useMutation({
     mutationFn: async (postId: string) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.addToFavorites(postId);
+      
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timed out. Please try again.')), MUTATION_TIMEOUT);
+      });
+      
+      return Promise.race([
+        actor.addToFavorites(postId),
+        timeoutPromise
+      ]) as Promise<void>;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['favoritePosts'] });
@@ -118,7 +151,15 @@ export function useRemoveFromFavorites() {
   return useMutation({
     mutationFn: async (postId: string) => {
       if (!actor) throw new Error('Actor not available');
-      return actor.removeFromFavorites(postId);
+      
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timed out. Please try again.')), MUTATION_TIMEOUT);
+      });
+      
+      return Promise.race([
+        actor.removeFromFavorites(postId),
+        timeoutPromise
+      ]) as Promise<void>;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['favoritePosts'] });

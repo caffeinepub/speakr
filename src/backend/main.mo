@@ -11,7 +11,6 @@ import MixinStorage "blob-storage/Mixin";
 import Storage "blob-storage/Storage";
 import AccessControl "authorization/access-control";
 
-
 actor {
   let accessControlState = AccessControl.initState();
   let userContent = Map.empty<Principal, List.List<Text>>();

@@ -2,10 +2,53 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-investigate-and-fix-the-deployment-issue-in-version-44-that-causes-the-site-to-display-a-going-live-loading-message-spinner-indefinitely-on-mobile-devices-preventing-the-application-from-loading-or-initializing-properly",
-      "featureTitle": "Investigate and fix the deployment issue in Version 44 that causes the site to display a 'going live' loading message/spinner indefinitely on mobile devices, preventing the application from loading or initializing properly",
+      "featureId": "feature-add-mobile-optimized-viewport-meta-tags-to-frontend-index-html-ensuring-proper-scaling-and-touch-interactions-width-device-width-initial-scale-1-maximum-scale-5-user-scalable-yes-viewport-fit-cover",
+      "featureTitle": "Add mobile-optimized viewport meta tags to frontend/index.html ensuring proper scaling and touch interactions (width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover)",
       "files": [
-        "frontend/index.html",
+        "frontend/index.html"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-49"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-increase-minimum-touch-target-sizes-to-44x44px-for-all-interactive-elements-buttons-links-controls-in-mobile-viewports-using-css-media-queries-and-tailwind-responsive-utilities",
+      "featureTitle": "Increase minimum touch target sizes to 44x44px for all interactive elements (buttons, links, controls) in mobile viewports using CSS media queries and Tailwind responsive utilities",
+      "files": [
+        "frontend/src/components/feed/AudioCard.tsx",
+        "frontend/src/components/layout/Header.tsx",
+        "frontend/src/components/layout/PrimaryNav.tsx",
+        "frontend/src/components/player/MiniPlayerBar.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-50"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-mobile-specific-error-boundary-component-that-wraps-the-entire-application-in-frontend-src-app-tsx-displaying-detailed-error-messages-with-component-stack-traces-recovery-suggestions-and-reload-clear-storage-buttons-optimized-for-mobile-screens",
+      "featureTitle": "Implement mobile-specific error boundary component that wraps the entire application in frontend/src/App.tsx, displaying detailed error messages with component stack traces, recovery suggestions, and reload/clear storage buttons optimized for mobile screens",
+      "files": [
         "frontend/src/App.tsx"
       ],
       "components": [
@@ -18,16 +61,16 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-44"
+        "REQ-51"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-comprehensive-error-handling-and-logging-to-the-frontend-initialization-process-in-frontend-src-main-tsx-and-frontend-src-app-tsx-to-capture-and-display-any-errors-that-prevent-the-application-from-loading",
-      "featureTitle": "Add comprehensive error handling and logging to the frontend initialization process in frontend/src/main.tsx and frontend/src/App.tsx to capture and display any errors that prevent the application from loading",
+      "featureId": "feature-implement-network-connectivity-check-in-frontend-src-app-tsx-before-attempting-canister-calls-displaying-user-friendly-offline-message-if-network-is-unavailable-with-retry-button-and-automatic-reconnection-detection",
+      "featureTitle": "Implement network connectivity check in frontend/src/App.tsx before attempting canister calls, displaying user-friendly offline message if network is unavailable, with retry button and automatic reconnection detection",
       "files": [
         "frontend/src/App.tsx",
-        "frontend/src/components/layout/ErrorBoundary.tsx"
+        "frontend/src/components/layout/NetworkStatusBanner.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -39,15 +82,123 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-45"
+        "REQ-53"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-test-the-deployed-version-44-on-multiple-mobile-browsers-safari-chrome-firefox-to-identify-browser-specific-issues-that-may-cause-the-loading-problem",
-      "featureTitle": "Test the deployed Version 44 on multiple mobile browsers (Safari, Chrome, Firefox) to identify browser-specific issues that may cause the loading problem",
+      "featureId": "feature-add-timeout-handlers-30-second-maximum-to-all-react-query-queries-and-mutations-in-frontend-src-hooks-usequeries-ts-displaying-timeout-error-messages-with-actionable-guidance-when-operations-exceed-the-limit",
+      "featureTitle": "Add timeout handlers (30 second maximum) to all React Query queries and mutations in frontend/src/hooks/useQueries.ts, displaying timeout error messages with actionable guidance when operations exceed the limit",
       "files": [
-        "frontend/index.html",
+        "frontend/src/hooks/useAudioReplies.ts",
+        "frontend/src/hooks/useFavorites.ts",
+        "frontend/src/hooks/useKidFriendlyContent.ts",
+        "frontend/src/hooks/useMyContent.ts",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/hooks/useUserStatistics.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-54"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-wrap-all-async-route-components-in-react-suspense-boundaries-with-mobile-optimized-loading-states-skeleton-screens-or-spinners-in-frontend-src-app-tsx-router-configuration-ensuring-graceful-loading-on-slower-mobile-connections",
+      "featureTitle": "Wrap all async route components in React Suspense boundaries with mobile-optimized loading states (skeleton screens or spinners) in frontend/src/App.tsx router configuration, ensuring graceful loading on slower mobile connections",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/RouteLoadingFallback.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-55"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-code-splitting-for-all-route-components-in-frontend-src-app-tsx-using-react-lazy-splitting-feedpage-explorepage-uploadpage-dashboardpage-and-legal-pages-into-separate-chunks-to-reduce-initial-bundle-size-for-mobile-devices",
+      "featureTitle": "Implement code splitting for all route components in frontend/src/App.tsx using React.lazy(), splitting FeedPage, ExplorePage, UploadPage, DashboardPage, and legal pages into separate chunks to reduce initial bundle size for mobile devices",
+      "files": [
+        "frontend/src/App.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-56"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-lazy-loading-to-all-images-in-frontend-components-using-native-loading-lazy-attribute-prioritizing-above-the-fold-images-with-loading-eager-to-optimize-bandwidth-usage-on-mobile-devices",
+      "featureTitle": "Add lazy loading to all images in frontend components using native loading='lazy' attribute, prioritizing above-the-fold images with loading='eager' to optimize bandwidth usage on mobile devices",
+      "files": [
+        "frontend/src/components/feed/AudioCard.tsx",
+        "frontend/src/components/feed/ProceduralCover.tsx",
+        "frontend/src/pages/ExplorePage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-57"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-debounced-scroll-and-input-handlers-300ms-delay-in-searchbar-component-and-any-scroll-triggered-components-to-reduce-cpu-usage-and-improve-performance-on-mobile-devices",
+      "featureTitle": "Implement debounced scroll and input handlers (300ms delay) in SearchBar component and any scroll-triggered components to reduce CPU usage and improve performance on mobile devices",
+      "files": [
+        "frontend/src/components/search/SearchBar.tsx",
+        "frontend/src/hooks/useDebounce.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-58"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-proper-cleanup-and-memory-leak-prevention-to-playerprovider-context-in-frontend-src-player-playerprovider-tsx-ensuring-audio-elements-are-properly-disposed-when-unmounted-and-event-listeners-are-removed-to-prevent-memory-leaks-on-mobile-devices-with-limited-ram",
+      "featureTitle": "Add proper cleanup and memory leak prevention to PlayerProvider context in frontend/src/player/PlayerProvider.tsx, ensuring audio elements are properly disposed when unmounted and event listeners are removed to prevent memory leaks on mobile devices with limited RAM",
+      "files": [
         "frontend/src/player/PlayerProvider.tsx"
       ],
       "components": [
@@ -60,7 +211,133 @@
         "blob-storage@4.0.0"
       ],
       "testIds": [
-        "REQ-47"
+        "REQ-59"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-replace-the-infinite-loading-spinner-in-frontend-index-html-with-a-fallback-error-ui-that-appears-after-15-seconds-if-the-app-hasn-t-loaded-displaying-the-specific-error-message-network-status-and-actionable-recovery-options-reload-clear-cache-check-connection",
+      "featureTitle": "Replace the infinite loading spinner in frontend/index.html with a fallback error UI that appears after 15 seconds if the app hasn't loaded, displaying the specific error message, network status, and actionable recovery options (reload, clear cache, check connection)",
+      "files": [
+        "frontend/index.html"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-60"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-graceful-degradation-fallbacks-throughout-the-application-that-allow-core-features-viewing-feed-browsing-explore-page-to-function-even-if-certain-features-fail-to-load-displaying-inline-error-messages-for-failed-features-while-allowing-the-rest-of-the-app-to-work",
+      "featureTitle": "Add graceful degradation fallbacks throughout the application that allow core features (viewing feed, browsing explore page) to function even if certain features fail to load, displaying inline error messages for failed features while allowing the rest of the app to work",
+      "files": [
+        "frontend/src/pages/DashboardPage.tsx",
+        "frontend/src/pages/ExplorePage.tsx",
+        "frontend/src/pages/FeedPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-61"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-optimize-all-css-in-frontend-src-index-css-for-mobile-first-rendering-by-adding-mobile-specific-utility-classes-for-touch-interactions-active-states-tap-highlights-ensuring-styles-render-efficiently-on-mobile-browsers-and-removing-unused-css",
+      "featureTitle": "Optimize all CSS in frontend/src/index.css for mobile-first rendering by adding mobile-specific utility classes for touch interactions (active states, tap highlights), ensuring styles render efficiently on mobile browsers, and removing unused CSS",
+      "files": [
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-62"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-progressive-enhancement-in-audiocard-component-frontend-src-components-feed-audiocard-tsx-so-that-basic-audio-playback-works-even-if-advanced-features-favorites-replies-fail-to-load-with-inline-error-messages-for-failed-features",
+      "featureTitle": "Implement progressive enhancement in AudioCard component (frontend/src/components/feed/AudioCard.tsx) so that basic audio playback works even if advanced features (favorites, replies) fail to load, with inline error messages for failed features",
+      "files": [
+        "frontend/src/components/feed/AudioCard.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-64"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-mobile-specific-touch-event-handlers-to-all-interactive-components-buttons-sliders-cards-implementing-proper-touch-feedback-active-states-ripple-effects-and-preventing-default-browser-behaviors-that-interfere-with-custom-interactions",
+      "featureTitle": "Add mobile-specific touch event handlers to all interactive components (buttons, sliders, cards), implementing proper touch feedback (active states, ripple effects) and preventing default browser behaviors that interfere with custom interactions",
+      "files": [
+        "frontend/src/components/feed/AudioCard.tsx",
+        "frontend/src/components/layout/PrimaryNav.tsx",
+        "frontend/src/components/player/MiniPlayerBar.tsx",
+        "frontend/src/hooks/useTouchFeedback.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-65"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-performance-monitoring-logging-to-frontend-src-main-tsx-that-tracks-and-logs-key-metrics-time-to-interactive-initial-load-time-bundle-size-memory-usage-to-console-on-mobile-devices-helping-identify-performance-bottlenecks",
+      "featureTitle": "Add performance monitoring logging to frontend/src/main.tsx that tracks and logs key metrics (time to interactive, initial load time, bundle size, memory usage) to console on mobile devices, helping identify performance bottlenecks",
+      "files": [
+        "frontend/src/hooks/usePerformanceMonitoring.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-67"
       ],
       "confidence": "high"
     }

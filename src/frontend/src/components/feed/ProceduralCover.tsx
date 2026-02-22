@@ -1,38 +1,22 @@
-import { useMemo } from 'react';
 import { getProceduralCoverUrl } from '@/lib/proceduralCovers';
 
 interface ProceduralCoverProps {
   category: string;
   itemId: string;
-  customThumbnail?: string;
-  alt: string;
-  className?: string;
+  thumbnail?: string;
+  loading?: 'lazy' | 'eager';
 }
 
-/**
- * Renders either a custom thumbnail or a procedurally generated category-based cover
- */
-export default function ProceduralCover({
-  category,
-  itemId,
-  customThumbnail,
-  alt,
-  className = '',
-}: ProceduralCoverProps) {
-  const proceduralUrl = useMemo(
-    () => getProceduralCoverUrl(category, itemId),
-    [category, itemId]
-  );
-
-  // Use custom thumbnail if available and not a placeholder
-  const shouldUseCustom = customThumbnail && 
-    !customThumbnail.includes('file_000000008744720abc6dc9f1fb80f8e2');
+export default function ProceduralCover({ category, itemId, thumbnail, loading = 'lazy' }: ProceduralCoverProps) {
+  const isPlaceholder = thumbnail?.includes('placeholder') || thumbnail?.includes('file_000000008744720abc6dc9f1fb80f8e2');
+  const coverUrl = !thumbnail || isPlaceholder ? getProceduralCoverUrl(category, itemId) : thumbnail;
 
   return (
     <img
-      src={shouldUseCustom ? customThumbnail : proceduralUrl}
-      alt={alt}
-      className={className}
+      src={coverUrl}
+      alt={`${category} cover`}
+      className="w-full h-full object-cover"
+      loading={loading}
     />
   );
 }

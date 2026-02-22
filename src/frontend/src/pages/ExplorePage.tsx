@@ -8,13 +8,14 @@ import { useKidsModeStore } from '@/state/kidsMode';
 import { useKidFriendlyContent } from '@/hooks/useKidFriendlyContent';
 import { useMyContent } from '@/hooks/useMyContent';
 import { useMemo } from 'react';
+import { AlertCircle } from 'lucide-react';
 
 export default function ExplorePage() {
   const { setSelectedCategory } = useFeedFilters();
   const navigate = useNavigate();
   const { isKidsMode } = useKidsModeStore();
-  const { data: kidFriendlyContent } = useKidFriendlyContent();
-  const { data: myContent } = useMyContent();
+  const { data: kidFriendlyContent, error: kidFriendlyError } = useKidFriendlyContent();
+  const { data: myContent, error: myContentError } = useMyContent();
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
@@ -23,7 +24,6 @@ export default function ExplorePage() {
 
   const categories = CATEGORIES.filter((cat) => cat !== 'All');
 
-  // Calculate category counts based on mode
   const categoryCounts = useMemo(() => {
     const content = isKidsMode ? kidFriendlyContent : myContent;
     const counts: Record<string, number> = {};
@@ -32,10 +32,10 @@ export default function ExplorePage() {
       counts[cat] = 0;
     });
 
-    // For now, we don't have category info in backend posts
-    // This is a placeholder for future enhancement
     return counts;
   }, [isKidsMode, kidFriendlyContent, myContent, categories]);
+
+  const hasError = kidFriendlyError || myContentError;
 
   return (
     <div className="min-h-screen pb-24">
@@ -50,13 +50,26 @@ export default function ExplorePage() {
               : 'Discover audio content across different topics'}
           </p>
         </div>
+
+        {hasError && (
+          <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-medium text-destructive">Failed to load category data</p>
+              <p className="text-sm text-destructive/80 mt-1">
+                You can still browse categories, but counts may not be accurate.
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 fade-in-up">
           {categories.map((category) => {
             const coverUrl = getProceduralCoverUrl(category, `explore-${category}`);
             return (
               <Card
                 key={category}
-                className="cursor-pointer card-elevated card-elevated-hover overflow-hidden border-border/50"
+                className="cursor-pointer card-elevated card-elevated-hover overflow-hidden border-border/50 touch-feedback"
                 onClick={() => handleCategoryClick(category)}
               >
                 <div className="relative aspect-video overflow-hidden">
@@ -64,6 +77,7 @@ export default function ExplorePage() {
                     src={coverUrl}
                     alt={category}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <CardTitle className="absolute bottom-3 left-4 text-white text-xl font-bold tracking-tight drop-shadow-lg">
@@ -72,7 +86,7 @@ export default function ExplorePage() {
                 </div>
                 <CardContent className="p-4">
                   <p className="text-sm text-muted-foreground">
-                    Explore {category.toLowerCase()} content
+                    {categoryCounts[category]} items
                   </p>
                 </CardContent>
               </Card>

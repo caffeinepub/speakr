@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react';
 import { RouterProvider, createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PlayerProvider } from './player/PlayerProvider';
@@ -5,30 +6,40 @@ import { Toaster } from '@/components/ui/sonner';
 import { InternetIdentityProvider } from './hooks/useInternetIdentity';
 import Header from './components/layout/Header';
 import MiniPlayerBar from './components/player/MiniPlayerBar';
-import FeedPage from './pages/FeedPage';
-import ExplorePage from './pages/ExplorePage';
-import UploadPage from './pages/UploadPage';
-import AuthPage from './pages/AuthPage';
-import OnboardingPage from './pages/OnboardingPage';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
-import HelpPage from './pages/HelpPage';
-import TermsPage from './pages/TermsPage';
-import PrivacyPage from './pages/PrivacyPage';
-import DashboardPage from './pages/DashboardPage';
 import FloatingBackToFeedButton from './components/layout/FloatingBackToFeedButton';
 import FloatingLanguageSelector from './components/layout/FloatingLanguageSelector';
 import { useOnboarding } from './hooks/useOnboarding';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useKidsModeStore } from './state/kidsMode';
 import ErrorBoundary from './components/layout/ErrorBoundary';
+import NetworkStatusBanner from './components/layout/NetworkStatusBanner';
+import RouteLoadingFallback from './components/layout/RouteLoadingFallback';
+
+// Lazy load route components for code splitting
+const FeedPage = lazy(() => import('./pages/FeedPage'));
+const ExplorePage = lazy(() => import('./pages/ExplorePage'));
+const UploadPage = lazy(() => import('./pages/UploadPage'));
+const AuthPage = lazy(() => import('./pages/AuthPage'));
+const OnboardingPage = lazy(() => import('./pages/OnboardingPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const HelpPage = lazy(() => import('./pages/HelpPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 2,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
       staleTime: 5000,
       refetchOnWindowFocus: false,
+      gcTime: 1000 * 60 * 5, // 5 minutes
+    },
+    mutations: {
+      retry: 1,
+      retryDelay: 1000,
     },
   },
 });
@@ -36,11 +47,34 @@ const queryClient = new QueryClient({
 function AppLayout() {
   const { isComplete } = useOnboarding();
   const { isKidsMode } = useKidsModeStore();
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    console.log('[App] AppLayout mounted');
+    
+    const handleOnline = () => {
+      console.log('[App] Network connection restored');
+      setIsOnline(true);
+    };
+    
+    const handleOffline = () => {
+      console.log('[App] Network connection lost');
+      setIsOnline(false);
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   useEffect(() => {
     // Only redirect if we're not already on the onboarding page
     if (!isComplete && window.location.pathname !== '/onboarding') {
-      // Use router navigation instead of window.location to avoid full page reload
+      console.log('[App] Redirecting to onboarding');
       window.history.pushState({}, '', '/onboarding');
       window.dispatchEvent(new PopStateEvent('popstate'));
     }
@@ -56,9 +90,12 @@ function AppLayout() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <NetworkStatusBanner isOnline={isOnline} />
       <Header />
       <main>
-        <Outlet />
+        <Suspense fallback={<RouteLoadingFallback />}>
+          <Outlet />
+        </Suspense>
       </main>
       <MiniPlayerBar />
       <FloatingBackToFeedButton />
@@ -154,6 +191,8 @@ const routeTree = rootRoute.addChildren([
 const router = createRouter({ routeTree });
 
 export default function App() {
+  console.log('[App] App component rendering');
+  
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>

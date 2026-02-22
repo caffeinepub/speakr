@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 27,
+  "projectStateVersion": 31,
   "summary": "Web application with prominent speaker logo, branded slogan, and audio upload system featuring favorites and audio replies for logged-in members, with upload persistence and admin management capabilities. Includes a kid-friendly section with content filtering, simplified authentication (username + PIN), and playful styling accessible via navigation toggle.",
   "architectural_notes": [
     "Audio uploads exist in general feed and category-specific views",
@@ -290,6 +290,134 @@
         "REQ-47"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-add-mobile-optimized-viewport-meta-tags-to-frontend-index-html-ensuring-proper-scaling-and-touch-interactions-width-device-width-initial-scale-1-maximum-scale-5-user-scalable-yes-viewport-fit-cover",
+      "title": "Add mobile-optimized viewport meta tags to frontend/index.html ensuring proper scaling and touch interactions (width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover)",
+      "reqIds": [
+        "REQ-49"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-increase-minimum-touch-target-sizes-to-44x44px-for-all-interactive-elements-buttons-links-controls-in-mobile-viewports-using-css-media-queries-and-tailwind-responsive-utilities",
+      "title": "Increase minimum touch target sizes to 44x44px for all interactive elements (buttons, links, controls) in mobile viewports using CSS media queries and Tailwind responsive utilities",
+      "reqIds": [
+        "REQ-50"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-mobile-specific-error-boundary-component-that-wraps-the-entire-application-in-frontend-src-app-tsx-displaying-detailed-error-messages-with-component-stack-traces-recovery-suggestions-and-reload-clear-storage-buttons-optimized-for-mobile-screens",
+      "title": "Implement mobile-specific error boundary component that wraps the entire application in frontend/src/App.tsx, displaying detailed error messages with component stack traces, recovery suggestions, and reload/clear storage buttons optimized for mobile screens",
+      "reqIds": [
+        "REQ-51"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-network-connectivity-check-in-frontend-src-app-tsx-before-attempting-canister-calls-displaying-user-friendly-offline-message-if-network-is-unavailable-with-retry-button-and-automatic-reconnection-detection",
+      "title": "Implement network connectivity check in frontend/src/App.tsx before attempting canister calls, displaying user-friendly offline message if network is unavailable, with retry button and automatic reconnection detection",
+      "reqIds": [
+        "REQ-53"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-timeout-handlers-30-second-maximum-to-all-react-query-queries-and-mutations-in-frontend-src-hooks-usequeries-ts-displaying-timeout-error-messages-with-actionable-guidance-when-operations-exceed-the-limit",
+      "title": "Add timeout handlers (30 second maximum) to all React Query queries and mutations in frontend/src/hooks/useQueries.ts, displaying timeout error messages with actionable guidance when operations exceed the limit",
+      "reqIds": [
+        "REQ-54"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-wrap-all-async-route-components-in-react-suspense-boundaries-with-mobile-optimized-loading-states-skeleton-screens-or-spinners-in-frontend-src-app-tsx-router-configuration-ensuring-graceful-loading-on-slower-mobile-connections",
+      "title": "Wrap all async route components in React Suspense boundaries with mobile-optimized loading states (skeleton screens or spinners) in frontend/src/App.tsx router configuration, ensuring graceful loading on slower mobile connections",
+      "reqIds": [
+        "REQ-55"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-code-splitting-for-all-route-components-in-frontend-src-app-tsx-using-react-lazy-splitting-feedpage-explorepage-uploadpage-dashboardpage-and-legal-pages-into-separate-chunks-to-reduce-initial-bundle-size-for-mobile-devices",
+      "title": "Implement code splitting for all route components in frontend/src/App.tsx using React.lazy(), splitting FeedPage, ExplorePage, UploadPage, DashboardPage, and legal pages into separate chunks to reduce initial bundle size for mobile devices",
+      "reqIds": [
+        "REQ-56"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-lazy-loading-to-all-images-in-frontend-components-using-native-loading-lazy-attribute-prioritizing-above-the-fold-images-with-loading-eager-to-optimize-bandwidth-usage-on-mobile-devices",
+      "title": "Add lazy loading to all images in frontend components using native loading='lazy' attribute, prioritizing above-the-fold images with loading='eager' to optimize bandwidth usage on mobile devices",
+      "reqIds": [
+        "REQ-57"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-debounced-scroll-and-input-handlers-300ms-delay-in-searchbar-component-and-any-scroll-triggered-components-to-reduce-cpu-usage-and-improve-performance-on-mobile-devices",
+      "title": "Implement debounced scroll and input handlers (300ms delay) in SearchBar component and any scroll-triggered components to reduce CPU usage and improve performance on mobile devices",
+      "reqIds": [
+        "REQ-58"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-proper-cleanup-and-memory-leak-prevention-to-playerprovider-context-in-frontend-src-player-playerprovider-tsx-ensuring-audio-elements-are-properly-disposed-when-unmounted-and-event-listeners-are-removed-to-prevent-memory-leaks-on-mobile-devices-with-limited-ram",
+      "title": "Add proper cleanup and memory leak prevention to PlayerProvider context in frontend/src/player/PlayerProvider.tsx, ensuring audio elements are properly disposed when unmounted and event listeners are removed to prevent memory leaks on mobile devices with limited RAM",
+      "reqIds": [
+        "REQ-59"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-infinite-loading-spinner-in-frontend-index-html-with-a-fallback-error-ui-that-appears-after-15-seconds-if-the-app-hasn-t-loaded-displaying-the-specific-error-message-network-status-and-actionable-recovery-options-reload-clear-cache-check-connection",
+      "title": "Replace the infinite loading spinner in frontend/index.html with a fallback error UI that appears after 15 seconds if the app hasn't loaded, displaying the specific error message, network status, and actionable recovery options (reload, clear cache, check connection)",
+      "reqIds": [
+        "REQ-60"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-graceful-degradation-fallbacks-throughout-the-application-that-allow-core-features-viewing-feed-browsing-explore-page-to-function-even-if-certain-features-fail-to-load-displaying-inline-error-messages-for-failed-features-while-allowing-the-rest-of-the-app-to-work",
+      "title": "Add graceful degradation fallbacks throughout the application that allow core features (viewing feed, browsing explore page) to function even if certain features fail to load, displaying inline error messages for failed features while allowing the rest of the app to work",
+      "reqIds": [
+        "REQ-61"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-optimize-all-css-in-frontend-src-index-css-for-mobile-first-rendering-by-adding-mobile-specific-utility-classes-for-touch-interactions-active-states-tap-highlights-ensuring-styles-render-efficiently-on-mobile-browsers-and-removing-unused-css",
+      "title": "Optimize all CSS in frontend/src/index.css for mobile-first rendering by adding mobile-specific utility classes for touch interactions (active states, tap highlights), ensuring styles render efficiently on mobile browsers, and removing unused CSS",
+      "reqIds": [
+        "REQ-62"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-progressive-enhancement-in-audiocard-component-frontend-src-components-feed-audiocard-tsx-so-that-basic-audio-playback-works-even-if-advanced-features-favorites-replies-fail-to-load-with-inline-error-messages-for-failed-features",
+      "title": "Implement progressive enhancement in AudioCard component (frontend/src/components/feed/AudioCard.tsx) so that basic audio playback works even if advanced features (favorites, replies) fail to load, with inline error messages for failed features",
+      "reqIds": [
+        "REQ-64"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-mobile-specific-touch-event-handlers-to-all-interactive-components-buttons-sliders-cards-implementing-proper-touch-feedback-active-states-ripple-effects-and-preventing-default-browser-behaviors-that-interfere-with-custom-interactions",
+      "title": "Add mobile-specific touch event handlers to all interactive components (buttons, sliders, cards), implementing proper touch feedback (active states, ripple effects) and preventing default browser behaviors that interfere with custom interactions",
+      "reqIds": [
+        "REQ-65"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-performance-monitoring-logging-to-frontend-src-main-tsx-that-tracks-and-logs-key-metrics-time-to-interactive-initial-load-time-bundle-size-memory-usage-to-console-on-mobile-devices-helping-identify-performance-bottlenecks",
+      "title": "Add performance monitoring logging to frontend/src/main.tsx that tracks and logs key metrics (time to interactive, initial load time, bundle size, memory usage) to console on mobile devices, helping identify performance bottlenecks",
+      "reqIds": [
+        "REQ-67"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -556,6 +684,70 @@
       "summary": "Verify that the backend canister in backend/main.mo compiles successfully and deploys without errors, ensuring all query functions and mutations are accessible",
       "reqIds": [
         "REQ-46"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-52",
+      "summary": "Deploy Version 45 to production environment to test the error handling fixes that should resolve the mobile loading issue or display helpful error messages instead of infinite loading spinner",
+      "reqIds": [
+        "REQ-48"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-53",
+      "summary": "Implement comprehensive mobile-first optimizations including viewport meta tags, touch-friendly interactions, mobile-specific error boundaries, and asset loading optimization",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-54",
+      "summary": "Add enhanced initialization error handling with fallback UI displaying specific error messages, network connectivity checks, timeout handlers, and React Suspense boundaries optimized for mobile",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-55",
+      "summary": "Implement performance improvements for mobile including code splitting, optimized images/assets for mobile bandwidth, debounced handlers, and memory leak prevention",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-56",
+      "summary": "Add comprehensive testing safeguards with console logging at each initialization step, user-facing error messages with actionable guidance, and graceful degradation for failed features",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-60",
+      "summary": "Add comprehensive console logging throughout frontend/src/main.tsx initialization sequence, logging each step: DOM ready, React mounting, QueryClient creation, InternetIdentityProvider initialization, and App component render, with timestamps and success/failure status",
+      "reqIds": [
+        "REQ-52"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-71",
+      "summary": "Add comprehensive try-catch blocks with detailed error logging to all async operations in useActor hook (frontend/src/hooks/useActor.ts), capturing actor initialization failures, canister communication errors, and authentication issues, logging them to console with actionable error messages",
+      "reqIds": [
+        "REQ-63"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-74",
+      "summary": "Optimize React Query cache configuration in frontend/src/main.tsx for mobile devices by reducing cache time, implementing staleTime appropriate for mobile connections, and adding retry logic with exponential backoff for failed queries",
+      "reqIds": [
+        "REQ-66"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-76",
+      "summary": "Implement proper error recovery in Internet Identity authentication flow (frontend/src/hooks/useInternetIdentity.ts) with mobile-optimized error messages, automatic retry on transient failures, and clear guidance for authentication errors on mobile devices",
+      "reqIds": [
+        "REQ-68"
       ],
       "status": "pending"
     }

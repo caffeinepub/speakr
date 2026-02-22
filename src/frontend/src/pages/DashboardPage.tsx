@@ -1,97 +1,61 @@
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 import { useNavigate } from '@tanstack/react-router';
-import { useEffect, useMemo } from 'react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import MyContentSection from '@/components/dashboard/MyContentSection';
+import { useEffect } from 'react';
 import StatisticsSection from '@/components/dashboard/StatisticsSection';
 import FavoritesSection from '@/components/dashboard/FavoritesSection';
+import MyContentSection from '@/components/dashboard/MyContentSection';
 import DashboardEmptyHero from '@/components/dashboard/DashboardEmptyHero';
 import { useMyContent } from '@/hooks/useMyContent';
-import { useKidsModeStore } from '@/state/kidsMode';
+import { AlertCircle } from 'lucide-react';
 
 export default function DashboardPage() {
-  const { identity, loginStatus } = useInternetIdentity();
+  const { identity } = useInternetIdentity();
   const navigate = useNavigate();
-  const { data: myContent, isLoading: contentLoading } = useMyContent();
-  const { isKidsMode } = useKidsModeStore();
-  const isAuthenticated = !!identity;
-  const isInitializing = loginStatus === 'initializing';
+  const { data: myContent, isLoading, error } = useMyContent();
 
   useEffect(() => {
-    if (!isInitializing && !isAuthenticated) {
-      navigate({ to: '/' });
+    if (!identity) {
+      navigate({ to: '/auth' });
     }
-  }, [isAuthenticated, isInitializing, navigate]);
+  }, [identity, navigate]);
 
-  // Filter content based on kids mode
-  const filteredContent = useMemo(() => {
-    if (!myContent) return [];
-    if (isKidsMode) {
-      return myContent.filter((post) => post.kidFriendly === true);
-    }
-    return myContent;
-  }, [myContent, isKidsMode]);
-
-  if (isInitializing) {
-    return (
-      <div className="container px-4 md:px-6 py-8">
-        <div className="max-w-6xl mx-auto">
-          <p className="text-center text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
+  if (!identity) {
+    return null;
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="container px-4 md:px-6 py-8">
-        <div className="max-w-6xl mx-auto">
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              You must be logged in to access the dashboard.
-            </AlertDescription>
-          </Alert>
-          <div className="mt-4">
-            <Button onClick={() => navigate({ to: '/' })}>
-              Go to Feed
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const principalId = identity.getPrincipal().toString();
-  const displayName = principalId.substring(0, 8) + '...' + principalId.substring(principalId.length - 6);
-  const hasContent = filteredContent && filteredContent.length > 0;
-  const showEmptyHero = !contentLoading && !hasContent;
+  const hasContent = myContent && myContent.length > 0;
 
   return (
-    <div className="container px-4 md:px-6 py-8 pb-24">
-      <div className="max-w-6xl mx-auto space-y-8 fade-in-up">
-        {/* Header */}
-        <div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-2 tracking-tight">
-            {isKidsMode ? 'My Kid-Friendly Dashboard' : 'Dashboard'}
-          </h1>
-          <p className="text-lg text-muted-foreground">Welcome back, {displayName}</p>
+    <div className="min-h-screen pb-24">
+      <div className="container px-4 md:px-6 py-8">
+        <div className="space-y-3 mb-8 fade-in-up">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-lg text-muted-foreground">
+            Manage your content and view your statistics
+          </p>
         </div>
 
-        {/* Empty state hero or statistics */}
-        {showEmptyHero ? (
-          <DashboardEmptyHero hasProfile={true} />
-        ) : (
-          <StatisticsSection isKidsMode={isKidsMode} />
+        {error && (
+          <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-medium text-destructive">Failed to load dashboard data</p>
+              <p className="text-sm text-destructive/80 mt-1">
+                Please check your connection and try again.
+              </p>
+            </div>
+          </div>
         )}
 
-        {/* Favorites Section */}
-        <FavoritesSection isKidsMode={isKidsMode} />
-
-        {/* My Content Section */}
-        <MyContentSection isKidsMode={isKidsMode} />
+        {!isLoading && !hasContent ? (
+          <DashboardEmptyHero />
+        ) : (
+          <div className="space-y-8 fade-in-up">
+            <StatisticsSection />
+            <FavoritesSection />
+            <MyContentSection />
+          </div>
+        )}
       </div>
     </div>
   );
